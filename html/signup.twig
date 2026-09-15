@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="{{site['iso_lang_code']}}">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>{{ page['title'] }}</title>
+		<meta name="keywords" content="{{ site['seo_key'] }}">
+		<meta name="description" content="{{ site['seo_desc'] }}">
+		{% if site['favicon'] %}
+			<link rel="shortcut icon" type="image/ico" href="{{ site['favicon'] }}"/>
+		{% endif %}
+
+		<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+		<!--[if lt IE 9]>
+		  <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+		  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+		  <![endif]-->
+		{{ site['custom_header'] }}
+
+		{% for style in site['styles'] %}
+			<link rel="stylesheet" type="text/css" href="{{ style['href'] }}">
+		{% endfor %}
+		<script>
+			window.modules = {};
+		</script>
+
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @font-face {
+            font-family: "Satoshi";
+            src: url(https://cdn.smmspot.net/smm1stv4/assets/Satoshi-Variable.woff2) format("woff2"),
+                 url(https://cdn.smmspot.net/smm1stv4/assets/Satoshi-Variable.woff) format("woff"),
+                 url(https://cdn.smmspot.net/smm1stv4/assets/Satoshi-Variable.ttf) format("truetype");
+            font-weight: 300 900;
+            font-display: swap;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: "Aeonik";
+            src: url(https://cdn.smmspot.net/smm1stv4/assets/Aeonik-Medium.woff2) format("woff2"),
+                 url(https://cdn.smmspot.net/smm1stv4/assets/Aeonik-Medium.woff) format("woff");
+            font-weight: 500;
+            font-style: normal;
+            font-display: swap;
+        }
+
+        :root {
+            --primary-blue: #2563eb;
+            --light-bg: #f8fafc;
+            --secondary-bg: #ffffff;
+            --text-heading: #1e293b;
+            --text-dark: #334155;
+            --text-light: #64748b;
+            --border-color: #e2e8f0;
+            --card-bg-color: #ffffff; 
+            --stroke-color: #e2e8f0;
+            --body-text: #334155;
+        }
+        
+        body {
+            font-family: "Aeonik", "Satoshi", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .background-effects {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 0;
+        }
+        .grid-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image:
+                linear-gradient(rgba(0,0,0,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0,0,0,0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+        }
+        .blur-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(120px);
+            opacity: 0.15;
+        }
+        .orb1 { background-color: #00c6ff; width: 400px; height: 400px; top: -100px; left: -150px; }
+        .orb2 { background-color: #ff00aa; width: 300px; height: 300px; top: 200px; right: -100px; }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 7px 20px -4px rgba(37, 99, 235, 0.4);
+        }
+        
+        .title {
+            color: var(--text-heading);
+            font-size: 35px;
+            font-style: normal;
+            font-weight: 550;
+            line-height: 48px;
+            margin: 0;
+            text-align: center;
+            letter-spacing: -2.057px;
+        }
+
+        .subtitle {
+            color: var(--text-light);
+            text-align: center;
+            font-size: 15px;
+            font-style: normal;
+            font-weight: 400;
+            line-height: 22px;
+        }
+
+        .btn-primary-custom {
+            /* Base styles */
+            min-height: 50px;
+            padding: 12px 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 15px;
+            gap: 9px;
+            transition: all .14s ease;
+            text-decoration: none;
+            width: 100%;
+            font-size: 1rem;
+            font-weight: 500;
+
+            /* Custom styles */
+            border: 1px solid var(--primary-blue);
+            background: var(--primary-blue);
+            box-shadow: 0px 1.18245px 2.3649px 0px rgba(37, 99, 235, 0.4), 0px 0px 0px 1.18245px var(--primary-blue);
+            color: #fff;
+        }
+
+        .form-control-custom {
+            background-color: var(--secondary-bg);
+            border: 1px solid #bfdbfe;
+            color: var(--text-dark);
+            width: 100%;
+            display: block;
+            font-size: 16px;
+            font-style: normal;
+            font-weight: 500;
+            line-height: 19px;
+            letter-spacing: -0.42px;
+            min-height: 55px;
+            border-radius: 10px;
+            padding: 10px 20px;
+            box-shadow: none;
+            transition: all 0.2s ease-in-out;
+        }
+
+        .form-control-custom:focus {
+            outline: none;
+            border-color: var(--primary-blue);
+            background-color: var(--secondary-bg);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+        }
+
+        .checkbox-icon {
+            opacity: 0;
+            transition: opacity 0.15s ease-in-out;
+            color: white;
+            font-size: 0.875rem; /* text-sm */
+            line-height: 1.25rem;
+        }
+        .peer:checked ~ .checkbox-container > .checkbox-icon {
+            opacity: 1;
+        }
+
+        .help-icon {
+            color: var(--primary-blue) !important;
+            font-size: 1.125rem !important;
+        }
+
+        .header {
+            padding: 20px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            width: 100%;
+        }
+
+        .header-inner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: relative;
+            max-width: 1280px; /* max-w-7xl */
+            width: 100%;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            border-radius: 9999px;
+            padding: 12px 25px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.07);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--text-heading);
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            background-color: var(--primary-blue);
+            color: white;
+            font-weight: 900;
+            font-size: 1rem;
+        }
+
+        .logo-icon img {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            object-fit: contain;
+        }
+
+        .logo-text {
+            font-weight: 600;
+        }
+
+        .signin-prompt {
+            border-radius: 15px;
+            background-color:#2563eb0d;
+            border: 1px solid var(--border-color);
+            padding: 20px;
+            margin-top: 30px;
+            text-align: center;
+            font-size: 1rem;
+            font-weight: 500;
+            color: var(--text-dark);
+        }
+        .signin-prompt a {
+            font-weight: 600;
+            color: var(--primary-blue);
+            text-decoration: none;
+            margin-left: 0.5rem;
+        }
+        .signin-prompt a:hover {
+            text-decoration: underline;
+        }
+
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-700 {% if site['rtl'] %}rtl{% endif %}">
+    <div class="background-effects">
+        <div class="grid-overlay"></div>
+        <div class="blur-orb orb1"></div>
+        <div class="blur-orb orb2"></div>
+    </div>
+
+    <div class="relative z-10 flex min-h-screen flex-col">
+        <header class="header">
+            <div class="header-inner">
+                <a href="/" class="inline-flex items-center justify-center rounded-full border border-blue-200 bg-[#2563eb0d] text-sm font-medium text-blue-600 shadow-sm transition hover:-translate-y-px hover:bg-[#2563eb1a] hover:shadow-md w-12 h-12 md:w-auto md:h-auto md:gap-x-2 md:px-5 md:py-3">
+                    <i class="ri-arrow-left-line text-lg"></i>
+                    <span class="hidden md:inline">Go Back to Website</span>
+                </a>
+                <div class="absolute left-1/2 -translate-x-1/2">
+                    <a href="{{ page_url('index') }}" class="logo">
+                        {% if site['logo'] %}
+                            <img src="{{ site['logo'] }}" alt="{{ site['name'] }}" title="{{ site['name'] }}" style="
+            height: 40px !important;
+            width: auto !important;
+            max-width: 150px !important;
+            max-height: 40px !important;
+            object-fit: contain !important;
+            display: block !important;
+            opacity: 1 !important;
+            visibility: visible !important;
+        ">
+                        {% else %}
+                            <div class="logo-icon">{{ site['name']|first|upper }}</div>
+                            <span class="logo-text">{{ site['name'] }}</span>
+                        {% endif %}
+                    </a>
+                </div>
+                <a href="/howitworks" class="inline-flex items-center justify-center rounded-full border border-blue-200 bg-[#2563eb0d] text-sm font-medium text-blue-600 shadow-sm transition hover:-translate-y-px hover:bg-[#2563eb1a] hover:shadow-md w-12 h-12 md:w-auto md:h-auto md:gap-x-2 md:px-5 md:py-3">
+                    <i class="ri-question-line help-icon"></i>
+                    <span class="hidden md:inline">How it Works</span>
+                </a>
+            </div>
+        </header>
+    
+        <main class="flex flex-grow flex-col items-center justify-center p-8">
+            <div class="w-full max-w-md text-center">
+                <div class="mb-8">
+                    <div class="mb-5 inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-blue-100">
+                        <i class="ri-user-add-line text-4xl text-blue-600"></i>
+                    </div>
+                    <h1 class="title">Create an Account</h1>
+                    <p class="subtitle mt-2">Let's get you started. Provide your details to join us.</p>
+                </div>
+    
+                <form {% if site['rtl'] %}class="rtl-form"{% endif %} action="" method="post">
+                    {% if error %}
+                        <div class="mb-5 rounded-lg border border-red-200 bg-red-50 p-4 text-red-800">
+                            <div class="flex items-center">
+                                <i class="ri-error-warning-line mr-2 text-lg"></i>
+                                <span>{{ errorMessage }}</span>
+                            </div>
+                        </div>
+                    {% endif %}
+                    {% if success %}
+                        <div class="mb-5 rounded-lg border border-green-200 bg-green-50 p-4 text-green-800">
+                            <div class="flex items-center">
+                                <i class="ri-check-line mr-2 text-lg"></i>
+                                <span>{{ successText }}</span>
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    {% for field in fields %}
+                        <div class="mb-5 text-left">
+                            <label for="{{ field.code }}" class="mb-2 block text-base font-medium text-slate-700">{{ lang(field.label) }}</label>
+                            {% if field.type == 'password' %}
+                                <div class="relative">
+                                    <input type="{{ field.type }}" id="{{ field.code }}" name="RegistrationForm[{{ field.code }}]" value="{{ field.value }}" class="form-control-custom pr-10">
+                                    <div class="absolute inset-y-0 right-4 flex cursor-pointer items-center text-slate-400 hover:text-slate-600" onclick="togglePasswordVisibility('{{ field.code }}')">
+                                        <i class="ri-eye-off-line"></i>
+                                    </div>
+                                </div>
+                            {% else %}
+                                <input type="{{ field.type }}" id="{{ field.code }}" name="RegistrationForm[{{ field.code }}]" value="{{ field.value }}" class="form-control-custom">
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+
+                    {% if site['captcha'] %}
+                        <div class="mb-5">
+                            {{ captchaCode }}
+                        </div>
+                    {% endif %}
+
+                    {% if check_agreement %}
+                        <div class="mb-6 text-left">
+                            <label class="flex cursor-pointer items-center">
+                                <input type="checkbox" name="RegistrationForm[termsofservice]" class="peer hidden terms-accept-checkbox">
+                                <span class="checkbox-container mr-3 flex h-5 w-5 items-center justify-center rounded border border-blue-300 bg-white transition-all peer-checked:border-blue-600 peer-checked:bg-blue-600">
+                                    <i class="checkbox-icon ri-check-line"></i>
+                                </span>
+                                <span class="text-sm text-slate-700">{{ lang('signup.accept_terms_text') }} <a href="{{ page_url('terms') }}" target="_blank" class="font-medium text-blue-600 hover:underline">{{ lang('terms.signup_checkbox') }}</a></span>
+                            </label>
+                        </div>
+                    {% endif %}
+    
+                    <div class="mt-6">
+                        <input type="hidden" name="_csrf" value="{{csrftoken}}">
+                        <div class="flex flex-col gap-4">
+                            <button type="submit" class="btn-primary-custom">
+                                <span>{{ lang('signup.button') }}</span>
+                                <i class="ri-user-follow-line"></i>
+                            </button>
+                            
+                            {% if googleSignIn %}
+                                <div id="g_id_onload"
+                                   data-client_id="{{ googleClientId }}"
+                                   data-login_uri="{{ googleSignInRedirectUrl }}"
+                                   data-auto_prompt="false"
+                                   data-_csrf="{{csrftoken}}">
+                                </div>
+                                <div class="g_id_signin"
+                                   data-type="standard"
+                                   data-size="large"
+                                   data-theme="outline"
+                                   data-text="signup_with"
+                                   data-shape="rectangular"
+                                   data-logo_alignment="left">
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </form>
+
+                <div class="signin-prompt">
+                    <span>{{ lang('signup.text') }}</span>
+                    <a href="{{ page_url('signin') }}">{{ lang('signin.title') }}</a>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        function togglePasswordVisibility(id) {
+            const input = document.getElementById(id);
+            const iconContainer = input.nextElementSibling;
+            const icon = iconContainer.querySelector('i');
+            if (input.type === "password") {
+                input.type = "text";
+                icon.classList.remove('ri-eye-off-line');
+                icon.classList.add('ri-eye-line');
+            } else {
+                input.type = "password";
+                icon.classList.remove('ri-eye-line');
+                icon.classList.add('ri-eye-off-line');
+            }
+        }
+    </script>
+
+	{{ site['custom_footer'] }}
+
+		{% for script in site['scripts'] %}
+			<script type="text/javascript" {% if script['src'] %} src="{{ script['src'] }}" {% endif %}>
+				{% if script['code'] %}
+{{ script['code'] }}
+{% endif %}
+			</script>
+		{% endfor %}
+
+</body>
+</html>

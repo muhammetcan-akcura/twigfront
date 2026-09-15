@@ -1,0 +1,1157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Video Checker</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        .yt-checker-wrapper {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
+            color: #1f2937;
+        }
+
+        .yt-checker-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .icon-box {
+            width: px;
+            height: 48px;
+            background: transparent;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .icon-box svg {
+            width: 108px;
+            height: 108px;
+            color: white;
+        }
+
+        h1 {
+            font-size: 2.25rem;
+            font-weight: bold;
+            color: #1f2937;
+        }
+
+        .subtitle {
+            color: #6b7280;
+            font-size: 1.125rem;
+        }
+
+        .tab-container {
+            max-width: 768px;
+            margin: 0 auto 2rem;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 0.5rem;
+            background: white;
+            padding: 0.5rem;
+            border-radius: 12px;
+            border: 1px solid #e5e7eb;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+            background: transparent;
+            color: #6b7280;
+        }
+
+        .tab:hover {
+            background: #f3f4f6;
+            color: #1f2937;
+        }
+
+        .tab.active {
+            background: #dc2626;
+            color: white;
+            box-shadow: 0 10px 15px -3px rgba(220, 38, 38, 0.3);
+        }
+
+        .input-section {
+            max-width: 768px;
+            margin: 0 auto 2rem;
+            display: none;
+        }
+
+        .input-section.active {
+            display: block;
+        }
+
+        .input-box {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 20px;
+            padding: 1.5rem;
+        }
+
+        label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 0.75rem;
+        }
+
+        .input-group {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        input[type="text"],
+        textarea {
+            flex: 1;
+            padding: 1rem;
+            background: white;
+            border: 1px solid #d1d5db;
+            border-radius: 15px;
+            color: #1f2937;
+            font-size: 1rem;
+            transition: all 0.2s;
+        }
+
+        textarea {
+            width: 100%;
+            font-family: 'Courier New', monospace;
+            font-size: 0.875rem;
+            resize: vertical;
+        }
+
+        input:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #dc2626;
+            box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
+        }
+
+        input::placeholder,
+        textarea::placeholder {
+            color: #9ca3af;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            background: linear-gradient(to right, #dc2626, #b91c1c);
+            color: white;
+            font-weight: 600;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: 0 10px 15px -3px rgba(220, 38, 38, 0.3);
+        }
+
+        .btn:hover {
+            background: linear-gradient(to right, #b91c1c, #991b1b);
+        }
+
+        .btn:disabled {
+            background: linear-gradient(to right, #9ca3af, #6b7280);
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        .btn-full {
+            width: 100%;
+            justify-content: center;
+            margin-top: 1rem;
+        }
+
+        .spinner {
+            width: 20px;
+            height: 20px;
+            border: 2px solid white;
+            border-top-color: transparent;
+            border-radius: 50%;
+            animation: spin 0.6s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .results {
+            max-width: 768px;
+            margin: 0 auto;
+            display: none;
+        }
+
+        .results.active {
+            display: block;
+        }
+
+        .result-card {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 20px;
+            padding: 1.5rem;
+            transition: all 0.2s;
+        }
+
+        .result-card:hover {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+
+        .result-card.success {
+            border-color: rgba(34, 197, 94, 0.5);
+            background: rgba(34, 197, 94, 0.05);
+        }
+
+        .result-card.error {
+            border-color: rgba(239, 68, 68, 0.5);
+            background: rgba(239, 68, 68, 0.05);
+        }
+
+        .result-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #e5e7eb;
+            margin-bottom: 1.5rem;
+        }
+
+        .status-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .status-icon.success {
+            background: #22c55e;
+        }
+
+        .status-icon.error {
+            background: #ef4444;
+        }
+
+        .status-icon svg {
+            width: 28px;
+            height: 28px;
+            color: white;
+        }
+
+        .result-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .result-title.success {
+            color: #22c55e;
+        }
+
+        .result-title.error {
+            color: #ef4444;
+        }
+
+        .result-subtitle {
+            color: #6b7280;
+        }
+
+        .video-thumbnail {
+            width: 100%;
+            border-radius: 15px;
+            margin-bottom: 1rem;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .info-item {
+            background: #f9fafb;
+            border-radius: 15px;
+            padding: 1rem;
+            border: 1px solid #e5e7eb;
+        }
+
+        .info-label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+            color: #6b7280;
+            margin-bottom: 0.5rem;
+        }
+
+        .info-label svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        .info-value {
+            color: #1f2937;
+            font-weight: 500;
+        }
+
+        .info-value.mono {
+            font-family: 'Courier New', monospace;
+            font-size: 0.875rem;
+        }
+
+        .info-value.success {
+            color: #22c55e;
+        }
+
+        .info-value.error {
+            color: #ef4444;
+        }
+
+        .info-value.warning {
+            color: #eab308;
+        }
+
+        .bulk-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .stat-card {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 20px;
+            padding: 1.5rem;
+        }
+
+        .stat-card.success {
+            border-color: rgba(34, 197, 94, 0.5);
+        }
+
+        .stat-card.error {
+            border-color: rgba(239, 68, 68, 0.5);
+        }
+
+        .stat-label {
+            color: #6b7280;
+            font-size: 0.875rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-value {
+            font-size: 1.875rem;
+            font-weight: bold;
+            color: #1f2937;
+        }
+
+        .stat-value.success {
+            color: #22c55e;
+        }
+
+        .stat-value.error {
+            color: #ef4444;
+        }
+
+        .bulk-results {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: none;
+        }
+
+        .bulk-results.active {
+            display: block;
+        }
+
+        .bulk-item {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 20px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            transition: all 0.2s;
+        }
+
+        .bulk-item:hover {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+
+        .bulk-item.success {
+            border-color: rgba(34, 197, 94, 0.5);
+            background: rgba(34, 197, 94, 0.03);
+        }
+
+        .bulk-item.error {
+            border-color: rgba(239, 68, 68, 0.5);
+            background: rgba(239, 68, 68, 0.03);
+        }
+
+        .bulk-item-content {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .bulk-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .bulk-icon.success {
+            background: #22c55e;
+        }
+
+        .bulk-icon.error {
+            background: #ef4444;
+        }
+
+        .bulk-icon svg {
+            width: 24px;
+            height: 24px;
+            color: white;
+        }
+
+        .bulk-details {
+            flex: 1;
+        }
+
+        .bulk-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 0.5rem;
+        }
+
+        .bulk-title {
+            font-weight: 600;
+            font-size: 1.125rem;
+        }
+
+        .bulk-title.success {
+            color: #22c55e;
+        }
+
+        .bulk-title.error {
+            color: #ef4444;
+        }
+
+        .bulk-video-title {
+            color: #1f2937;
+            font-weight: 500;
+            margin-bottom: 0.25rem;
+        }
+
+        .bulk-author {
+            color: #6b7280;
+            font-size: 0.875rem;
+        }
+
+        .bulk-thumbnail {
+            width: 128px;
+            height: 72px;
+            object-fit: cover;
+            border-radius: 15px;
+            flex-shrink: 0;
+        }
+
+        .bulk-meta {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 0.5rem;
+            font-size: 0.875rem;
+            margin-top: 0.5rem;
+        }
+
+        .bulk-meta-item {
+            color: #6b7280;
+        }
+
+        .bulk-meta-value {
+            color: #1f2937;
+            font-family: 'Courier New', monospace;
+        }
+
+        .bulk-error {
+            margin-top: 0.5rem;
+            color: #ef4444;
+            font-size: 0.875rem;
+        }
+
+        .info-section {
+            max-width: 768px;
+            margin: 0 auto;
+            display: none;
+        }
+
+        .info-section.active {
+            display: block;
+        }
+
+        .info-box {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 20px;
+            padding: 1.5rem;
+        }
+
+        .info-box h3 {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 0.75rem;
+        }
+
+        .info-list {
+            list-style: none;
+        }
+
+        .info-list li {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+            color: #374151;
+        }
+
+        .bullet {
+            width: 6px;
+            height: 6px;
+            background: #dc2626;
+            border-radius: 50%;
+        }
+
+        .info-list code {
+            background: #f3f4f6;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.875rem;
+            border: 1px solid #e5e7eb;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.75rem;
+            }
+            .input-group {
+                flex-direction: column;
+            }
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+            .bulk-header {
+                flex-direction: column;
+            }
+            .bulk-thumbnail {
+                width: 100%;
+                height: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="yt-checker-wrapper relative z-10 pb-16 md:pb-15 bg-white pt-6">
+        <div class="yt-checker-container mx-auto relative z-10">
+        <!-- Header -->
+        <div class="header">
+            <div class="header-content">
+                <div class="icon-box">
+                    <img src="https://storage.perfectcdn.com/f3b92e/613d1l69p0oz9rzr.svg" alt="YouTube" style="width: 28px; height: 28px;">
+                </div>
+                <h1>YouTube Video Control</h1>
+            </div>
+            <p class="subtitle">Check video information and accessibility by entering a YouTube video link</p>
+        </div>
+
+        <!-- Tabs -->
+        <div class="tab-container">
+            <div class="tabs">
+                <button class="tab active" onclick="switchTab('single', event)">Single Check</button>
+                <button class="tab" onclick="switchTab('bulk', event)">Bulk Check</button>
+            </div>
+        </div>
+
+        <!-- Single Check Input -->
+        <div id="single-input" class="input-section active">
+            <div class="input-box">
+                <label>YouTube Video Link</label>
+                <div class="input-group">
+                    <input type="text" id="single-link" placeholder="https://www.youtube.com/watch?v=... or https://youtu.be/..." onkeypress="if(event.key==='Enter') checkSingle()">
+                    <button class="btn" id="single-btn" onclick="checkSingle()">
+                        <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                        </svg>
+                        Check Video
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bulk Check Input -->
+        <div id="bulk-input" class="input-section">
+            <div class="input-box">
+                <label>YouTube Video Links (one per line)</label>
+                <textarea id="bulk-links" rows="10" placeholder="https://www.youtube.com/watch?v=...&#10;https://youtu.be/...&#10;https://www.youtube.com/watch?v=..."></textarea>
+                <button class="btn btn-full" id="bulk-btn" onclick="checkBulk()">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                    </svg>
+                    Check All Videos
+                </button>
+            </div>
+        </div>
+
+        <!-- Single Result -->
+        <div id="single-result" class="results"></div>
+
+        <!-- Bulk Results -->
+        <div id="bulk-result" class="bulk-results"></div>
+
+        <!-- Info Section -->
+        <div id="info-section" class="info-section active">
+            <div class="info-box">
+                <h3>Supported Link Formats</h3>
+                <ul class="info-list">
+                    <li>
+                        <span class="bullet"></span>
+                        <code>https://www.youtube.com/watch?v=VIDEO_ID</code>
+                    </li>
+                    <li>
+                        <span class="bullet"></span>
+                        <code>https://youtu.be/VIDEO_ID</code>
+                    </li>
+                    <li>
+                        <span class="bullet"></span>
+                        <code>https://www.youtube.com/embed/VIDEO_ID</code>
+                    </li>
+                    <li>
+                        <span class="bullet"></span>
+                        <code>VIDEO_ID (10-11 characters)</code>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ============================================
+        // CONFIGURATION
+        // ============================================
+       
+        const API_URL = 'https://youtuberefill-1.onrender.com/api/youtube/check';
+
+        // ============================================
+        // TAB SWITCHING
+        // ============================================
+        function switchTab(tab, event) {
+            // Update tab buttons
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Update input sections
+            document.getElementById('single-input').classList.toggle('active', tab === 'single');
+            document.getElementById('bulk-input').classList.toggle('active', tab === 'bulk');
+            
+            // Hide results and show info
+            document.getElementById('single-result').classList.remove('active');
+            document.getElementById('bulk-result').classList.remove('active');
+            document.getElementById('info-section').classList.add('active');
+        }
+
+        // ============================================
+        // SINGLE CHECK
+        // ============================================
+        async function checkSingle() {
+            const input = document.getElementById('single-link');
+            const link = input.value.trim();
+            
+            if (!link) {
+                alert('Please enter a YouTube link');
+                return;
+            }
+
+            setLoading(true, 'single');
+            document.getElementById('info-section').classList.remove('active');
+
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ link })
+                });
+
+                const data = await response.json();
+                displaySingleResult(data);
+            } catch (error) {
+                displaySingleResult({
+                    success: false,
+                    error: 'Network error: ' + error.message,
+                    errorReason: 'network_error'
+                });
+            } finally {
+                setLoading(false, 'single');
+            }
+        }
+
+        // ============================================
+        // BULK CHECK
+        // ============================================
+        async function checkBulk() {
+            const textarea = document.getElementById('bulk-links');
+            const links = textarea.value.split('\n').map(l => l.trim()).filter(l => l.length > 0);
+            
+            if (links.length === 0) {
+                alert('Please enter at least one YouTube link');
+                return;
+            }
+
+            setLoading(true, 'bulk');
+            document.getElementById('info-section').classList.remove('active');
+
+            const results = [];
+            const btn = document.getElementById('bulk-btn');
+
+            for (let i = 0; i < links.length; i++) {
+                btn.innerHTML = `<div class="spinner"></div> Checking ${i + 1} / ${links.length}...`;
+                
+                try {
+                    const response = await fetch(API_URL, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ link: links[i] })
+                    });
+
+                    const data = await response.json();
+                    results.push(data);
+                } catch (error) {
+                    results.push({
+                        success: false,
+                        error: 'Network error',
+                        errorReason: 'network_error'
+                    });
+                }
+
+                // Small delay to avoid rate limiting
+                await new Promise(resolve => setTimeout(resolve, 100));
+            }
+
+            displayBulkResults(results);
+            setLoading(false, 'bulk');
+        }
+
+        // ============================================
+        // LOADING STATE
+        // ============================================
+        function setLoading(loading, type) {
+            const btn = document.getElementById(type + '-btn');
+            
+            if (loading) {
+                btn.disabled = true;
+                if (type === 'single') {
+                    btn.innerHTML = '<div class="spinner"></div> Checking...';
+                }
+            } else {
+                btn.disabled = false;
+                if (type === 'single') {
+                    btn.innerHTML = `
+                        <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                        </svg>
+                        Check Video
+                    `;
+                } else {
+                    btn.innerHTML = `
+                        <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                        </svg>
+                        Check All Videos
+                    `;
+                }
+            }
+        }
+
+        // ============================================
+        // DISPLAY SINGLE RESULT
+        // ============================================
+        function displaySingleResult(data) {
+            const container = document.getElementById('single-result');
+            const isSuccess = data.success;
+            
+            let html = `
+                <div class="result-card ${isSuccess ? 'success' : 'error'}" ${data.videoId ? `onclick="window.open('https://www.youtube.com/watch?v=${escapeHtml(data.videoId)}', '_blank', 'noopener,noreferrer')" style="cursor: pointer;"` : ''}>
+                    <div class="result-header">
+                        <div class="status-icon ${isSuccess ? 'success' : 'error'}">
+                            ${isSuccess 
+                                ? '<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>'
+                                : '<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>'
+                            }
+                        </div>
+                        <div>
+                            <div class="result-title ${isSuccess ? 'success' : 'error'}">
+                                ${isSuccess ? 'Video Accessible' : 'Video Not Accessible'}
+                            </div>
+                            <div class="result-subtitle">
+                                ${isSuccess ? 'Video found successfully and is accessible' : getErrorMessage(data.errorReason)}
+                            </div>
+                        </div>
+                    </div>
+            `;
+
+            if (isSuccess) {
+                // Thumbnail
+                if (data.thumbnail) {
+                    html += `<img src="${escapeHtml(data.thumbnail)}" alt="${escapeHtml(data.title || 'Video')}" class="video-thumbnail">`;
+                }
+
+                // Video Info Grid
+                html += '<div class="info-grid">';
+                
+                if (data.title) {
+                    html += `
+                        <div class="info-item">
+                            <div class="info-label">
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                                </svg>
+                                Video Title
+                            </div>
+                            <div class="info-value">${escapeHtml(data.title)}</div>
+                        </div>
+                    `;
+                }
+
+                if (data.author) {
+                    html += `
+                        <div class="info-item">
+                            <div class="info-label">
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                Channel
+                            </div>
+                            <div class="info-value">${escapeHtml(data.author)}</div>
+                        </div>
+                    `;
+                }
+
+                if (data.videoId) {
+                    html += `
+                        <div class="info-item">
+                            <div class="info-label">
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                                Video ID
+                            </div>
+                            <div class="info-value mono">${escapeHtml(data.videoId)}</div>
+                        </div>
+                    `;
+                }
+
+                if (data.embedAllowed !== undefined) {
+                    html += `
+                        <div class="info-item">
+                            <div class="info-label">
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                                Embed Status
+                            </div>
+                            <div class="info-value ${data.embedAllowed ? 'success' : 'error'}">
+                                ${data.embedAllowed ? 'Enabled' : 'Disabled'}
+                            </div>
+                        </div>
+                    `;
+                }
+
+                if (data.privacyStatus) {
+                    html += `
+                        <div class="info-item">
+                            <div class="info-label">
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                Privacy Status
+                            </div>
+                            <div class="info-value ${data.privacyStatus === 'public' ? 'success' : 'warning'}">
+                                ${escapeHtml(data.privacyStatus)}
+                            </div>
+                        </div>
+                    `;
+                }
+
+                if (data.ageRestricted !== undefined) {
+                    html += `
+                        <div class="info-item">
+                            <div class="info-label">
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                Age Restricted
+                            </div>
+                            <div class="info-value ${data.ageRestricted ? 'error' : 'success'}">
+                                ${data.ageRestricted ? 'Yes' : 'No'}
+                            </div>
+                        </div>
+                    `;
+                }
+
+                if (data.regionRestriction) {
+                    const rr = data.regionRestriction;
+                    let regionText = '';
+                    let regionClass = 'warning';
+                    
+                    if (rr.blocked && rr.blocked.length > 0) {
+                        regionText = `Blocked in ${rr.blocked.length} countries`;
+                        regionClass = 'error';
+                    } else if (rr.allowed && rr.allowed.length > 0) {
+                        regionText = `Only ${rr.allowed.length} countries`;
+                        regionClass = 'warning';
+                    }
+                    
+                    if (regionText) {
+                        html += `
+                            <div class="info-item">
+                                <div class="info-label">
+                                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    Region Restriction
+                                </div>
+                                <div class="info-value ${regionClass}">
+                                    ${regionText}
+                                </div>
+                            </div>
+                        `;
+                    }
+                }
+
+                if (data.licensedContent !== undefined) {
+                    html += `
+                        <div class="info-item">
+                            <div class="info-label">
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                                </svg>
+                                Licensed Content
+                            </div>
+                            <div class="info-value ${data.licensedContent ? 'warning' : 'success'}">
+                                ${data.licensedContent ? 'Yes (Copyrighted)' : 'No'}
+                            </div>
+                        </div>
+                    `;
+                }
+
+                html += '</div>';
+
+                // Warnings Section - Sarı uyarılar
+                if (data.warnings && data.warnings.length > 0) {
+                    html += '<div style="margin-top: 1rem; padding: 1rem; background: rgba(234, 179, 8, 0.1); border: 1px solid rgba(234, 179, 8, 0.3); border-radius: 15px;">';
+                    html += '<div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem; color: #eab308; font-weight: 600;">';
+                    html += '<svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>';
+                    html += 'Warnings</div>';
+                    data.warnings.forEach(warning => {
+                        html += `<div style="color: #92400e; font-size: 0.875rem; margin-bottom: 0.25rem;">⚠️ ${escapeHtml(warning)}</div>`;
+                    });
+                    html += '</div>';
+                }
+
+                html += '</div>';
+
+                // Open Video Button
+                if (data.videoId) {
+                    html += `
+                        <button class="btn btn-full" onclick="window.open('https://www.youtube.com/watch?v=${escapeHtml(data.videoId)}', '_blank', 'noopener,noreferrer')">
+                            <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                            </svg>
+                            Open on YouTube
+                        </button>
+                    `;
+                }
+            } else {
+                // Error Details
+                html += '<div class="info-grid">';
+                
+                if (data.error) {
+                    html += `
+                        <div class="info-item">
+                            <div class="info-label">
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                </svg>
+                                Error Detail
+                            </div>
+                            <div class="info-value error">${escapeHtml(data.error)}</div>
+                        </div>
+                    `;
+                }
+
+                if (data.videoId) {
+                    html += `
+                        <div class="info-item">
+                            <div class="info-label">
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                Video ID
+                            </div>
+                            <div class="info-value mono">${escapeHtml(data.videoId)}</div>
+                        </div>
+                    `;
+                }
+
+                if (data.status) {
+                    html += `
+                        <div class="info-item">
+                            <div class="info-label">
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                HTTP Status
+                            </div>
+                            <div class="info-value mono">${data.status}</div>
+                        </div>
+                    `;
+                }
+
+                html += '</div>';
+            }
+
+            html += '</div>';
+            
+            container.innerHTML = html;
+            container.classList.add('active');
+        }
+
+        // ============================================
+        // DISPLAY BULK RESULTS
+        // ============================================
+        function displayBulkResults(results) {
+            const container = document.getElementById('bulk-result');
+            const successCount = results.filter(r => r.success).length;
+            const errorCount = results.length - successCount;
+
+            // Summary Stats
+            let html = `
+                <div class="bulk-stats">
+                    <div class="stat-card">
+                        <div class="stat-label">Total Checked</div>
+                        <div class="stat-value">${results.length}</div>
+                    </div>
+                    <div class="stat-card success">
+                        <div class="stat-label">Accessible</div>
+                        <div class="stat-value success">${successCount}</div>
+                    </div>
+                    <div class="stat-card error">
+                        <div class="stat-label">Not Accessible</div>
+                        <div class="stat-value error">${errorCount}</div>
+                    </div>
+                </div>
+            `;
+
+            // Individual Results
+            results.forEach((result, index) => {
+                const isSuccess = result.success;
+                html += `
+                    <div class="bulk-item ${isSuccess ? 'success' : 'error'}" ${result.videoId ? `onclick="window.open('https://www.youtube.com/watch?v=${escapeHtml(result.videoId)}', '_blank', 'noopener,noreferrer')" style="cursor: pointer;"` : ''}>
+                        <div class="bulk-item-content">
+                            <div class="bulk-icon ${isSuccess ? 'success' : 'error'}">
+                                ${isSuccess 
+                                    ? '<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>'
+                                    : '<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>'
+                                }
+                            </div>
+                            <div class="bulk-details">
+                                <div class="bulk-header">
+                                    <div>
+                                        <div class="bulk-title ${isSuccess ? 'success' : 'error'}">
+                                            ${isSuccess ? 'Accessible' : 'Not Accessible'}
+                                        </div>
+                                        ${result.title ? `<div class="bulk-video-title">${escapeHtml(result.title)}</div>` : ''}
+                                        ${result.author ? `<div class="bulk-author">${escapeHtml(result.author)}</div>` : ''}
+                                    </div>
+                                    ${result.thumbnail ? `<img src="${escapeHtml(result.thumbnail)}" alt="${escapeHtml(result.title || 'Video')}" class="bulk-thumbnail">` : ''}
+                                </div>
+                                <div class="bulk-meta">
+                                    ${result.videoId ? `<div class="bulk-meta-item">ID: <span class="bulk-meta-value">${escapeHtml(result.videoId)}</span></div>` : ''}
+                                    ${result.privacyStatus ? `<div class="bulk-meta-item">Privacy: <span class="bulk-meta-value" style="color: ${result.privacyStatus === 'public' ? '#22c55e' : '#eab308'}">${escapeHtml(result.privacyStatus)}</span></div>` : ''}
+                                    ${result.ageRestricted !== undefined ? `<div class="bulk-meta-item">Age Restricted: <span class="bulk-meta-value" style="color: ${result.ageRestricted ? '#ef4444' : '#22c55e'}">${result.ageRestricted ? 'Yes' : 'No'}</span></div>` : ''}
+                                    ${result.embedAllowed !== undefined ? `<div class="bulk-meta-item">Embed: <span class="bulk-meta-value" style="color: ${result.embedAllowed ? '#22c55e' : '#ef4444'}">${result.embedAllowed ? 'Enabled' : 'Disabled'}</span></div>` : ''}
+                                    ${result.licensedContent !== undefined ? `<div class="bulk-meta-item">Licensed: <span class="bulk-meta-value" style="color: ${result.licensedContent ? '#eab308' : '#22c55e'}">${result.licensedContent ? 'Yes' : 'No'}</span></div>` : ''}
+                                </div>
+                                ${!isSuccess && result.error ? `<div class="bulk-error">❌ ${escapeHtml(result.error)}</div>` : ''}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+            container.classList.add('active');
+        }
+
+        // ============================================
+        // HELPER FUNCTIONS
+        // ============================================
+        function getErrorMessage(errorReason) {
+            const messages = {
+                'not_found': 'Video not found or deleted',
+                'embedding_disabled': 'Embedding disabled or private video',
+                'age_restricted': 'Video is age restricted',
+                'video_private': 'Video is private or unlisted',
+                'made_for_kids': 'Video is made for kids (embedding restrictions)',
+                'playback_restricted': 'Video has playback restrictions',
+                'invalid_url': 'Invalid YouTube URL format',
+                'api_error': 'API error occurred',
+                'network_error': 'Network error occurred',
+                'region_restricted': 'Video has region restrictions'
+            };
+            return messages[errorReason] || 'Unknown error';
+        }
+
+        function escapeHtml(text) {
+            if (!text) return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+    </script>
+    </div>
+    </div>
+</body>
+</html>

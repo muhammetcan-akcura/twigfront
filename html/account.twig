@@ -1,0 +1,816 @@
+
+<div class="relative z-10 pb-16 md:pb-15 bg-white pt-12">
+    <div class="container mx-auto px-4 relative z-10">
+
+
+
+
+
+        <!-- Main Content -->
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+            
+            <!-- Sidebar -->
+            <div class="lg:col-span-1">
+                <div class="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden">
+                    
+                    <!-- Profile Info Section -->
+                    <div class="bg-white p-6 text-center border-b border-gray-200">
+                        <div class="avatar-custom-style w-16 h-16 mx-auto mb-3 rounded-lg text-white flex items-center justify-center text-xl font-bold">
+                            {{ user['username']|first|upper }}
+                        </div>
+                        <h3 class="text-lg font-semibold mb-1 text-gray-800">{{ user['username'] }}</h3>
+                        <span class="text-sm text-gray-600">SMM Member</span>
+                    </div>
+
+                    <!-- Navigation Menu -->
+                    <nav class="p-4">
+                        <ul class="space-y-1">
+                            <li>
+                                <a href="{{ page_url('account') }}" class="sidebar-nav-btn active w-full text-left px-4 py-3 rounded-lg font-medium transition-all duration-200 flex items-center gap-3 group" data-tab="profile">
+                                    <div class="w-8 h-8 rounded-lg bg-blue-100 flex items-center justify-center group-hover:bg-blue-200 transition-colors">
+                                        <i class="ri-user-line text-blue-600 text-lg"></i>
+                                    </div>
+                                    <span class="flex-1">{{ lang('account.tab.general') }}</span>
+                                    <div class="w-2 h-2 rounded-full bg-blue-500 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                                </a>
+                            </li>
+                            
+                            <li>
+                                <a href="{{ page_url('notifications') }}" class="sidebar-nav-btn w-full text-left px-4 py-3 rounded-lg font-medium transition-all duration-200 flex items-center gap-3 group">
+                                    <div class="w-8 h-8 rounded-lg bg-gray-100 flex items-center justify-center group-hover:bg-gray-200 transition-colors">
+                                        <i class="ri-notification-line text-gray-600 text-lg"></i>
+                                    </div>
+                                    <span class="flex-1">{{ lang('account.tab.notifications') }}</span>
+                                    <div class="w-2 h-2 rounded-full bg-gray-500 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                                </a>
+                            </li>
+                        </ul>
+                        
+                        <!-- Tab Navigation (for current page content) -->
+                        <div class="mt-4 pt-4 border-t border-gray-200">
+                            <ul class="space-y-1">
+                                <li>
+                                    <button class="sidebar-nav-btn active w-full text-left px-4 py-3 rounded-lg font-medium transition-all duration-200 flex items-center gap-3 group" data-tab="profile">
+                                        <div class="w-8 h-8 rounded-lg bg-blue-100 flex items-center justify-center group-hover:bg-blue-200 transition-colors">
+                                            <i class="ri-user-line text-blue-600 text-lg"></i>
+                                        </div>
+                                        <span class="flex-1">Profile Information</span>
+                                        <div class="w-2 h-2 rounded-full bg-blue-500 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                                    </button>
+                                </li>
+                                
+                                <li>
+                                    <button class="sidebar-nav-btn w-full text-left px-4 py-3 rounded-lg font-medium transition-all duration-200 flex items-center gap-3 group" data-tab="password">
+                                        <div class="w-8 h-8 rounded-lg bg-gray-100 flex items-center justify-center group-hover:bg-gray-200 transition-colors">
+                                            <i class="ri-lock-line text-gray-600 text-lg"></i>
+                                        </div>
+                                        <span class="flex-1">Change Password</span>
+                                        <div class="w-2 h-2 rounded-full bg-gray-500 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                                    </button>
+                                </li>
+                                
+                                <li>
+                                    <button class="sidebar-nav-btn w-full text-left px-4 py-3 rounded-lg font-medium transition-all duration-200 flex items-center gap-3 group" data-tab="preferences">
+                                        <div class="w-8 h-8 rounded-lg bg-gray-100 flex items-center justify-center group-hover:bg-gray-200 transition-colors">
+                                            <i class="ri-settings-3-line text-gray-600 text-lg"></i>
+                                        </div>
+                                        <span class="flex-1">Preferences</span>
+                                        <div class="w-2 h-2 rounded-full bg-gray-500 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                                    </button>
+                                </li>
+                                
+                                <li>
+                                    <button class="sidebar-nav-btn w-full text-left px-4 py-3 rounded-lg font-medium transition-all duration-200 flex items-center gap-3 group" data-tab="api">
+                                        <div class="w-8 h-8 rounded-lg bg-gray-100 flex items-center justify-center group-hover:bg-gray-200 transition-colors">
+                                            <i class="ri-key-line text-gray-600 text-lg"></i>
+                                        </div>
+                                        <span class="flex-1">{{ lang('account.api_key') }}</span>
+                                        <div class="w-2 h-2 rounded-full bg-gray-500 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                                    </button>
+                                </li>
+                            </ul>
+                        </div>
+                    </nav>
+
+                    <!-- Account Stats -->
+                    <div class="border-t border-gray-100 p-4 bg-gray-50">
+                        <div class="space-y-3">
+                            <div class="flex justify-between items-center">
+                                <span class="text-sm text-gray-600">Balance</span>
+                                <span class="text-sm font-semibold text-green-600">${{ user.funds|number_format(2) }}</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-sm text-gray-600">Total Spent</span>
+                                <span class="text-sm font-semibold text-gray-800">${{ user.spent|number_format(2) }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Content Area -->
+            <div class="lg:col-span-3">
+                
+                <!-- Profile Information Tab -->
+                <div id="profile" class="tab-content active">
+                    <div class="bg-white border border-gray-200 rounded-xl p-6 md:p-8">
+                        <div class="flex items-center gap-3 mb-6">
+                            <i class="ri-user-line text-2xl text-blue-600"></i>
+                            <h2 class="text-2xl font-bold text-gray-800">Profile Information</h2>
+                        </div>
+                        
+                        <!-- Success/Error Messages -->
+                        {% if success %}
+                            <div class="mb-6 bg-green-50 border border-green-200 rounded-lg p-4">
+                                <div class="flex items-center">
+                                    <i class="ri-check-line text-green-600 text-xl mr-3"></i>
+                                    <p class="text-green-800 font-medium">{{ successText }}</p>
+                                </div>
+                            </div>
+                        {% endif %}
+                        
+                        {% if error %}
+                            <div class="mb-6 bg-red-50 border border-red-200 rounded-lg p-4">
+                                <div class="flex items-center">
+                                    <i class="ri-error-warning-line text-red-600 text-xl mr-3"></i>
+                                    <p class="text-red-800 font-medium">{{ errorText }}</p>
+                                </div>
+                            </div>
+                        {% endif %}
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">{{ lang('account.username') }}</label>
+                                <input type="text" value="{{ user['username'] }}" disabled class="w-full px-4 py-3 border border-gray-200 rounded-lg bg-gray-50 text-gray-600">
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">{{ lang('account.email') }}</label>
+                                <div class="flex gap-3">
+                                    <input type="email" value="{{ user['email'] }}" disabled class="w-full px-4 py-3 border border-gray-200 rounded-lg bg-gray-50 text-gray-600">
+                                    <button id="changeEmailBtn" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-3 rounded-lg font-medium transition-colors whitespace-nowrap">
+                                        {{ lang('confirmemail.button.change') }}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 2FA Section -->
+                        <div class="mt-8 pt-8 border-t border-gray-200">
+                            <div class="flex items-center gap-3 mb-4">
+                                <i class="ri-shield-check-line text-2xl text-blue-600"></i>
+                                <h3 class="text-xl font-semibold text-gray-800">{{ lang('2fa.title') }}
+                                    {% if twofactorauth.activated %}
+                                        - {{ lang('account.2fa.disabled') }}
+                                    {% else %}
+                                        - {{ lang('account.2fa.enabled') }}
+                                    {% endif %}
+                                </h3>
+                            </div>
+
+                            <!-- 2FA Success Message -->
+                            {% if twofactorauth.success %}
+                                <div class="mb-4 bg-green-50 border border-green-200 rounded-lg p-4">
+                                    <div class="flex items-center">
+                                        <i class="ri-check-line text-green-600 text-xl mr-3"></i>
+                                        <p class="text-green-800 font-medium">{{ twofactorauth.success }}</p>
+                                    </div>
+                                </div>
+                            {% endif %}
+
+                            <!-- 2FA Error Message -->
+                            {% if twofactorauth.error %}
+                                <div class="mb-4 bg-red-50 border border-red-200 rounded-lg p-4">
+                                    <div class="flex items-center">
+                                        <i class="ri-error-warning-line text-red-600 text-xl mr-3"></i>
+                                        <p class="text-red-800 font-medium">{{ twofactorauth.error }}</p>
+                                    </div>
+                                </div>
+                            {% endif %}
+
+                            <!-- 2FA Generate Form -->
+                            <form id="2fa-generate-form" method="post" action="{{ twofactorauth.url.generate }}" 
+                                  style="{% if twofactorauth.active_code %} display: none; {% else %} display: block; {% endif %}" 
+                                  class="space-y-4">
+                                <p class="text-gray-600">{{ lang('account.2fa.description') }}</p>
+                                <input type="hidden" name="enabled" value="{% if twofactorauth.activated %}1{% else %}0{% endif %}">
+                                <input type="hidden" name="_csrf" value="{{ csrftoken }}">
+                                <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors">
+                                    {% if twofactorauth.activated %}
+                                        {{ lang('account.2fa.enable') }}
+                                    {% else %}
+                                        {{ lang('account.2fa.disable') }}
+                                    {% endif %}
+                                </button>
+                            </form>
+                            
+                            <!-- 2FA Verification Form -->
+                            <form id="2fa-approve-form" method="post" action="{{ twofactorauth.url.approve }}" 
+                                  style="{% if twofactorauth.active_code %} display: block; {% else %} display: none; {% endif %}" 
+                                  class="space-y-4">
+                                <p class="text-gray-600">{{ lang('2fa.sent') }}</p>
+                                <div class="max-w-xs">
+                                    <label for="2fa-code" class="block text-sm font-medium text-gray-700 mb-2">{{ lang('2fa.code') }}</label>
+                                    <input type="text" id="2fa-code" name="code" placeholder="Enter 6-digit code" class="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                </div>
+                                <input type="hidden" name="enabled" value="{% if twofactorauth.activated %}1{% else %}0{% endif %}">
+                                <input type="hidden" name="_csrf" value="{{ csrftoken }}">
+                                <div class="flex gap-3">
+                                    <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors">
+                                        {% if twofactorauth.activated %}
+                                            {{ lang('account.2fa.enable') }}
+                                        {% else %}
+                                            {{ lang('account.2fa.disable') }}
+                                        {% endif %}
+                                    </button>
+                                    <button type="button" id="2fa-cancel-btn" class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-6 py-3 rounded-lg font-medium transition-colors">
+                                        Cancel
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Change Password Tab -->
+                <div id="password" class="tab-content hidden">
+                    <div class="bg-white border border-gray-200 rounded-xl p-6 md:p-8">
+                        <div class="flex items-center gap-3 mb-6">
+                            <i class="ri-lock-line text-2xl text-blue-600"></i>
+                            <h2 class="text-2xl font-bold text-gray-800">Change Password</h2>
+                        </div>
+                        
+                        <form method="post" action="" class="space-y-6{% if site['rtl'] %} rtl-form{% endif %}">
+                            {% if error %}
+                                <div class="bg-red-50 border border-red-200 rounded-lg p-4">
+                                    <div class="flex items-center">
+                                        <i class="ri-error-warning-line text-red-600 text-xl mr-3"></i>
+                                        <p class="text-red-800 font-medium">{{ errorText }}</p>
+                                    </div>
+                                </div>
+                            {% endif %}
+                            
+                            <div>
+                                <label for="current" class="block text-sm font-medium text-gray-700 mb-2">{{ lang('account.password.current') }}</label>
+                                <input type="password" id="current" name="SettingsFrom[current_password]" required class="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                            </div>
+                            
+                            <div>
+                                <label for="new" class="block text-sm font-medium text-gray-700 mb-2">{{ lang('account.password.new') }}</label>
+                                <input type="password" id="new" name="SettingsFrom[password]" required class="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                            </div>
+                            
+                            <div>
+                                <label for="confirm" class="block text-sm font-medium text-gray-700 mb-2">{{ lang('account.password.confirm') }}</label>
+                                <input type="password" id="confirm" name="SettingsFrom[confirm_password]" required class="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                            </div>
+
+                            <input type="hidden" name="_csrf" value="{{ csrftoken }}">
+                            <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg font-medium transition-colors">
+                                {{ lang('account.password.button') }}
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Preferences Tab -->
+                <div id="preferences" class="tab-content hidden">
+                    <div class="bg-white border border-gray-200 rounded-xl p-6 md:p-8">
+                        <div class="flex items-center gap-3 mb-6">
+                            <i class="ri-settings-3-line text-2xl text-blue-600"></i>
+                            <h2 class="text-2xl font-bold text-gray-800">Preferences</h2>
+                        </div>
+                        
+                        <!-- Timezone Form -->
+                        <form method="post" action="" class="space-y-6 mb-8{% if site['rtl'] %} rtl-form{% endif %}">
+                            <div>
+                                <label for="timezone" class="block text-sm font-medium text-gray-700 mb-2">{{ lang('account.timezone') }}</label>
+                                <select name="SettingsFrom[timezone]" id="timezone" class="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                    {% for timezone, label in timezones %}
+                                        <option value="{{ timezone }}" {% if timezone == user['timezone'] %}selected{% endif %}>{{ label }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            
+                            <input type="hidden" name="_csrf" value="{{ csrftoken }}">
+                            <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg font-medium transition-colors">
+                                {{ lang('account.save') }}
+                            </button>
+                        </form>
+
+                        <!-- Language Form (if multiple languages available) -->
+                        {% if site['languages']|length > 1 %}
+                            <div class="pt-8 border-t border-gray-200">
+                                <form method="post" action="" class="space-y-6{% if site['rtl'] %} rtl-form{% endif %}">
+                                    <div>
+                                        <label for="language" class="block text-sm font-medium text-gray-700 mb-2">{{ lang('account.language') }}</label>
+                                        <select class="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" id="language" name="SettingsFrom[lang]">
+                                            {% for language in site['languages'] %}
+                                                <option value="{{ language['code'] }}" {% if language['code'] == user['lang'] %}selected{% endif %}>{{ language['name'] }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    
+                                    <input type="hidden" name="_csrf" value="{{ csrftoken }}">
+                                    <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg font-medium transition-colors">
+                                        {{ lang('account.save') }}
+                                    </button>
+                                </form>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- API Key Tab -->
+                <div id="api" class="tab-content hidden">
+                    <div class="bg-white border border-gray-200 rounded-xl p-6 md:p-8">
+                        <div class="flex items-center gap-3 mb-6">
+                            <i class="ri-key-line text-2xl text-blue-600"></i>
+                            <h2 class="text-2xl font-bold text-gray-800">{{ lang('account.api_key') }}</h2>
+                        </div>
+                        
+                        <!-- API Key Error Message -->
+                        {% if apiKey.errorMessage %}
+                            <div class="mb-6 bg-red-50 border border-red-200 rounded-lg p-4">
+                                <div class="flex items-center">
+                                    <i class="ri-error-warning-line text-red-600 text-xl mr-3"></i>
+                                    <p class="text-red-800 font-medium">{{ apiKey.errorMessage }}</p>
+                                </div>
+                            </div>
+                        {% endif %}
+
+                        <form method="post" action="{{ page['url'] }}/newkey" class="space-y-6{% if site['rtl'] %} rtl-form{% endif %}">
+                            <div class="space-y-6">
+                                {% if user['is_generated_apikey'] %}
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-700 mb-2">{{ lang('account.api_key.date') }}</label>
+                                            <input type="text" value="{{ user['apikey_created'] }}" disabled class="w-full px-4 py-3 border border-gray-200 rounded-lg bg-gray-50 text-gray-600">
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="bg-gray-50 border border-gray-200 rounded-lg p-4">
+                                        <div class="space-y-3">
+                                            <label for="api_key" class="block text-sm font-medium text-gray-700">{{ lang('account.api_key') }}</label>
+                                            <div class="flex items-center gap-3">
+                                                <input type="text" id="api_key" value="{{ user['apikey'] }}" readonly class="flex-1 px-4 py-3 border border-gray-200 rounded-lg bg-white text-gray-600 font-mono text-sm">
+                                                <button type="button" onclick="copyToClipboard('{{ user['apikey'] }}')" class="bg-gray-200 hover:bg-gray-300 text-gray-700 p-3 rounded-lg transition-colors">
+                                                    <i class="ri-file-copy-line text-xl"></i>
+                                                </button>
+                                            </div>
+                                            <small class="text-gray-500 block">{{ lang('account.api_key.date') }} {{ user['apikey_created'] }}</small>
+                                        </div>
+                                    </div>
+                                {% endif %}
+
+                                <input type="hidden" name="_csrf" value="{{ csrftoken }}">
+                                <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg font-medium transition-colors">
+                                    {{ lang('account.generate_key') }}
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<style>
+    /* Sidebar Navigation Styles */
+    .sidebar-nav-btn {
+        position: relative;
+        color: #6b7280;
+        background: transparent;
+        border: none;
+        outline: none;
+    }
+    
+    .sidebar-nav-btn:hover {
+        background-color: #f8fafc;
+        color: #374151;
+    }
+    
+    .sidebar-nav-btn.active {
+        background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+        color: #1e40af;
+        border: 1px solid #bfdbfe;
+        box-shadow: 0 2px 8px rgba(59, 130, 246, 0.1);
+    }
+    
+    .sidebar-nav-btn.active .w-8 {
+        background-color: #3b82f6 !important;
+    }
+    
+    .sidebar-nav-btn.active i {
+        color: white !important;
+    }
+    
+    .sidebar-nav-btn.active .w-2 {
+        opacity: 1 !important;
+        background-color: #3b82f6 !important;
+    }
+    
+    /* Tab Content Styles */
+    .tab-content {
+        display: none;
+        animation: fadeIn 0.3s ease-in-out;
+    }
+    
+    .tab-content.active {
+        display: block;
+    }
+    
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 1024px) {
+        .sidebar-nav-btn {
+            padding: 0.75rem 1rem;
+        }
+    }
+</style>
+
+<!-- Change Email Modal -->
+<div id="changeEmailModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50 hidden">
+    <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+        <form id="changeEmailForm" method="post" action="" class="{% if site['rtl'] %}rtl-form{% endif %}">
+            <div class="mt-3">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-medium text-gray-900">{{ lang('confirmemail.change_email.title') }}</h3>
+                    <button type="button" id="closeEmailModal" class="text-gray-400 hover:text-gray-600">
+                        <i class="ri-close-line text-xl"></i>
+                    </button>
+                </div>
+                
+                <!-- Error Display -->
+                <div id="changeEmailError" class="hidden mb-4 bg-red-50 border border-red-200 rounded-lg p-4">
+                    <div class="flex items-center">
+                        <i class="ri-error-warning-line text-red-600 text-xl mr-3"></i>
+                        <p class="text-red-800 font-medium" id="changeEmailErrorText"></p>
+                    </div>
+                </div>
+
+                <!-- Email Change Messages -->
+                {% if successChangeEmail %}
+                    <div class="mb-4 bg-green-50 border border-green-200 rounded-lg p-4">
+                        <div class="flex items-center">
+                            <i class="ri-check-line text-green-600 text-xl mr-3"></i>
+                            <p class="text-green-800 font-medium">{{ successChangeEmailMessage }}</p>
+                        </div>
+                    </div>
+                {% endif %}
+                
+                {% if errorChangeEmail %}
+                    <div class="mb-4 bg-red-50 border border-red-200 rounded-lg p-4">
+                        <div class="flex items-center">
+                            <i class="ri-error-warning-line text-red-600 text-xl mr-3"></i>
+                            <p class="text-red-800 font-medium">{{ errorChangeEmailMessage }}</p>
+                        </div>
+                    </div>
+                {% endif %}
+                
+                <div class="space-y-4">
+                    <div>
+                        <label for="current-email" class="block text-sm font-medium text-gray-700 mb-2">{{ lang('confirmemail.change_email.current_email') }}</label>
+                        <input type="email" id="current-email" value="{{ user['email'] }}" disabled class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-50 text-gray-600">
+                    </div>
+                    
+                    <div>
+                        <label for="new-email" class="block text-sm font-medium text-gray-700 mb-2">{{ lang('confirmemail.change_email.new_email') }}</label>
+                        <input type="email" id="new-email" name="ChangeEmailForm[email]" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                    
+                    <div>
+                        <label for="current-password" class="block text-sm font-medium text-gray-700 mb-2">{{ lang('confirmemail.change_email.current_password') }}</label>
+                        <input type="password" id="current-password" name="ChangeEmailForm[password]" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                </div>
+                
+                <input type="hidden" name="_csrf" value="{{ csrftoken }}">
+                
+                <div class="flex items-center justify-end space-x-3 mt-6">
+                    <button type="button" id="cancelEmailChange" class="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400 transition-colors">
+                        {{ lang('confirmemail.change_email.close') }}
+                    </button>
+                    <button type="submit" id="changeEmailSubmitBtn" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors">
+                        {{ lang('confirmemail.change_email.submit') }}
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Tab switching functionality
+    const sidebarNavBtns = document.querySelectorAll('.sidebar-nav-btn');
+    const tabContents = document.querySelectorAll('.tab-content');
+    
+    sidebarNavBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            const targetTab = this.getAttribute('data-tab');
+            
+            // Remove active class from all buttons and contents
+            sidebarNavBtns.forEach(b => b.classList.remove('active'));
+            tabContents.forEach(c => c.classList.remove('active'));
+            
+            // Add active class to clicked button and target content
+            this.classList.add('active');
+            const targetContent = document.getElementById(targetTab);
+            if (targetContent) {
+                targetContent.classList.add('active');
+            }
+        });
+    });
+    
+    // Change Email Modal functionality
+    const changeEmailBtn = document.getElementById('changeEmailBtn');
+    const changeEmailModal = document.getElementById('changeEmailModal');
+    const closeEmailModal = document.getElementById('closeEmailModal');
+    const cancelEmailChange = document.getElementById('cancelEmailChange');
+    
+    if (changeEmailBtn) {
+        changeEmailBtn.addEventListener('click', function() {
+            changeEmailModal.classList.remove('hidden');
+        });
+    }
+    
+    if (closeEmailModal) {
+        closeEmailModal.addEventListener('click', function() {
+            changeEmailModal.classList.add('hidden');
+        });
+    }
+    
+    if (cancelEmailChange) {
+        cancelEmailChange.addEventListener('click', function() {
+            changeEmailModal.classList.add('hidden');
+        });
+    }
+    
+    // Close modal when clicking outside
+    changeEmailModal.addEventListener('click', function(e) {
+        if (e.target === changeEmailModal) {
+            changeEmailModal.classList.add('hidden');
+        }
+    });
+    
+    // Copy to clipboard function
+    window.copyToClipboard = function(text) {
+        navigator.clipboard.writeText(text).then(function() {
+            // Show success message
+            const btn = event.target.closest('button');
+            const originalIcon = btn.innerHTML;
+            btn.innerHTML = '<i class="ri-check-line text-xl"></i>';
+            btn.classList.remove('bg-gray-200', 'hover:bg-gray-300');
+            btn.classList.add('bg-green-200', 'text-green-700');
+            
+            setTimeout(function() {
+                btn.innerHTML = originalIcon;
+                btn.classList.remove('bg-green-200', 'text-green-700');
+                btn.classList.add('bg-gray-200', 'hover:bg-gray-300');
+            }, 2000);
+        }).catch(function(err) {
+            console.error('Could not copy text: ', err);
+        });
+    };
+    
+    // Additional functionality for better UX
+    const sidebar = document.querySelector('.bg-white.border.border-gray-200.rounded-xl');
+    if (sidebar) {
+        // Add sticky behavior on scroll
+        window.addEventListener('scroll', function() {
+            if (window.innerWidth >= 1024) { // Only on desktop
+                const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+                if (scrollTop > 100) {
+                    sidebar.style.position = 'sticky';
+                    sidebar.style.top = '24px';
+                } else {
+                    sidebar.style.position = 'relative';
+                    sidebar.style.top = 'auto';
+                }
+            }
+        });
+    }
+    
+    // 2FA AJAX Form Handling
+    const twoFAGenerateForm = document.getElementById('2fa-generate-form');
+    const twoFAApproveForm = document.getElementById('2fa-approve-form');
+    
+    if (twoFAGenerateForm) {
+        twoFAGenerateForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const button = this.querySelector('button[type="submit"]');
+            const originalText = button.textContent;
+            
+            button.disabled = true;
+            button.textContent = 'Processing...';
+            
+            fetch(this.action, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
+            .then(response => response.text())
+            .then(responseText => {
+                console.log('Generate Response:', responseText);
+                
+                try {
+                    const data = JSON.parse(responseText);
+                    console.log('Parsed Generate Data:', data);
+                    
+                    if (data.status === 'success') {
+                        // Hide generate form, show approve form
+                        twoFAGenerateForm.style.display = 'none';
+                        twoFAApproveForm.style.display = 'block';
+                        
+                        // Show success message
+                        showMessage(data.message || 'Verification code sent to your email', 'success');
+                    } else {
+                        // Show error message
+                        showMessage(data.message || 'Request failed. Please try again.', 'error');
+                    }
+                } catch (e) {
+                    console.log('Not JSON response, treating as success for form switch');
+                    // If not JSON, might be a redirect or HTML - treat as success for form display
+                    twoFAGenerateForm.style.display = 'none';
+                    twoFAApproveForm.style.display = 'block';
+                    showMessage('Please check your email for verification code', 'success');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showMessage('Network error occurred', 'error');
+            })
+            .finally(() => {
+                button.disabled = false;
+                button.textContent = originalText;
+            });
+        });
+    }
+    
+    if (twoFAApproveForm) {
+        twoFAApproveForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const button = this.querySelector('button[type="submit"]');
+            const originalText = button.textContent;
+            
+            button.disabled = true;
+            button.textContent = 'Verifying...';
+            
+            fetch(this.action, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
+            .then(response => {
+                console.log('Approve Response Status:', response.status);
+                
+                if (response.status === 302) {
+                    // 302 redirect - let the browser handle the redirect naturally
+                    // Just reload the page to see the actual result (success or error)
+                    console.log('302 redirect detected, reloading page to see result');
+                    window.location.reload();
+                    return; // Exit here
+                } else {
+                    return response.text();
+                }
+            })
+            .then(responseText => {
+                if (!responseText) return; // Skip if already redirected
+                
+                console.log('Approve Response Text:', responseText);
+                
+                try {
+                    const data = JSON.parse(responseText);
+                    console.log('Parsed Approve Data:', data);
+                    
+                    if (data.status === 'success') {
+                        showMessage(data.message || '2FA updated successfully', 'success');
+                        
+                        setTimeout(() => {
+                            window.location.reload();
+                        }, 1500);
+                    } else {
+                        showMessage(data.message || 'Invalid code. Please try again.', 'error');
+                    }
+                } catch (e) {
+                    console.log('Not JSON response, checking content for success indicators');
+                    // If response contains success indicators, treat as success
+                    if (responseText.includes('alert-success') || responseText.includes('twofactorauth.success')) {
+                        showMessage('2FA updated successfully', 'success');
+                        setTimeout(() => {
+                            window.location.reload();
+                        }, 1500);
+                    } else if (responseText.includes('alert-danger') || responseText.includes('twofactorauth.error')) {
+                        showMessage('Invalid code. Please try again.', 'error');
+                    } else {
+                        // If we can't determine, just reload to see the actual state
+                        window.location.reload();
+                    }
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showMessage('Network error occurred', 'error');
+            })
+            .finally(() => {
+                button.disabled = false;
+                button.textContent = originalText;
+            });
+        });
+    }
+    
+    // Helper function to show messages
+    function showMessage(message, type) {
+        // Remove existing message
+        const existingMessage = document.querySelector('.temp-message');
+        if (existingMessage) {
+            existingMessage.remove();
+        }
+        
+        // Create new message
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `temp-message mb-4 p-4 rounded-lg border ${type === 'success'
+            ? 'bg-green-50 border-green-200 text-green-800'
+            : 'bg-red-50 border-red-200 text-red-800'}`;
+        
+        messageDiv.innerHTML = `
+            <div class="flex items-center">
+                <i class="${type === 'success' ? 'ri-check-line text-green-600' : 'ri-error-warning-line text-red-600'} text-xl mr-3"></i>
+                <p class="font-medium">${message}</p>
+            </div>
+        `;
+        
+        // Insert before 2FA section
+        const twoFASection = document.querySelector('.mt-8.pt-8.border-t.border-gray-200');
+        if (twoFASection) {
+            twoFASection.parentNode.insertBefore(messageDiv, twoFASection);
+        }
+        
+        // Auto remove after 5 seconds
+        setTimeout(() => {
+            if (messageDiv && messageDiv.parentNode) {
+                messageDiv.remove();
+            }
+        }, 5000);
+    }
+    
+    // 2FA Cancel button
+    const cancelBtn = document.getElementById('2fa-cancel-btn');
+    if (cancelBtn) {
+        cancelBtn.addEventListener('click', function() {
+            // Hide approve form, show generate form
+            twoFAApproveForm.style.display = 'none';
+            twoFAGenerateForm.style.display = 'block';
+            
+            // Clear the code input
+            const codeInput = document.getElementById('2fa-code');
+            if (codeInput) {
+                codeInput.value = '';
+            }
+        });
+    }
+    
+    // Focus code input when approve form is shown
+    const observer = new MutationObserver(function(mutations) {
+        mutations.forEach(function(mutation) {
+            if (mutation.type === 'attributes' && mutation.attributeName === 'style') {
+                const target = mutation.target;
+                if (target.id === '2fa-approve-form' && target.style.display === 'block') {
+                    setTimeout(() => {
+                        const codeInput = document.getElementById('2fa-code');
+                        if (codeInput) {
+                            codeInput.focus();
+                        }
+                    }, 100);
+                }
+            }
+        });
+    });
+    
+    if (twoFAApproveForm) {
+        observer.observe(twoFAApproveForm, { attributes: true });
+    }
+});
+</script>

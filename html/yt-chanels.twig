@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Channel Video Scraper</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        .yt-scraper-wrapper {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
+            color: #1f2937;
+        }
+
+        .yt-scraper-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .icon-box {
+            width: auto;
+            height: 48px;
+            background: transparent;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .icon-box img {
+            width: 28px;
+            height: 28px;
+        }
+
+        h1 {
+            font-size: 2.25rem;
+            font-weight: bold;
+            color: #1f2937;
+        }
+
+        .subtitle {
+            color: #6b7280;
+            font-size: 1.125rem;
+        }
+
+        .input-box {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 20px;
+            padding: 1.5rem;
+            max-width: 768px;
+            margin: 0 auto 2rem;
+        }
+
+        label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 0.75rem;
+        }
+
+        .input-group {
+            display: flex;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+        }
+
+        input[type="text"],
+        input[type="number"] {
+            flex: 1;
+            padding: 1rem;
+            background: white;
+            border: 1px solid #d1d5db;
+            border-radius: 15px;
+            color: #1f2937;
+            font-size: 1rem;
+            transition: all 0.2s;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #dc2626;
+            box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
+        }
+
+        input::placeholder {
+            color: #9ca3af;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            background: linear-gradient(to right, #dc2626, #b91c1c);
+            color: white;
+            font-weight: 600;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            box-shadow: 0 10px 15px -3px rgba(220, 38, 38, 0.3);
+        }
+
+        .btn:hover {
+            background: linear-gradient(to right, #b91c1c, #991b1b);
+        }
+
+        .btn:disabled {
+            background: linear-gradient(to right, #9ca3af, #6b7280);
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        .btn-full {
+            width: 100%;
+        }
+
+        .spinner {
+            width: 20px;
+            height: 20px;
+            border: 2px solid white;
+            border-top-color: transparent;
+            border-radius: 50%;
+            animation: spin 0.6s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .channel-info {
+            max-width: 768px;
+            margin: 0 auto 2rem;
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 20px;
+            padding: 1.5rem;
+            display: none;
+        }
+
+        .channel-info.active {
+            display: block;
+        }
+
+        .channel-header {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .channel-thumbnail {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+        }
+
+        .channel-details h2 {
+            font-size: 1.5rem;
+            color: #1f2937;
+            margin-bottom: 0.25rem;
+        }
+
+        .channel-stats {
+            color: #6b7280;
+            font-size: 0.875rem;
+        }
+
+        .results {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: none;
+        }
+
+        .results.active {
+            display: block;
+        }
+
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .results-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #1f2937;
+        }
+
+        .copy-all-btn {
+            padding: 0.75rem 1.5rem;
+            background: #22c55e;
+            color: white;
+            font-weight: 600;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .copy-all-btn:hover {
+            background: #16a34a;
+        }
+
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1rem;
+        }
+
+        .video-card {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 15px;
+            overflow: hidden;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .video-card:hover {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .video-thumbnail-container {
+            position: relative;
+            padding-bottom: 56.25%;
+            background: #f3f4f6;
+        }
+
+        .video-thumbnail-img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .video-info {
+            padding: 1rem;
+        }
+
+        .video-title {
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 0.5rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .video-date {
+            color: #6b7280;
+            font-size: 0.875rem;
+        }
+
+        .video-link {
+            color: #dc2626;
+            font-size: 0.75rem;
+            font-family: 'Courier New', monospace;
+            word-break: break-all;
+            margin-top: 0.5rem;
+        }
+
+        .error-box {
+            max-width: 768px;
+            margin: 0 auto;
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            border-radius: 15px;
+            padding: 1.5rem;
+            color: #ef4444;
+            display: none;
+        }
+
+        .error-box.active {
+            display: block;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.75rem;
+            }
+            .input-group {
+                flex-direction: column;
+            }
+            .video-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="yt-scraper-wrapper relative z-10 pb-16 md:pb-15 bg-white pt-6">
+        <div class="yt-scraper-container mx-auto relative z-10">
+            <!-- Header -->
+            <div class="header">
+                <div class="header-content">
+                    <div class="icon-box">
+                        <img src="https://storage.perfectcdn.com/f3b92e/613d1l69p0oz9rzr.svg" alt="YouTube">
+                    </div>
+                    <h1>YouTube Channel Video Scraper</h1>
+                </div>
+            </div>
+
+            <!-- Input Form -->
+            <div class="input-box">
+                <label>Channel Names, URLs, or IDs (one per line)</label>
+                <textarea id="channel-input" rows="5" placeholder="@channelname&#10;youtube.com/@channel&#10;UC...&#10;&#10;Enter multiple channels, one per line" style="width: 100%; padding: 1rem; background: white; border: 1px solid #d1d5db; border-radius: 15px; color: #1f2937; font-size: 1rem; resize: vertical; font-family: inherit;" onkeypress="if(event.key==='Enter' && event.ctrlKey) fetchVideos()"></textarea>
+                
+                <div class="input-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 0.75rem; margin-top: 1rem;">
+                    <div>
+                        <label>Max Videos per Channel</label>
+                        <input type="number" id="max-results" placeholder="50" value="50" min="1" max="500" style="width: 100%;">
+                    </div>
+                    <div>
+                        <label>Video Type</label>
+                        <select id="video-type" style="width: 100%; padding: 1rem; background: white; border: 1px solid #d1d5db; border-radius: 15px; color: #1f2937; font-size: 1rem; cursor: pointer;">
+                            <option value="all">All Videos</option>
+                            <option value="regular">Regular Videos Only</option>
+                            <option value="shorts">Shorts Only</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label>Service ID (Optional) </label>
+                        <input type="text" id="service-id" placeholder="6542" style="width: 100%;">
+                    </div>
+                    <div>
+                        <label>Quantity (Optional) </label>
+                        <input type="number" id="quantity" placeholder="1000" min="1" style="width: 100%;">
+                    </div>
+                </div>
+                
+                <button class="btn btn-full" id="fetch-btn" onclick="fetchVideos()" style="margin-top: 1rem;">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                    </svg>
+                    Fetch Videos
+                </button>
+            </div>
+
+            <!-- Error Box -->
+            <div id="error-box" class="error-box"></div>
+
+            <!-- Channel Info -->
+            <div id="channel-info" class="channel-info"></div>
+
+            <!-- Results -->
+            <div id="results" class="results">
+                <div class="results-header">
+                    <div class="results-title" id="results-title">Videos Found: 0</div>
+                    <div id="copy-buttons" style="display: flex; gap: 0.5rem;">
+                        <button class="copy-all-btn" onclick="copyAllLinks()" id="copy-links-btn">
+                            <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="display: inline; margin-right: 0.5rem;">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                            </svg>
+                            Copy All Links
+                        </button>
+                        <button class="copy-all-btn" onclick="copyMassOrder()" id="copy-mass-btn" style="display: none; background: #2563eb;">
+                            <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="display: inline; margin-right: 0.5rem;">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
+                            </svg>
+                            Copy Mass Order
+                        </button>
+                    </div>
+                </div>
+                <div id="video-grid" class="video-grid"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Configuration
+        const API_URL = 'https://youtuberefill-1.onrender.com/api/youtube/channel/videos';
+        let currentVideos = [];
+
+        async function fetchVideos() {
+            const channelInputText = document.getElementById('channel-input').value.trim();
+            const maxResults = parseInt(document.getElementById('max-results').value) || 50;
+            const videoType = document.getElementById('video-type').value;
+            const serviceId = document.getElementById('service-id').value.trim();
+            const quantity = document.getElementById('quantity').value.trim();
+
+            if (!channelInputText) {
+                showError('Please enter at least one channel name, URL, or ID');
+                return;
+            }
+
+            // Split by newlines and filter empty lines
+            const channels = channelInputText.split('\n').map(c => c.trim()).filter(c => c.length > 0);
+
+            setLoading(true);
+            hideError();
+            hideChannelInfo();
+            hideResults();
+
+            currentVideos = [];
+            let totalChannels = channels.length;
+            let processedChannels = 0;
+
+            try {
+                for (const channel of channels) {
+                    processedChannels++;
+                    updateLoadingText(`Processing ${processedChannels}/${totalChannels} channels...`);
+
+                    try {
+                        const response = await fetch(API_URL, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ channel, maxResults: maxResults * 2 }) // Fetch more to filter
+                        });
+
+                        const data = await response.json();
+
+                        if (data.success) {
+                            let videos = data.videos;
+                            
+                            // Filter by video type
+                            if (videoType === 'shorts') {
+                                videos = videos.filter(v => v.isShort === true);
+                            } else if (videoType === 'regular') {
+                                videos = videos.filter(v => v.isShort === false);
+                            }
+                            
+                            // Limit to maxResults after filtering
+                            videos = videos.slice(0, maxResults);
+                            
+                            currentVideos = currentVideos.concat(videos);
+                        }
+                    } catch (error) {
+                        console.error(`Error fetching channel ${channel}:`, error);
+                    }
+
+                    // Small delay between requests
+                    await new Promise(resolve => setTimeout(resolve, 200));
+                }
+
+                if (currentVideos.length > 0) {
+                    displayResults(currentVideos);
+                    updateCopyButtons(serviceId, quantity);
+                } else {
+                    showError('No videos found from any channel');
+                }
+            } catch (error) {
+                showError('Network error: ' + error.message);
+            } finally {
+                setLoading(false);
+            }
+        }
+
+        function updateCopyButtons(serviceId, quantity) {
+            const copyLinksBtn = document.getElementById('copy-links-btn');
+            const copyMassBtn = document.getElementById('copy-mass-btn');
+
+            if (serviceId && quantity) {
+                copyMassBtn.style.display = 'flex';
+            } else {
+                copyMassBtn.style.display = 'none';
+            }
+        }
+
+        function copyMassOrder() {
+            const serviceId = document.getElementById('service-id').value.trim();
+            const quantity = document.getElementById('quantity').value.trim();
+
+            if (!serviceId || !quantity) {
+                showError('Please enter both Service ID and Quantity');
+                return;
+            }
+
+            const massOrderLines = currentVideos.map(v => `${serviceId} | ${v.link} | ${quantity}`).join('\n');
+            
+            navigator.clipboard.writeText(massOrderLines).then(() => {
+                const btn = document.getElementById('copy-mass-btn');
+                const originalText = btn.innerHTML;
+                const originalBg = btn.style.background;
+                btn.innerHTML = '✓ Copied Mass Order!';
+                btn.style.background = '#16a34a';
+                setTimeout(() => {
+                    btn.innerHTML = originalText;
+                    btn.style.background = originalBg;
+                }, 2000);
+            });
+        }
+
+        function updateLoadingText(text) {
+            const btn = document.getElementById('fetch-btn');
+            btn.innerHTML = `<div class="spinner"></div> ${text}`;
+        }
+
+        function displayChannelInfo(channel) {
+            const container = document.getElementById('channel-info');
+            container.innerHTML = `
+                <div class="channel-header">
+                    <img src="${escapeHtml(channel.thumbnail)}" alt="${escapeHtml(channel.title)}" class="channel-thumbnail">
+                    <div class="channel-details">
+                        <h2>${escapeHtml(channel.title)}</h2>
+                        <div class="channel-stats">
+                            ${formatNumber(channel.subscriberCount)} subscribers • ${formatNumber(channel.videoCount)} videos
+                        </div>
+                    </div>
+                </div>
+            `;
+            container.classList.add('active');
+        }
+
+        function displayResults(videos) {
+            const container = document.getElementById('video-grid');
+            const resultsTitle = document.getElementById('results-title');
+            
+            resultsTitle.textContent = `Videos Found: ${videos.length}`;
+            
+            container.innerHTML = videos.map(video => `
+                <div class="video-card" onclick="window.open('${escapeHtml(video.link)}', '_blank', 'noopener,noreferrer')">
+                    <div class="video-thumbnail-container">
+                        <img src="${escapeHtml(video.thumbnail)}" alt="${escapeHtml(video.title)}" class="video-thumbnail-img">
+                    </div>
+                    <div class="video-info">
+                        <div class="video-title">${escapeHtml(video.title)}</div>
+                        <div class="video-date">${formatDate(video.publishedAt)}</div>
+                        <div class="video-link">${escapeHtml(video.link)}</div>
+                    </div>
+                </div>
+            `).join('');
+
+            document.getElementById('results').classList.add('active');
+        }
+
+        function copyAllLinks() {
+            const links = currentVideos.map(v => v.link).join('\n');
+            navigator.clipboard.writeText(links).then(() => {
+                const btn = document.getElementById('copy-links-btn');
+                const originalText = btn.innerHTML;
+                btn.innerHTML = '✓ Copied!';
+                btn.style.background = '#16a34a';
+                setTimeout(() => {
+                    btn.innerHTML = originalText;
+                    btn.style.background = '#22c55e';
+                }, 2000);
+            });
+        }
+
+        function setLoading(loading) {
+            const btn = document.getElementById('fetch-btn');
+            if (loading) {
+                btn.disabled = true;
+                btn.innerHTML = '<div class="spinner"></div> Fetching...';
+            } else {
+                btn.disabled = false;
+                btn.innerHTML = `
+                    <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                    </svg>
+                    Fetch Videos
+                `;
+            }
+        }
+
+        function showError(message) {
+            const errorBox = document.getElementById('error-box');
+            errorBox.textContent = '❌ ' + message;
+            errorBox.classList.add('active');
+        }
+
+        function hideError() {
+            document.getElementById('error-box').classList.remove('active');
+        }
+
+        function hideChannelInfo() {
+            document.getElementById('channel-info').classList.remove('active');
+        }
+
+        function hideResults() {
+            document.getElementById('results').classList.remove('active');
+        }
+
+        function formatNumber(num) {
+            if (num >= 1000000) return (num / 1000000).toFixed(1) + 'M';
+            if (num >= 1000) return (num / 1000).toFixed(1) + 'K';
+            return num;
+        }
+
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            const now = new Date();
+            const diffTime = Math.abs(now - date);
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+            
+            if (diffDays < 7) return diffDays + ' days ago';
+            if (diffDays < 30) return Math.floor(diffDays / 7) + ' weeks ago';
+            if (diffDays < 365) return Math.floor(diffDays / 30) + ' months ago';
+            return Math.floor(diffDays / 365) + ' years ago';
+        }
+
+        function escapeHtml(text) {
+            if (!text) return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+    </script>
+</body>
+</html>

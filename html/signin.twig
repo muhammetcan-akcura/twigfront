@@ -1,0 +1,1029 @@
+<style>
+        /* Mobile responsive shadow hiding */
+        @media (max-width: 768px) {
+            .shadow-2xl {
+                box-shadow: none !important;
+            }
+        }
+        </style>
+        <main class="relative z-10 overflow-hidden">
+            <div id="particles-background" class="absolute inset-0 z-0"></div>
+            <section class="hero relative z-10">
+                <div class="container relative z-10">
+                    <div class="grid lg:grid-cols-2 gap-1 items-start">
+                        <!-- Left column - Login -->
+                        <div class="text-center lg:text-left" style="margin: 0; padding: 0;" data-aos="fade-right">
+                            <div class="login-container" style="margin: 0; padding: 0;">
+                                <div class="bg-white/60 backdrop-blur-xl p-7 rounded-3xl shadow-2xl max-w-md mx-auto lg:mx-0 login-box-border {% if site['rtl'] %} rtl-content {% endif %}">
+
+                                    {% if error %}
+                                        <div class="alert alert-dismissible alert-danger {% if site['rtl'] %} rtl-alert {% endif %} mb-4 p-4 bg-red-100 border border-red-300 text-red-700 rounded-lg">
+                                            <button type="button" class="close float-right" data-dismiss="alert" onclick="this.parentElement.style.display='none'">&times;</button>
+                                            {{ errorMessage }}
+                                        </div>
+                                    {% endif %}
+
+                                    {% if success %}
+                                        <div class="alert alert-success alert-dismissible mb-4 p-4 bg-green-100 border border-green-300 text-green-700 rounded-lg" role="alert">
+                                            <button type="button" class="close float-right" data-dismiss="alert" aria-label="Close" onclick="this.parentElement.style.display='none'"><span aria-hidden="true">&times;</span></button>
+                                            {{successMessage}}
+                                        </div>
+                                    {% endif %}
+                                
+                                    <h2 class="text-3xl font-bold text-gray-900 mb-4">{{ lang('signin.title') ? lang('signin.title') : 'Login' }}</h2>
+                                    
+                                    {% if googleSignIn %}
+                                        <div class="w-full mb-4">
+                                            <div id="g_id_onload"
+                                               data-client_id="{{ googleClientId }}"
+                                               data-login_uri="{{ googleSignInRedirectUrl }}"
+                                               data-auto_prompt="false"
+                                               data-_csrf="{{csrftoken}}">
+                                            </div>
+                                            <div class="g_id_signin w-full flex items-center justify-center gap-3 transition-colors"
+                                               data-type="standard"
+                                               data-size="large"
+                                               data-theme="outline"
+                                               data-text="sign_in_with"
+                                               data-shape="rectangular"
+                                               data-logo_alignment="left">
+                                            </div>
+                                        </div>
+                                    {% endif %}
+            
+                                    <div class="flex items-center my-5">
+                                        <hr class="w-full border-gray-300/80">
+                                        <span class="px-3 text-xs text-gray-500 bg-transparent whitespace-nowrap">{{ lang('Sign in') ? lang('Sign in') : 'or sign in with username' }}</span>
+                                        <hr class="w-full border-gray-300/80">
+                                    </div>
+
+                                    <form {% if site['rtl'] %}class="rtl-form"{% endif %} method="post" action="{{ page['url'] }}" class="space-y-4">
+                                        <div>
+                                            <label for="username" class="block text-sm font-medium text-gray-700 mb-1.5">{{ lang('signup.username') ? lang('signup.username') : 'Username' }}</label>
+                                            <div class="input-with-icon">
+                                                <div class="input-icon-left">
+                                                    <i class="ri-user-line"></i>
+                                                </div>
+                                                <input type="text" id="username" name="LoginForm[username]" placeholder="{{ lang('signup.username') ? lang('signup.username') : 'Username' }}" required class="icon-input">
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <label for="password" class="block text-sm font-medium text-gray-700 mb-1.5">{{ lang('signup.password') ? lang('signup.password') : 'Password' }}</label>
+                                            <div class="input-with-icon">
+                                                <div class="input-icon-left">
+                                                    <i class="ri-lock-line"></i>
+                                                </div>
+                                                <input type="password" name="LoginForm[password]" id="password" placeholder="{{ lang('signup.password') ? lang('signup.password') : 'Password' }}" required class="icon-input">
+                                                <button type="button" id="toggle-password" class="input-icon-right">
+                                                    <i class="ri-eye-line"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        
+                                        {% if captcha %}
+                                            <div class="mb-4">
+                                                {{ captchaCode }}
+                                            </div>
+                                        {% endif %}
+
+                                        <div class="flex items-center justify-between !mt-5">
+                                            <div class="flex items-center">
+                                                <label class="custom-checkbox flex items-center cursor-pointer">
+                                                    <input type="checkbox" name="LoginForm[remember]" value="1" id="remember">
+                                                    <span class="checkmark"></span>
+                                                    <span class="ml-6 text-sm text-gray-800">{{ lang('signin.remember_me') ? lang('signin.remember_me') : 'Remember me' }}</span>
+                                                </label>
+                                            </div>
+                                            {% if site['resetPassword'] %}
+                                                <a href="{{ page_url('resetpassword') }}" class="text-sm font-medium text-blue-600 hover:text-blue-700">{{ lang('signin.reset_password') ? lang('signin.reset_password') : 'Forgot password?' }}</a>
+                                            {% endif %}
+                                        </div>
+
+                                        <input type="hidden" name="_csrf" value="{{csrftoken}}">
+                                        
+                                        <button type="submit" class="w-full flex items-center justify-center gap-2 text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-base px-5 py-3 text-center !mt-6 transition-all duration-300 shadow-lg hover:shadow-xl">
+                                            <span>{{ lang('signin.button') ? lang('signin.button') : 'Login' }}</span>
+                                            <i data-feather="log-in"></i>
+                                        </button>
+                                        <p class="text-sm text-center text-gray-600 !mt-5">
+                                            {{ lang('signin.text') ? lang('signin.text') : "Don't have an account?" }} <a href="{{ page_url('signup') }}" class="font-medium text-blue-600 hover:text-blue-700">{{ lang('signup.title') ? lang('signup.title') : 'Sign up' }}</a>
+                                        </p>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Right column - Title and World Map -->
+                        <div class="hero-image-container relative hidden lg:block" data-aos="fade-left">
+                            <div class="world-map-container relative" style="margin-top: 120px;">
+                                <!-- Dotted World Map Image -->
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/e/ec/World_map_%28blue_dots%29.svg" alt="World Map" class="world-map-image"/>
+                                
+                                <!-- Background overlay for better visibility -->
+                                <div class="map-overlay"></div>
+                                
+                                <!-- Title overlaid on top of map -->
+                                <div class="absolute top-0 left-0 right-0 z-20 text-center" style="padding-top: 0; margin-top: -120px;">
+                                    
+                                    <!-- Badge -->
+                                    <div class="inline-flex items-center gap-3 bg-transparent backdrop-blur-sm text-white px-4 py-2 rounded-full text-sm font-medium mb-3 neon-badge" data-aos="fade-down">
+                                        <div class="w-6 h-6 rounded-full flex items-center justify-center neon-icon-container">
+                                            <i class="ri-flashlight-line text-white text-xs"></i>
+                                        </div>
+                                        <span class="text-gray-900">{{ site['name'] }} The Best SMMPanel</span>
+                                    </div>
+
+                                    <h1 class="text-4xl md:text-5xl lg:text-[3.8rem] font-bold text-gray-900 mb-4 hero-title" data-aos="fade-up">
+                                     🔥#1 SMM PANEL<br>
+                                         <span class="gradient-text">IN THE WORLD!</span>
+                                    </h1>
+                                    
+
+                                    
+
+                                </div>
+                                
+                                <!-- Gradient fade overlay under text -->
+                                <div class="absolute left-0 right-0 bg-gradient-to-b from-white/90 via-white/50 to-transparent gradient-fade-overlay"></div>
+
+                                <!-- Animated Social Media Bubbles - Well distributed -->
+                                <!-- North America - USA -->
+                                <div class="social-bubble bubble-1" data-platform="instagram" data-aos="zoom-in-up">
+                                    <div class="bubble-icon">
+                                        <i class="ri-instagram-line"></i>
+                                    </div>
+                                </div>
+
+                                <!-- Europe - Western Europe -->
+                                <div class="social-bubble bubble-2" data-platform="youtube" data-aos="zoom-in-up">
+                                    <div class="bubble-icon">
+                                        <i class="ri-youtube-fill"></i>
+                                    </div>
+                                </div>
+
+                                <!-- Asia - East Asia -->
+                                <div class="social-bubble bubble-3" data-platform="twitter" data-aos="zoom-in-up">
+                                    <div class="bubble-icon">
+                                        <i class="ri-twitter-x-line"></i>
+                                    </div>
+                                </div>
+
+                                <!-- Africa - Central Africa -->
+                                <div class="social-bubble bubble-4" data-platform="tiktok" data-aos="zoom-in-up">
+                                    <div class="bubble-icon">
+                                        <i class="ri-tiktok-fill"></i>
+                                    </div>
+                                </div>
+
+                                <!-- South America - Brazil -->
+                                <div class="social-bubble bubble-5" data-platform="facebook" data-aos="zoom-in-up">
+                                    <div class="bubble-icon">
+                                        <i class="ri-facebook-fill"></i>
+                                    </div>
+                                </div>
+
+                                <!-- Australia/Oceania -->
+                                <div class="social-bubble bubble-6" data-platform="twitch" data-aos="zoom-in-up">
+                                    <div class="bubble-icon">
+                                        <i class="ri-twitch-fill"></i>
+                                    </div>
+                                </div>
+
+                                <!-- Asia - Central Asia/Russia -->
+                                <div class="social-bubble bubble-7" data-platform="spotify" data-aos="zoom-in-up">
+                                    <div class="bubble-icon">
+                                        <i class="ri-spotify-fill"></i>
+                                    </div>
+                                </div>
+
+                                <!-- North America - Canada -->
+                                <div class="social-bubble bubble-8" data-platform="discord" data-aos="zoom-in-up">
+                                    <div class="bubble-icon">
+                                        <i class="ri-discord-fill"></i>
+                                    </div>
+                                </div>
+
+                                <!-- Exclusive Badge -->
+                                <div class="absolute bottom-[75px] left-0 right-0 z-20 flex justify-center" data-aos="zoom-in-up" data-aos-delay="500">
+                                    <div class="float-animation flex items-center gap-3 bg-gradient-to-r from-blue-600 to-blue-400 text-white px-6 py-3 rounded-full font-bold text-base shadow-lg shadow-blue-500/50 hover:scale-105 transition-transform cursor-pointer">
+                                        <i class="ri-vip-crown-2-fill text-xl"></i>
+                                        <span>Stand Out, Stay EXCLUSIVE</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+            </section>
+        </main>
+
+        {% if authText %}
+            <section class="auth-text-section py-8">
+                <div class="container mx-auto px-4">
+                    <div class="max-w-4xl mx-auto">
+                        <div class="bg-white/60 backdrop-blur-xl p-7 rounded-3xl shadow-2xl {% if site['rtl'] %} rtl-content {% endif %}">
+                            {{ authText }}
+                        </div>
+                    </div>
+                </div>
+            </section>
+        {% endif %}
+
+        <section class="stats-section relative container mx-auto px-4 py-8">
+            <div id="particles-payment" class="absolute inset-0"></div>
+            <div class="relative z-10 flex flex-col md:flex-row justify-around items-center text-center md:text-left space-y-8 md:space-y-0">
+                
+                <div class="stat-item flex items-center space-x-4 w-48 md:ml-10" data-aos="fade-up" data-aos-delay="100">
+                    <div class="stat-icon">
+                        <i class="ri-history-line"></i>
+                    </div>
+                    <div class="flex flex-col">
+                        <div class="flex items-baseline">
+                            <span class="stat-number count-up">{{ totals['ordersAll'] }}</span>
+                            <span class="stat-suffix">+</span>
+                        </div>
+                        <span class="stat-label">Completed Order</span>
+                    </div>
+                </div>
+
+                <div class="stat-item flex items-center space-x-4 w-48" data-aos="fade-up" data-aos-delay="200">
+                    <div class="stat-icon">
+                        <i class="ri-group-line"></i>
+                    </div>
+                    <div class="flex flex-col">
+                        <div class="flex items-baseline">
+                            <span class="stat-number count-up">{{ totals['usersAll'] }}</span>
+                            <span class="stat-suffix">+</span>
+                        </div>
+                        <span class="stat-label">Active Users</span>
+                    </div>
+                </div>
+
+                <div class="stat-item flex items-center space-x-4 w-48" data-aos="fade-up" data-aos-delay="300">
+                    <div class="stat-icon">
+                        <i class="ri-sparkling-2-line"></i>
+                    </div>
+                    <div class="flex flex-col">
+                        <div class="flex items-baseline">
+                            <span class="stat-number count-up">6</span>
+                            <span class="stat-suffix">+ Years</span>
+                        </div>
+                        <span class="stat-label">Experience</span>
+                    </div>
+                </div>
+
+                <div class="stat-item flex items-center space-x-4 w-48" data-aos="fade-up" data-aos-delay="400">
+                    <div class="stat-icon">
+                        <i class="ri-settings-line"></i>
+                    </div>
+                    <div class="flex flex-col">
+                        <div class="flex items-baseline">
+                            <span class="stat-number count-up">{{ totals['servicesAll'] }}</span>
+                            <span class="stat-suffix">+</span>
+                        </div>
+                        <span class="stat-label">Services</span>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+
+        <!-- About Us Section -->
+        <section class="about-us-section" data-aos="fade-up">
+            <div class="container mx-auto px-4">
+                <div class="section-header text-center mb-12">
+                     <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">About <span class="text-blue-600">{{ site['name'] }}</span></h2>
+                </div>
+                <div class="about-us-gradient-wrapper">
+                    <div class="about-us-box">
+                        <div class="flex items-center gap-x-5 mb-4">
+                            <svg class="flex-shrink-0" xmlns="http://www.w3.org/2000/svg" width="72" height="72" viewBox="0 0 72 72" fill="none">
+                                <g clip-path="url(#clip0_23_29)">
+                                    <rect width="72" height="72" rx="36" fill="#0038FF"></rect>
+                                    <g filter="url(#filter0_d_23_29)">
+                                    <rect x="7" y="7" width="58" height="58" rx="29" fill="white"></rect>
+                                    </g>
+                                    <path d="M25.5 40.6667L22 29L30.288 33.6667L36 24.3333L41.712 33.6667L50 29L46.5 40.6667H25.5ZM25.5 43V47.6667H46.5V43H25.5Z" fill="url(#paint0_linear_23_29)"></path>
+                                </g>
+                                <defs>
+                                    <filter id="filter0_d_23_29" x="3" y="7" width="66" height="66" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+                                    <feFlood flood-opacity="0" result="BackgroundImageFix"></feFlood>
+                                    <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"></feColorMatrix>
+                                    <feOffset dy="4"></feOffset>
+                                    <feGaussianBlur stdDeviation="2"></feGaussianBlur>
+                                    <feComposite in2="hardAlpha" operator="out"></feComposite>
+                                    <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"></feColorMatrix>
+                                    <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_23_29"></feBlend>
+                                    <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_23_29" result="shape"></feBlend>
+                                    </filter>
+                                    <linearGradient id="paint0_linear_23_29" x1="36" y1="24.3333" x2="36" y2="47.6667" gradientUnits="userSpaceOnUse">
+                                    <stop stop-color="#0038FF"></stop>
+                                    <stop offset="1" stop-color="#0038FF" stop-opacity="0.19"></stop>
+                                    </linearGradient>
+                                    <clipPath id="clip0_23_29">
+                                    <rect width="72" height="72" fill="white"></rect>
+                                    </clipPath>
+                                </defs>
+                            </svg>
+                            <h3 class="!mb-0">World's Best Cheap & Easy SMM Panel</h3>
+                        </div>
+                        <p>{{ site['name'] }} is a globally recognized platform offering top-notch SMM services. Whether you're in the United States, India, or Turkey, you can access our services anywhere, anytime. Our panel is designed to be user-friendly and cost-effective, providing the best value for your money.</p>
+                        
+                        
+                        <div class="about-us-image-wrapper">
+                             <!-- Floating Follower Bubbles -->
+                            <div id="follower-bubble-1" class="follower-bubble">
+                                <div class="follower-bubble-img">
+                                    <img src="https://randomuser.me/api/portraits/men/86.jpg" alt="User Avatar">
+                                    <div class="follower-bubble-badge">
+                                        <i class="ri-instagram-line"></i>
+                                    </div>
+                                </div>
+                                <span>New followers are coming! 🎉</span>
+                            </div>
+                            <div id="follower-bubble-2" class="follower-bubble">
+                                <div class="follower-bubble-img">
+                                    <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="User Avatar">
+                                    <div class="follower-bubble-badge">
+                                        <i class="ri-instagram-line"></i>
+                                    </div>
+                                </div>
+                                <span>New followers are coming! 🎉</span>
+                            </div>
+                             <img src="https://storage.perfectcdn.com/ed17j7/wje65i9nolyra4ww.png" alt="{{ site['name'] }} Dashboard">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- Key Features Section -->
+        <section class="key-features-section" data-aos="fade-up">
+            <div class="container mx-auto px-4">
+                <div class="section-header text-center mb-12">
+                    <div class="section-badge inline-flex items-center gap-2 bg-blue-100 text-blue-600 border border-blue-200 py-2 px-4 rounded-full font-medium mb-5">
+                        <i data-feather="star"></i>
+                        <span>Why {{ site['name'] }}?</span>
+                    </div>
+                    <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Unmatched <span class="text-blue-600">Quality and Service</span></h2>
+                    <p class="subtitle text-lg text-gray-600 max-w-3xl mx-auto">We are committed to providing you with the best experience, combining cutting-edge technology with dedicated support.</p>
+                </div>
+                <div class="key-features-grid">
+                    <!-- Feature Card 1 -->
+                    <div class="key-feature-card">
+                        <div class="key-feature-icon">
+                            <i class="ri-shield-check-line"></i>
+                        </div>
+                        <h3>Reliable and Fast</h3>
+                        <span class="subtitle">We Proved It!</span>
+                        <div class="divider"></div>
+                        <p>We are at your service with a secure payment infrastructure!</p>
+                    </div>
+                    <!-- Feature Card 2 -->
+                    <div class="key-feature-card">
+                        <div class="key-feature-icon">
+                            <i class="ri-apps-2-line"></i>
+                        </div>
+                        <h3>All Platforms</h3>
+                        <span class="subtitle">Any Service You Want!</span>
+                        <div class="divider"></div>
+                        <p>Always the best services for you.</p>
+                    </div>
+                    <!-- Feature Card 3 -->
+                    <div class="key-feature-card">
+                        <div class="key-feature-icon">
+                            <i class="ri-global-line"></i>
+                        </div>
+                        <h3>For the Whole World</h3>
+                        <span class="subtitle">Access from Anywhere!</span>
+                        <div class="divider"></div>
+                        <p>Uninterrupted access from any point in the world.</p>
+                    </div>
+                    <!-- Feature Card 4 -->
+                    <div class="key-feature-card">
+                        <div class="key-feature-icon">
+                            <i class="ri-bank-card-line"></i>
+                        </div>
+                        <h3>Fast Payment</h3>
+                        <span class="subtitle">All Payment Methods</span>
+                        <div class="divider"></div>
+                        <p>Most payment methods you want and are looking for.</p>
+                    </div>
+                    <!-- Feature Card 5 -->
+                    <div class="key-feature-card">
+                        <div class="key-feature-icon">
+                            <i class="ri-customer-service-2-line"></i>
+                        </div>
+                        <h3>7/24 Support</h3>
+                        <span class="subtitle">Always Fast</span>
+                        <div class="divider"></div>
+                        <p>10+ Staff Working For You</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+
+    <section class="payment-methods-section py-16 md:py-24" data-aos="fade-up">
+            <div class="container mx-auto px-4">
+                <div class="section-header text-center mb-12">
+                    <div class="section-badge inline-flex items-center gap-2 bg-blue-100 text-blue-600 border border-blue-200 py-2 px-4 rounded-full font-medium mb-5">
+                        <i data-feather="help-circle"></i>
+                        <span>Payment Methods</span>
+                    </div>
+                    <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Multiple Payment Options <br><span class="text-blue-600">for Your Convenience</span></h2>
+                    <p class="subtitle text-lg text-gray-600 max-w-2xl mx-auto">If you have any questions about payments, our support team is always ready to help you.</p>
+                </div>
+                <div class="payment-container-box max-w-4xl mx-auto">
+                    <div class="payment-stars"></div>
+                    <div class="payment-window">
+                        <div class="payment-window-header">
+                            <div class="dots">
+                                <span></span><span></span><span></span>
+                            </div>
+                            <div class="address-bar">
+                                <i class="ri-lock-fill"></i>
+                                smmexclusive.com/addfunds
+                            </div>
+                            <div class="actions">
+                                <i class="ri-links-line"></i>
+                                <i class="ri-star-line"></i>
+                            </div>
+                        </div>
+                        <div class="payment-window-body">
+                           <img src="https://storage.perfectcdn.com/ed17j7/mlkmhj6ftijiiyu3.jpg" alt="Payment Methods" class="w-full h-full object-cover">
+                        </div>
+                    </div>
+
+                    <div class="payment-promo-box">
+                        <div class="crypto-promo">
+                            <div class="section-badge">
+                                <i class="ri-bit-coin-line"></i>
+                            </div>
+                            <h3>Payment with crypto? Of course...</h3>
+                        </div>
+
+                        <div class="payment-logos-container">
+                            <div class="payment-logos">
+                                <img src="https://cdn.smmspot.net/smmflare/assets/images/payment/paypal.svg" alt="PayPal">
+                                <img src="https://cdn.smmspot.net/smmflare/assets/images/payment/stripe.svg" alt="Stripe">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/Binance_logo.svg/1280px-Binance_logo.svg.png" alt="Binance">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Mastercard-logo.svg/2560px-Mastercard-logo.svg.png" alt="Mastercard">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Visa_Inc._logo.svg/2560px-Visa_Inc._logo.svg.png" alt="Visa">
+                                <!-- Duplicate for seamless scroll -->
+                                <img src="https://cdn.smmspot.net/smmflare/assets/images/payment/paypal.svg" alt="PayPal">
+                                <img src="https://cdn.smmspot.net/smmflare/assets/images/payment/stripe.svg" alt="Stripe">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/Binance_logo.svg/1280px-Binance_logo.svg.png" alt="Binance">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Mastercard-logo.svg/2560px-Mastercard-logo.svg.png" alt="Mastercard">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Visa_Inc._logo.svg/2560px-Visa_Inc._logo.svg.png" alt="Visa">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+    
+        <section class="reviews-section py-16 md:py-24" data-aos="fade-up">
+            <div class="container mx-auto px-4">
+                <div class="section-header text-center mb-12">
+                    <div class="section-badge inline-flex items-center gap-2 bg-blue-100 text-blue-600 border border-blue-200 py-2 px-4 rounded-full font-medium mb-5">
+                        <i data-feather="help-circle"></i>
+                        <span>Customer Reviews</span>
+                    </div>
+                    <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">What Our Clients Say <br><span class="text-blue-600">About {{ site['name'] }}</span></h2>
+                    <p class="subtitle text-lg text-gray-600 max-w-2xl mx-auto">If you have any questions, our support team is always here to help you.</p>
+                </div>
+                <div class="reviews-slider grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Review Card 1 -->
+                    <div class="review-card-simple">
+                        <div class="review-header-simple">
+                            <div class="reviewer-info-simple">
+                                <h4>Lee Jordan</h4>
+                                <span>Social Media Manager</span>
+                            </div>
+                            <div class="review-quote-icon">
+                                <i class="ri-double-quotes-r"></i>
+                            </div>
+                        </div>
+                        <hr class="review-divider">
+                        <div class="review-text-simple">
+                            <p>"My SMM panel search is finally over. smmtest truly is the grace of all SMM panels and services, thank you, thank you, thank you!"</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Review Card 2 -->
+                    <div class="review-card-simple">
+                        <div class="review-header-simple">
+                            <div class="reviewer-info-simple">
+                                <h4>Maryam Sharmi</h4>
+                                <span>Freelancer</span>
+                            </div>
+                            <div class="review-quote-icon">
+                                <i class="ri-double-quotes-r"></i>
+                            </div>
+                        </div>
+                        <hr class="review-divider">
+                        <div class="review-text-simple">
+                            <p>"I like this social media panel, I actually face a problem with my first try but support was there, and they help me to fix that problem and then I buy YouTube views and I guess it's one of the best."</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Review Card 3 -->
+                    <div class="review-card-simple">
+                        <div class="review-header-simple">
+                            <div class="reviewer-info-simple">
+                                <h4>SantyMan</h4>
+                                <span>Digital Marketer</span>
+                            </div>
+                            <div class="review-quote-icon">
+                                <i class="ri-double-quotes-r"></i>
+                            </div>
+                        </div>
+                        <hr class="review-divider">
+                        <div class="review-text-simple">
+                            <p>"What a great Experience... CHEAPEST and fast and best Response team. My social media is growing very fast."</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Review Card 4 -->
+                    <div class="review-card-simple">
+                        <div class="review-header-simple">
+                            <div class="reviewer-info-simple">
+                                <h4>Alex Johnson</h4>
+                                <span>E-commerce Owner</span>
+                            </div>
+                            <div class="review-quote-icon">
+                                <i class="ri-double-quotes-r"></i>
+                            </div>
+                        </div>
+                        <hr class="review-divider">
+                        <div class="review-text-simple">
+                            <p>"{{ site['name'] }} has been a game-changer for my online store's social media presence. The services are both affordable and incredibly effective."</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Review Card 5 -->
+                    <div class="review-card-simple">
+                        <div class="review-header-simple">
+                            <div class="reviewer-info-simple">
+                                <h4>Emily Wilson</h4>
+                                <span>Influencer</span>
+                            </div>
+                            <div class="review-quote-icon">
+                                <i class="ri-double-quotes-r"></i>
+                            </div>
+                        </div>
+                        <hr class="review-divider">
+                        <div class="review-text-simple">
+                            <p>"The best SMM panel I've used so far. The support team responds very quickly and the results are amazing. I definitely recommend it!"</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Review Card 6 -->
+                    <div class="review-card-simple">
+                        <div class="review-header-simple">
+                            <div class="reviewer-info-simple">
+                                <h4>Michael Turner</h4>
+                                <span>Entrepreneur</span>
+                            </div>
+                            <div class="review-quote-icon">
+                                <i class="ri-double-quotes-r"></i>
+                            </div>
+                        </div>
+                        <hr class="review-divider">
+                        <div class="review-text-simple">
+                            <p>"Fast, reliable and affordable. {{ site['name'] }} provides everything you need to strengthen your social media accounts. I'm very satisfied."</p>
+                        </div>
+                    </div>
+
+                    <!-- Review Card 7 -->
+                    <div class="review-card-simple">
+                        <div class="review-header-simple">
+                            <div class="reviewer-info-simple">
+                                <h4>Sarah Brown</h4>
+                                <span>Musician</span>
+                            </div>
+                            <div class="review-quote-icon">
+                                <i class="ri-double-quotes-r"></i>
+                            </div>
+                        </div>
+                        <hr class="review-divider">
+                        <div class="review-text-simple">
+                            <p>"Thanks to {{ site['name'] }}, I significantly increased my presence on Spotify and YouTube. Their services are first-class."</p>
+                        </div>
+                    </div>
+
+                    <!-- Review Card 8 -->
+                    <div class="review-card-simple">
+                        <div class="review-header-simple">
+                            <div class="reviewer-info-simple">
+                                <h4>David Miller</h4>
+                                <span>Photographer</span>
+                            </div>
+                            <div class="review-quote-icon">
+                                <i class="ri-double-quotes-r"></i>
+                            </div>
+                        </div>
+                        <hr class="review-divider">
+                        <div class="review-text-simple">
+                            <p>"The interface is user-friendly and the variety of services is impressive. I saw real growth on my Instagram page."</p>
+                        </div>
+                    </div>
+
+                    <!-- Review Card 9 -->
+                    <div class="review-card-simple">
+                        <div class="review-header-simple">
+                            <div class="reviewer-info-simple">
+                                <h4>Jessica Davis</h4>
+                                <span>Blogger</span>
+                            </div>
+                            <div class="review-quote-icon">
+                                <i class="ri-double-quotes-r"></i>
+                            </div>
+                        </div>
+                        <hr class="review-divider">
+                        <div class="review-text-simple">
+                            <p>"I've tried many SMM panels but {{ site['name'] }} stands out with its quality and customer support. It's now my indispensable platform."</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <section class="faq-section py-16 md:py-24" data-aos="fade-up">
+            <div class="container mx-auto px-4">
+                <div class="section-header text-center mb-12">
+                    <div class="section-badge inline-flex items-center gap-2 bg-blue-100 text-blue-600 border border-blue-200 py-2 px-4 rounded-full font-medium mb-5">
+                        <i data-feather="help-circle"></i>
+                        <span>Frequently Asked Questions</span>
+                    </div>
+                    <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Have questions? <br><span class="text-blue-600">We have answers.</span></h2>
+                    <p class="subtitle text-lg text-gray-600 max-w-2xl mx-auto">If you have any other questions, feel free to contact our support team anytime.</p>
+                </div>
+
+                <div class="flex justify-center">
+                    <div class="faq-tabs-container text-xs sm:text-sm md:text-base px-2 sm:px-4">
+                        <button class="faq-tab active px-2 py-1 sm:px-3 sm:py-2 md:px-4 md:py-2" data-tab="smm-panel">SMM Panel</button>
+                        <button class="faq-tab px-2 py-1 sm:px-3 sm:py-2 md:px-4 md:py-2" data-tab="payments">Payments</button>
+                        <button class="faq-tab px-2 py-1 sm:px-3 sm:py-2 md:px-4 md:py-2" data-tab="orders">Orders</button>
+                        <button class="faq-tab px-2 py-1 sm:px-3 sm:py-2 md:px-4 md:py-2" data-tab="services">Services</button>
+                    </div>
+                </div>
+
+                <div class="faq-content">
+                    <div id="smm-panel" class="faq-tab-content active">
+                        <div class="faq-grid grid grid-cols-1 md:grid-cols-2 gap-5 max-w-4xl mx-auto">
+                            <div class="faq-item">
+                                <div class="faq-question">
+                                    <h4>What is an SMM panel?</h4>
+                                    <i data-feather="plus"></i>
+                                </div>
+                                <div class="faq-answer">
+                                    <p>An SMM panel is a platform that offers social media marketing services such as followers, likes, and views for various platforms.</p>
+                                </div>
+                            </div>
+                            <div class="faq-item">
+                                <div class="faq-question">
+                                    <h4>How do I sign up and log in?</h4>
+                                    <i data-feather="plus"></i>
+                                </div>
+                                <div class="faq-answer">
+                                    <p>You can sign up by clicking the "Sign Up" button and filling out the registration form. To log in, simply enter your username and password on the login page.</p>
+                                </div>
+                            </div>
+                            <div class="faq-item">
+                                <div class="faq-question">
+                                    <h4>Do you have a reseller program?</h4>
+                                    <i data-feather="plus"></i>
+                                </div>
+                                <div class="faq-answer">
+                                    <p>Yes, we offer a reseller program so you can provide services to your own clients. Contact us for more details.</p>
+                                </div>
+                            </div>
+                            <div class="faq-item">
+                                <div class="faq-question">
+                                    <h4>How can I reach your support team?</h4>
+                                    <i data-feather="plus"></i>
+                                </div>
+                                <div class="faq-answer">
+                                    <p>You can reach our support team 24/7 via our ticket system or the contact channels on our website.</p>
+                                </div>
+                            </div>
+                            <div class="faq-item">
+                                <div class="faq-question">
+                                    <h4>Support available for order issues?</h4>
+                                    <i data-feather="plus"></i>
+                                </div>
+                                <div class="faq-answer">
+                                    <p>Yes, our dedicated technical support team is available to help you with any issues you may encounter. Just open a support ticket.</p>
+                                </div>
+                            </div>
+                            <div class="faq-item">
+                                <div class="faq-question">
+                                    <h4>Can I start my own SMM panel?</h4>
+                                    <i data-feather="plus"></i>
+                                </div>
+                                <div class="faq-answer">
+                                    <p>Yes, we offer special discounts for resellers who want to start their own SMM panel. Please contact us for more information on our reseller program.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="payments" class="faq-tab-content">
+                        <div class="faq-grid grid grid-cols-1 md:grid-cols-2 gap-5 max-w-4xl mx-auto">
+                            <div class="faq-item">
+                                <div class="faq-question">
+                                    <h4>What payment methods do you accept?</h4>
+                                    <i data-feather="plus"></i>
+                                </div>
+                                <div class="faq-answer">
+                                    <p>You can pay securely via credit card, bank transfer, and various online payment systems like PayPal and cryptocurrencies.</p>
+                                </div>
+                            </div>
+                            <div class="faq-item">
+                                <div class="faq-question">
+                                    <h4>Can you clarify your refund and cancellation policies?</h4>
+                                    <i data-feather="plus"></i>
+                                </div>
+                                <div class="faq-answer">
+                                    <p>We offer refunds for any remaining balance in your account. For specific order cancellations and refunds, please contact our support team to review your case.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="orders" class="faq-tab-content">
+                        <div class="faq-grid grid grid-cols-1 md:grid-cols-2 gap-5 max-w-4xl mx-auto">
+                           <div class="faq-item">
+                                <div class="faq-question">
+                                    <h4>How long does it take to complete orders?</h4>
+                                    <i data-feather="plus"></i>
+                                </div>
+                                <div class="faq-answer">
+                                    <p>Order completion time depends on the service type and demand, but usually starts within minutes of placing the order.</p>
+                                </div>
+                            </div>
+                            <div class="faq-item">
+                                <div class="faq-question">
+                                    <h4>What happens if my order is not completed?</h4>
+                                    <i data-feather="plus"></i>
+                                </div>
+                                <div class="faq-answer">
+                                    <p>If an order cannot be completed, the amount for the undelivered portion will be automatically refunded to your panel balance.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                     <div id="services" class="faq-tab-content">
+                        <div class="faq-grid grid grid-cols-1 md:grid-cols-2 gap-5 max-w-4xl mx-auto">
+                           <div class="faq-item">
+                                <div class="faq-question">
+                                    <h4>Are your services safe to use?</h4>
+                                    <i data-feather="plus"></i>
+                                </div>
+                                <div class="faq-answer">
+                                    <p>Yes, all our services are completely safe for your accounts. We only use secure methods to deliver high-quality results.</p>
+                                </div>
+                            </div>
+                            <div class="faq-item">
+                                <div class="faq-question">
+                                    <h4>Can I resell your services via API?</h4>
+                                    <i data-feather="plus"></i>
+                                </div>
+                                <div class="faq-answer">
+                                    <p>Absolutely! We provide a fully integrated API that allows you to easily resell our services on your own platform.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+                <!-- All SMM Services Section -->
+                <section class="all-services-section py-16 md:py-24" data-aos="fade-up">
+            <div class="container mx-auto px-4">
+            <div class="section-header text-center mb-12">
+                    <div class="section-badge inline-flex items-center gap-2 bg-blue-100 text-blue-600 border border-blue-200 py-2 px-4 rounded-full font-medium mb-5">
+                        <i data-feather="star"></i>
+                        <span>Why {{ site['name'] }}?</span>
+                    </div>
+                    <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Unmatched <span class="text-blue-600">Quality and Service</span></h2>
+                    <p class="subtitle text-lg text-gray-600 max-w-3xl mx-auto">We are committed to providing you with the best experience, combining cutting-edge technology with dedicated support.</p>
+                </div>
+
+                <div class="services-accordion-container grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto md:items-start">
+                    <!-- Instagram -->
+                    <div class="accordion-item">
+                        <div class="accordion-header">
+                            <i class="ri-instagram-line service-icon2 icon-instagram"></i>
+                            <span>Buy Instagram SMM Panel Services</span>
+                            <i class="ri-arrow-down-s-line arrow-icon"></i>
+                        </div>
+                        <div class="accordion-content">
+                            <div class="sub-services-grid">
+                                <a href="#" class="sub-service-button">Buy Instagram Followers</a>
+                                <a href="#" class="sub-service-button">Buy Instagram Likes</a>
+                                <a href="#" class="sub-service-button">Buy Instagram Views</a>
+                                <a href="#" class="sub-service-button">Buy Instagram Comments</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- TikTok -->
+                    <div class="accordion-item">
+                        <div class="accordion-header">
+                            <i class="ri-tiktok-fill service-icon2 icon-tiktok"></i>
+                            <span>Buy TikTok SMM Panel Services</span>
+                            <i class="ri-arrow-down-s-line arrow-icon"></i>
+                        </div>
+                        <div class="accordion-content">
+                            <div class="sub-services-grid">
+                                <a href="#" class="sub-service-button">Buy TikTok Followers</a>
+                                <a href="#" class="sub-service-button">Buy TikTok Likes</a>
+                                <a href="#" class="sub-service-button">Buy TikTok Views</a>
+                                <a href="#" class="sub-service-button">Buy TikTok Comments</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- YouTube -->
+                    <div class="accordion-item">
+                        <div class="accordion-header">
+                            <i class="ri-youtube-fill service-icon2 icon-youtube"></i>
+                            <span>Buy YouTube SMM Panel Services</span>
+                            <i class="ri-arrow-down-s-line arrow-icon"></i>
+                        </div>
+                        <div class="accordion-content">
+                            <div class="sub-services-grid">
+                                <a href="#" class="sub-service-button">Buy YouTube Subscribers</a>
+                                <a href="#" class="sub-service-button">Buy YouTube Likes</a>
+                                <a href="#" class="sub-service-button">Buy YouTube Views</a>
+                                <a href="#" class="sub-service-button">Buy YouTube Comments</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Twitter -->
+                    <div class="accordion-item">
+                        <div class="accordion-header">
+                            <i class="ri-twitter-x-line service-icon2 icon-twitter"></i>
+                            <span>Buy Twitter SMM Panel Services</span>
+                            <i class="ri-arrow-down-s-line arrow-icon"></i>
+                        </div>
+                        <div class="accordion-content">
+                            <div class="sub-services-grid">
+                                <a href="#" class="sub-service-button">Buy Twitter Followers</a>
+                                <a href="#" class="sub-service-button">Buy Twitter Likes</a>
+                                <a href="#" class="sub-service-button">Buy Twitter Retweets</a>
+                                <a href="#" class="sub-service-button">Buy Twitter Comments</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Telegram -->
+                    <div class="accordion-item">
+                        <div class="accordion-header">
+                            <i class="ri-telegram-fill service-icon2 icon-telegram"></i>
+                            <span>Buy Telegram SMM Panel Services</span>
+                            <i class="ri-arrow-down-s-line arrow-icon"></i>
+                        </div>
+                        <div class="accordion-content">
+                            <div class="sub-services-grid">
+                                <a href="#" class="sub-service-button">Buy Telegram Members</a>
+                                <a href="#" class="sub-service-button">Buy Telegram Views</a>
+                                <a href="#" class="sub-service-button">Buy Telegram Reactions</a>
+                                <a href="#" class="sub-service-button">Buy Telegram Shares</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Facebook -->
+                    <div class="accordion-item">
+                        <div class="accordion-header">
+                            <i class="ri-facebook-fill service-icon2 icon-facebook"></i>
+                            <span>Buy Facebook SMM Panel Services</span>
+                            <i class="ri-arrow-down-s-line arrow-icon"></i>
+                        </div>
+                        <div class="accordion-content">
+                            <div class="sub-services-grid">
+                                <a href="#" class="sub-service-button">Buy Facebook Followers</a>
+                                <a href="#" class="sub-service-button">Buy Facebook Likes</a>
+                                <a href="#" class="sub-service-button">Buy Facebook Views</a>
+                                <a href="#" class="sub-service-button">Buy Facebook Shares</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Spotify -->
+                    <div class="accordion-item">
+                        <div class="accordion-header">
+                            <i class="ri-spotify-fill service-icon2 icon-spotify"></i>
+                            <span>Buy Spotify SMM Panel Services</span>
+                            <i class="ri-arrow-down-s-line arrow-icon"></i>
+                        </div>
+                        <div class="accordion-content">
+                            <div class="sub-services-grid">
+                                <a href="#" class="sub-service-button">Buy Spotify Followers</a>
+                                <a href="#" class="sub-service-button">Buy Spotify Plays</a>
+                                <a href="#" class="sub-service-button">Buy Spotify Saves</a>
+                                <a href="#" class="sub-service-button">Buy Spotify Listeners</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Snapchat -->
+                    <div class="accordion-item">
+                        <div class="accordion-header">
+                            <div class="service-icon2 snapchat-icon-container">
+                                <i class="ri-snapchat-fill icon-snapchat"></i>
+                            </div>
+                            <span>Buy Snapchat SMM Panel Services</span>
+                            <i class="ri-arrow-down-s-line arrow-icon"></i>
+                        </div>
+                        <div class="accordion-content">
+                            <div class="sub-services-grid">
+                                <a href="#" class="sub-service-button">Buy Snapchat Followers</a>
+                                <a href="#" class="sub-service-button">Buy Snapchat Views</a>
+                                <a href="#" class="sub-service-button">Buy Snapchat Friends</a>
+                                <a href="#" class="sub-service-button">Buy Snapchat Score</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Twitch -->
+                    <div class="accordion-item">
+                        <div class="accordion-header">
+                            <i class="ri-twitch-fill service-icon2 icon-twitch"></i>
+                            <span>Buy Twitch SMM Panel Services</span>
+                            <i class="ri-arrow-down-s-line arrow-icon"></i>
+                        </div>
+                        <div class="accordion-content">
+                            <div class="sub-services-grid">
+                                <a href="#" class="sub-service-button">Buy Twitch Followers</a>
+                                <a href="#" class="sub-service-button">Buy Twitch Views</a>
+                                <a href="#" class="sub-service-button">Buy Twitch Subscribers</a>
+                                <a href="#" class="sub-service-button">Buy Twitch Bits</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Kick -->
+                    <div class="accordion-item">
+                        <div class="accordion-header">
+                            <i class="ri-kick-fill service-icon2 icon-kick"></i>
+                            <span>Buy Kick SMM Panel Services</span>
+                            <i class="ri-arrow-down-s-line arrow-icon"></i>
+                        </div>
+                        <div class="accordion-content">
+                            <div class="sub-services-grid">
+                                <a href="#" class="sub-service-button">Buy Kick Followers</a>
+                                <a href="#" class="sub-service-button">Buy Kick Views</a>
+                                <a href="#" class="sub-service-button">Buy Kick Subscribers</a>
+                                <a href="#" class="sub-service-button">Buy Kick Chatters</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Threads -->
+                    <div class="accordion-item">
+                        <div class="accordion-header">
+                            <i class="ri-threads-line service-icon2 icon-threads"></i>
+                            <span>Buy Threads SMM Panel Services</span>
+                            <i class="ri-arrow-down-s-line arrow-icon"></i>
+                        </div>
+                        <div class="accordion-content">
+                            <div class="sub-services-grid">
+                                <a href="#" class="sub-service-button">Buy Threads Followers</a>
+                                <a href="#" class="sub-service-button">Buy Threads Likes</a>
+                                <a href="#" class="sub-service-button">Buy Threads Reposts</a>
+                                <a href="#" class="sub-service-button">Buy Threads Comments</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Discord -->
+                    <div class="accordion-item">
+                        <div class="accordion-header">
+                            <i class="ri-discord-fill service-icon2 icon-discord"></i>
+                            <span>Buy Discord SMM Panel Services</span>
+                            <i class="ri-arrow-down-s-line arrow-icon"></i>
+                        </div>
+                        <div class="accordion-content">
+                            <div class="sub-services-grid">
+                                <a href="#" class="sub-service-button">Buy Discord Members</a>
+                                <a href="#" class="sub-service-button">Buy Discord Reactions</a>
+                                <a href="#" class="sub-service-button">Buy Discord Boosts</a>
+                                <a href="#" class="sub-service-button">Buy Discord Friends</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>

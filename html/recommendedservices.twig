@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Top SMM Services</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #f9fafb;
+        }
+        .service-card {
+            transition: all 0.3s ease;
+            border: 1px solid #e5e7eb;
+            opacity: 1;
+            transform: translateY(0);
+            cursor: pointer;
+        }
+        .service-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.08);
+            border-color: #3b82f6;
+            background-color: #f8fafc;
+        }
+        .badge {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: .8; }
+        }
+        .quality-stars {
+            position: relative;
+            cursor: pointer;
+        }
+        .quality-stars:hover .sample-tooltip {
+            display: block;
+        }
+        .sample-tooltip {
+            display: none;
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #1f2937;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            white-space: nowrap;
+            margin-bottom: 8px;
+            z-index: 10;
+        }
+        .sample-tooltip::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 6px solid transparent;
+            border-top-color: #1f2937;
+        }
+        .platform-icon {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            padding: 8px;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Header Section -->
+    <section class="bg-white border-b">
+        <div class="container mx-auto px-4 text-center py-12">
+            <div class="inline-flex items-center gap-2 bg-blue-50 text-blue-700 px-4 py-2 rounded-full text-sm font-semibold mb-4">
+                <i class="ri-vip-crown-fill"></i>
+                <span>Premium Selection</span>
+            </div>
+            <h1 class="text-4xl md:text-5xl font-bold text-gray-900 tracking-tight mb-4">
+                Recommended Services
+            </h1>
+            <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+                Carefully curated premium services for maximum engagement and growth
+            </p>
+        </div>
+    </section>
+
+    <!-- Services List -->
+    <div class="container mx-auto px-4 py-8 pb-16">
+        <div class="space-y-4" id="servicesContainer">
+            <!-- Services will be generated here -->
+        </div>
+    </div>
+
+    <script>
+        // Platform icons configuration
+        const platformIcons = {
+            'instagram': {
+                icon: 'https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png',
+                filterName: 'Instagram'
+            },
+            'facebook': {
+                icon: 'https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg',
+                filterName: 'Facebook'
+            },
+            'youtube': {
+                icon: 'https://upload.wikimedia.org/wikipedia/commons/0/09/YouTube_full-color_icon_%282017%29.svg',
+                filterName: 'YouTube'
+            },
+            'tiktok': {
+                icon: 'https://upload.wikimedia.org/wikipedia/en/a/a9/TikTok_logo.svg',
+                filterName: 'TikTok'
+            },
+            'twitter': {
+                icon: 'https://upload.wikimedia.org/wikipedia/commons/6/6f/Logo_of_Twitter.svg',
+                filterName: 'Twitter'
+            },
+            'spotify': {
+                icon: 'https://upload.wikimedia.org/wikipedia/commons/1/19/Spotify_logo_without_text.svg',
+                filterName: 'Spotify'
+            }
+        };
+
+        // Function to get platform icon based on service title
+        function getPlatformIcon(title) {
+            const titleLower = title.toLowerCase();
+            
+            for (const [platform, config] of Object.entries(platformIcons)) {
+                if (titleLower.includes(platform)) {
+                    return {
+                        iconUrl: config.icon,
+                        platform: platform
+                    };
+                }
+            }
+            
+            return {
+                iconUrl: '',
+                platform: 'default'
+            };
+        }
+
+        // Services data array
+        const services = [
+            {
+                id:"6603",
+                title: '⭐ Instagram Followers Service | Up to 1M | 50–100K/Day | R30 | ⚡ Instant Start &amp; High Speed 🚀',
+                description: '',
+                speed: 5,
+                quality: 2,
+                sampleLink: '',
+                drop: '30%',
+                guarantee: '',
+                price: '$1.3',
+                min: '50',
+                max: '1M',
+                startTime: 'Instant'
+            },
+            {
+                id:"6604",
+                title: '⭐ Instagram Followers Service | HQ | Up to 1M | 20–30K/Day | R30 | Non Drop | ⚡ Instant Start &amp; High Speed 🚀',
+                description: '',
+                speed: 4,
+                quality: 3,
+                sampleLink: '',
+                drop: '5%',
+                guarantee: '30',
+                price: '$3.00',
+                min: '10',
+                max: '1M',
+                startTime: 'Instant'
+            },
+            {
+                id:"6605",
+                title: '⭐ Instagram RAF™ Followers | UHQ | Max 10K | 500–1K/Day | 0–12 Hours Start | 💎 PREMIUM',
+                description: '',
+                speed: 2,
+                quality: 5,
+                sampleLink:'https://www.instagram.com/poka48/followers/',
+                drop: '20%',
+                guarantee: '',
+                price: '$29.96',
+                min: '50',
+                max: '10K',
+                startTime: '0-12H'
+            },
+            {
+                id:"6606",
+                title: '❤️ Instagram Likes Service | 50–100K/Day | ⚡ High Speed | Non Drop 🚀',
+                description: '',
+                speed: 5,
+                quality: 2,
+                sampleLink: '',
+                drop: '0%',
+                guarantee: '',
+                price: '$0.42',
+                min: '10',
+                max: '200K',
+                startTime: 'Instant'
+            },
+            {
+                id:"6607",
+                title: '❤️ Instagram Real Likes | 10–20K/Day | 🔥 Power Likes | R30 ⚡',
+                description: '',
+                speed: 4,
+                quality: 4,
+                sampleLink: 'https://www.instagram.com/p/DT0xJ8wCK0L',
+                drop: '0%',
+                guarantee: '30',
+                price: '$0.54',
+                min: '10',
+                max: '50K',
+                startTime: '2-12h'
+            },
+            {
+                id:"6608",
+                title: '❤️ Instagram RAL™ Likes | Max 15K | Non Drop | 1–2K/Day | 0–12 Hours Start 🚀',
+                description: '',
+                speed: 2,
+                quality: 5,
+                sampleLink: 'https://www.instagram.com/p/DPpUpiWCksD/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA%3D%3D',
+                drop: '15%',
+                guarantee: '',
+                price: '$15.41',
+                min: '50',
+                max: '15K',
+                startTime: '0-12H'
+            },
+            {
+                id:"6609",
+                title: '🎥 Instagram Views Service | Stable | ⚡ 500K–1M/Day | 🚀 Super Fast',
+                description: '',
+                speed: 5,
+                quality: 5,
+                sampleLink: '',
+                drop: '0%',
+                guarantee: '',
+                price: '$0.0025',
+                min: '100',
+                max: '10M',
+                startTime: 'Instant'
+            },
+            {
+                id:"6610",
+                title: '🔺 YouTube Subscribers Service | HQ | Non Drop | Max 5K | 100–200/Day | R30',
+                description: '',
+                speed: 2,
+                quality: 5,
+                sampleLink: '',
+                drop: '5%',
+                guarantee: '30',
+                price: '$20.15',
+                min: '50',
+                max: '5K',
+                startTime: '0-1H'
+            },
+ {
+                id:"6611",
+                title: '🔺 YouTube Subscribers Service | HQ | Non Drop | Max 25K | 200–400/Day | R30',
+                description: '',
+                speed: 3,
+                quality: 5,
+                sampleLink: '',
+                drop: '5%',
+                guarantee: '30',
+                price: '$26.35',
+                min: '50',
+                max: '25K',
+                startTime: '0-1H'
+            },
+ {
+                id:"6612",
+                title: '🔺 YouTube Subscribers Service | Real &amp; HQ | Non Drop | Max 1M | 1-2K/Day | R30 | 🚀',
+                description: '',
+                speed: 4,
+                quality: 5,
+                sampleLink: '',
+                drop: '0%',
+                guarantee: '30',
+                price: '$32.55',
+                min: '100',
+                max: '1M',
+                startTime: '0-1H'
+            },
+{
+                id:"6613",
+                title: '🔺 YouTube Views Service | Max 10K | 1–2K/Day | R30 | ⚡ Instant Start | No Drop',
+                description: '',
+                speed: 3,
+                quality: 5,
+                sampleLink: '',
+                drop: '0%',
+                guarantee: '30',
+                price: '$1.22',
+                min: '100',
+                max: '100K',
+                startTime: 'Instant'
+            },
+{
+                id:"6614",
+                title: '🔺 YouTube Views Service | Max 10M | 5–10K/Day | R30 | 0–4 Hours Start | Non Drop',
+                description: '',
+                speed: 4,
+                quality: 5,
+                sampleLink: '',
+                drop: '0%',
+                guarantee: '30',
+                price: '$1.55',
+                min: '500',
+                max: '1M',
+                startTime: 'Instant'
+            },
+{
+                id:"6615",
+                title: '🔺 YouTube Views Service | Max 1M | 1–2K/Day | Lifetime Guarantee | ⚡ Instant Start | Natural Increase | 💎 Premium',
+                description: '',
+                speed: 4,
+                quality: 5,
+                sampleLink: '',
+                drop: '0%',
+                guarantee: '30',
+                price: '$1.71',
+                min: '50',
+                max: '1M',
+                startTime: 'Instant'
+            },
+{
+                id:"6616",
+                title: '🔺 YouTube Watch Time Service | 1K = 1000 Hours | Min. 60 Min Video | 250–500/Day | R30 🚀',
+                description: '',
+                speed: 5,
+                quality: 5,
+                sampleLink: '',
+                drop: '0%',
+                guarantee: '30',
+                price: '$20.48',
+                min: '10',
+                max: '4K',
+                startTime: 'Instant'
+            },
+{
+                id:"6617",
+                title: '🔺 YouTube Likes Service | Real | 30–50K | Non Drop | 30 Days Refill 🚀',
+                description: '',
+                speed: 5,
+                quality: 5,
+                sampleLink: '',
+                drop: '0%',
+                guarantee: '30',
+                price: '$0.48',
+                min: '10',
+                max: '150K',
+                startTime: 'Instant'
+            },
+{
+                id:"6618",
+                title: '	🔺 YouTube Custom Comments Service | Max 50K | 5K/Day | R30 | ⚡ Instant Start 🚀',
+                description: '',
+                speed: 5,
+                quality: 5,
+                sampleLink: '',
+                drop: '0%',
+                guarantee: '30',
+                price: '$7.50',
+                min: '5',
+                max: '50K',
+                startTime: '0-1H'
+            },
+{
+                id:"6619",
+                title: '🔺 YouTube Video Comment Likes Service | Max 300K | 5–10K/Day | Non Drop | 30 Days Refill 🚀',
+                description: '',
+                speed: 2,
+                quality: 5,
+                sampleLink: '',
+                drop: '0%',
+                guarantee: '30',
+                price: '$2.25',
+                min: '10',
+                max: '300K',
+                startTime: 'Instant'
+            },
+{
+                id:"6620",
+                title: '🔹 Facebook Page / Profile Followers Service | Max 500K | 5–10K/Day | R30 | ⚡ Instant Start 🚀',
+                description: '',
+                speed: 3,
+                quality: 3,
+                sampleLink: '',
+                drop: '5%',
+                guarantee: '30',
+                price: '$0.30',
+                min: '10',
+                max: '500K',
+                startTime: 'Instant'
+            },
+{
+                id:"6621",
+                title: '	🔹 Facebook Page Likes + Followers Service | Max 500K | 5–10K/Day | R30 | ⚡ Instant Start 🚀',
+                description: '',
+                speed: 3,
+                quality: 3,
+                sampleLink: '',
+                drop: '5%',
+                guarantee: '30',
+                price: '$0.45',
+                min: '10',
+                max: '500K',
+                startTime: 'Instant'
+            },
+{
+                id:"6622",
+                title: '🔹Facebook Post Likes | 1M | Start Time 0-1/H | 5-10K/D',
+                description: '',
+                speed: 3,
+                quality: 3,
+                sampleLink: '',
+                drop: '5%',
+                guarantee: '',
+                price: '$0.12',
+                min: '10',
+                max: '1M',
+                startTime: '0-1H'
+            },
+{
+                id:"6623",
+                title: '🔹 Facebook Video Views Service | Max 50M | 50–100K/Day | ⚡ Instant Start 🚀',
+                description: '',
+                speed: 5,
+                quality: 5,
+                sampleLink: '',
+                drop: '0%',
+                guarantee: '',
+                price: '$0.12',
+                min: '100',
+                max: '5M',
+                startTime: 'Instant'
+            },
+{
+                id:"6624",
+                title: '🔹 Facebook Custom Comments Service | Max 2K | 500–1K/Day 🚀',
+                description: '',
+                speed: 5,
+                quality: 3,
+                sampleLink: '',
+                drop: '0%',
+                guarantee: '',
+                price: '$4.35',
+                min: '5',
+                max: '2K',
+                startTime: 'Instant'
+            },
+{
+                id:"6625",
+                title: '◆ TikTok Likes Service | Real &amp; HQ | Max 10M | 10–20K/Day',
+                description: '',
+                speed: 4,
+                quality: 4,
+                sampleLink: '',
+                drop: '0%',
+                guarantee: '',
+                price: '$0.09',
+                min: '10',
+                max: '1M',
+                startTime: '0-1H'
+            },
+{
+                id:"6626",
+                title: '◆ TikTok Likes Service | High Quality | Max 10M | 30–50K/Day | ⚡ Instant Start | 🚀 High Speed',
+                description: '',
+                speed: 5,
+                quality: 5,
+                sampleLink: '',
+                drop: '0%',
+                guarantee: '',
+                price: '$0.18',
+                min: '10',
+                max: '1M',
+                startTime: 'Instant'
+            },
+{
+                id:"6627",
+                title: '◆ TikTok Followers Service | High Quality | Max 10M | 10K/Day | ⚡ Instant Start | Non Drop | 🔄 AR30 / Every 48-72 Hours 🚀',
+                description: '',
+                speed: 2,
+                quality: 4,
+                sampleLink: '',
+                drop: '0%',
+                guarantee: 'AR30',
+                price: '$1.40',
+                min: '10',
+                max: '1M',
+                startTime: 'Instant'
+            },
+{
+                id:"6628",
+                title: '	🔵 Telegram Members Service | Channel / Group | Max 140K | 5–10K/Day | R30',
+                description: '',
+                speed: 2,
+                quality: 4,
+                sampleLink: '',
+                drop: '10%',
+                guarantee: '30',
+                price: '$0.90',
+                min: '10',
+                max: '140k',
+                startTime: 'Instant'
+            }
+        ];
+
+        // Generate speed lightning icons
+        function generateSpeedIcons(speed) {
+            speed = Math.max(0, Math.min(5, Number(speed) || 0));
+        
+            let icons = '';
+            for (let i = 1; i <= 5; i++) {
+                icons += i <= speed
+                    ? '<i class="ri-flashlight-fill text-yellow-500"></i>'
+                    : '<i class="ri-flashlight-line text-gray-400"></i>';
+            }
+            return icons;
+        }
+        
+
+        // Generate star rating
+        function generateStars(quality, sampleLink) {
+            const fullStars = quality;
+            const emptyStars = 5 - quality;
+            let stars = '★'.repeat(fullStars) + '☆'.repeat(emptyStars);
+            
+           
+                return `<span class="font-semibold text-blue-600">${stars}</span>`;
+            
+        }
+
+        // Generate service cards
+        function generateServices() {
+            const container = document.getElementById('servicesContainer');
+            
+            services.forEach(service => {
+                const platformInfo = getPlatformIcon(service.title);
+                const card = document.createElement('div');
+                card.className = 'service-card bg-white rounded-xl p-4 md:p-6';
+                card.dataset.category = platformInfo.platform;
+                
+                const iconHTML = platformInfo.iconUrl 
+                    ? `<img src="${platformInfo.iconUrl}" alt="${platformInfo.platform}" class="platform-icon">`
+                    : `<i class="ri-star-fill text-gray-600 text-xl md:text-2xl"></i>`;
+                
+                card.onclick = () => {
+                    window.location.href = '/?service=' + service.id;
+                };
+                
+                card.innerHTML = `
+                ${service.sampleLink ? `
+    <a href="${service.sampleLink}" 
+       target="_blank"
+       onclick="event.stopPropagation()"
+       class="absolute -top-3 -right-3 w-9 h-9 bg-white border border-gray-200 rounded-lg shadow-md 
+              flex items-center justify-center text-blue-600 
+              hover:bg-blue-50 hover:scale-105 transition-all group">
+        <i class="ri-eye-line text-lg"></i>
+
+        <!-- Tooltip -->
+        <span class="absolute right-12 top-1/2 -translate-y-1/2 
+                     bg-gray-900 text-white text-xs px-2 py-1 rounded 
+                     opacity-0 group-hover:opacity-100 transition whitespace-nowrap">
+            View Sample
+        </span>
+    </a>
+` : ''}
+
+                    <div class="flex flex-col md:flex-row md:items-center gap-4 md:gap-6">
+                        <!-- Left: Icon, Title, Description -->
+                        <div class="flex items-start gap-3 md:gap-4 flex-1 min-w-0">
+                            <div class="w-12 h-12 md:w-14 md:h-14 bg-white border-2 border-gray-200 rounded-xl flex items-center justify-center shrink-0">
+                                ${iconHTML}
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <div class="flex flex-col sm:flex-row sm:items-center gap-2 mb-2">
+                                    <h3 class="text-base md:text-lg font-bold text-gray-900 break-words">${service.id} - ${service.title}</h3>
+                                </div>
+                                <p class="text-gray-600 text-sm break-words">
+                                    ${service.description}
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <!-- Right: Stats and Button -->
+                        <div class="flex flex-col gap-3 md:gap-4 w-full md:w-auto md:min-w-[280px] lg:min-w-[320px]">
+                            <div class="grid grid-cols-4 gap-2 md:gap-4 text-sm">
+                                <div class="text-center">
+                                    <div class="text-xs text-gray-500 mb-1">Speed</div>
+                                    <div class="font-semibold text-blue-600 text-xs md:text-sm">${generateSpeedIcons(service.speed)}</div>
+                                </div>
+                                <div class="text-center">
+                                    <div class="text-xs text-gray-500 mb-1">Quality</div>
+                                    <div class="text-xs md:text-sm">${generateStars(service.quality, service.sampleLink)}</div>
+                                </div>
+                                <div class="text-center">
+                                    <div class="text-xs text-gray-500 mb-1">Drop</div>
+                                    <div class="font-semibold text-gray-900 text-xs md:text-sm">${service.drop}</div>
+                                </div>
+                                <div class="text-center">
+                                    <div class="text-xs text-gray-500 mb-1">Warranty</div>
+                                    <div class="font-semibold text-gray-900 text-xs md:text-sm"> ${service.guarantee ?  service.guarantee + ' ' + 'Days' + ' ' + '♻️' : '❌' }  </div>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-4 gap-2 md:gap-4 text-sm pt-2 border-t">
+                           
+                                <div class="text-center">
+                                    <div class="text-xs text-gray-500 mb-1">Min</div>
+                                    <div class="font-semibold text-gray-700 text-xs md:text-sm">${service.min}</div>
+                                </div>
+                                <div class="text-center">
+                                    <div class="text-xs text-gray-500 mb-1">Max</div>
+                                    <div class="font-semibold text-gray-700 text-xs md:text-sm">${service.max}</div>
+                                </div>
+                                <div class="text-center">
+                                    <div class="text-xs text-gray-500 mb-1">Start</div>
+                                    <div class="font-semibold text-gray-700 text-xs md:text-sm">${service.startTime}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                container.appendChild(card);
+            });
+        }
+
+        // Initialize
+        generateServices();
+    </script>
+</body>
+</html>

@@ -1,0 +1,260 @@
+<div class="relative z-10 pb-16 md:pb-15 bg-white pt-6">
+    <div class="container mx-auto relative z-10">
+
+        <!-- Navigation Tabs -->
+        <div class="overflow-x-auto mb-8">
+            <div class="inline-flex items-center gap-[2px] list-none p-1 md:p-[6px] m-0 rounded-full border border-gray-200 bg-white min-w-fit">
+                <a href="/" class="flex items-center justify-center gap-1.5 md:gap-[10px] py-1.5 px-2.5 md:py-[12px] md:px-[14px] rounded-full font-medium whitespace-nowrap text-sm md:text-[15px] leading-[160%] tracking-[-0.3px] text-gray-600 hover:bg-gray-200 hover:text-gray-800">
+                    <i class="ri-shopping-cart-line text-base md:text-[22px]"></i>
+                    <span>New Order</span>
+                </a>
+                <a href="/massorder" class="flex items-center justify-center gap-1.5 md:gap-[10px] py-1.5 px-2.5 md:py-[12px] md:px-[14px] rounded-full font-medium whitespace-nowrap text-sm md:text-[15px] leading-[160%] tracking-[-0.3px] !text-white border border-white/15 btn-custom-active shadow-[0px_0px_3px_0px_#0139ff,0px_0px_0px_1.182px_#0139ff]">
+                    <i class="ri-stack-line text-base md:text-[22px]"></i>
+                    <span>Mass Order</span>
+                </a>
+
+                <button id="howToMassOrderBtn" class="flex items-center justify-center gap-1.5 md:gap-[10px] py-1.5 px-2.5 md:py-[12px] md:px-[14px] rounded-full font-medium whitespace-nowrap text-sm md:text-[15px] leading-[160%] tracking-[-0.3px] text-gray-600 hover:bg-gray-200 hover:text-gray-800">
+                    <i class="ri-question-line text-base md:text-[22px]"></i>
+                    <span>How to mass order?</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mass Order Card -->
+        <div class="border border-gray-200 rounded-[20px] w-full mx-auto mb-8 overflow-hidden">
+            <div class="p-4 md:p-6">
+                <form {% if site['rtl'] %}class="space-y-6 rtl-form"{% else %}class="space-y-6"{% endif %} method="post" action="{{ page['url'] }}">
+                    {% if 1 == success %}
+                        <div class="bg-green-50 border border-green-200 rounded-[15px] p-4 mb-6" role="alert">
+                            <button type="button" class="float-right text-green-500 hover:text-green-700 text-xl font-bold leading-none" onclick="this.parentElement.style.display='none'">&times;</button>
+                            <h4 class="text-green-800 font-bold text-lg mb-2">{{lang('massorder.message.success')}}</h4>
+                            <div class="text-green-700">
+                                {{lang('massorder.orders')}}: {{order['success']}}<br>
+                                {{lang('massorder.errors')}}: {{order['error']}}<br>
+                                <a href="{{ order['link'] }}" target="_blank" class="text-blue-600 hover:text-blue-800 underline">{{ lang('massorder.button.details') }}</a>
+                            </div>
+                        </div>
+                    {%endif%}
+                    {% if error %}
+                        <div class="bg-red-50 border border-red-200 rounded-[15px] p-4 mb-6 {% if site['rtl'] %} rtl-alert {% endif %}" role="alert">
+                            <button type="button" class="float-right text-red-500 hover:text-red-700 text-xl font-bold leading-none" onclick="this.parentElement.style.display='none'">&times;</button>
+                            {% if order['link'] %}
+                                <h4 class="text-red-800 font-bold text-lg mb-2">{{ errorText }}</h4>
+                                <div class="text-red-700">
+                                    {{lang('massorder.orders')}}: {{order['success']}}<br>
+                                    {{lang('massorder.errors')}}: {{order['error']}}<br>
+                                    <a href="{{ order['link'] }}" target="_blank" class="text-blue-600 hover:text-blue-800 underline">{{ lang('massorder.button.details') }}</a>
+                                </div>
+                            {% else %}
+                                <div class="text-red-700">{{ errorText }}</div>
+                            {% endif %}
+                        </div>
+                    {% endif %}
+  
+                    <div class="form-group">
+                        <div class="flex items-center justify-between mb-2.5">
+                            <label for="links" class="block text-base font-semibold text-gray-700">{{ lang('massorder.label') }}</label>
+                            <button type="button" id="openFormatGeneratorBtn" class="flex items-center gap-1.5 text-white bg-blue-600 hover:bg-blue-700 text-sm font-bold transition-all px-4 py-2 rounded-[10px] shadow-md border border-blue-700">
+                                <i class="ri-magic-line"></i>
+                                <span>Quick Format Generator</span>
+                            </button>
+                        </div>
+                        <textarea 
+                            class="w-full border border-gray-300 rounded-[15px] p-4 focus:ring-2 focus:ring-blue-200 focus:border-blue-400 font-medium resize-none outline-none font-mono text-sm" 
+                            name="MassOrderForm[orders]" 
+                            rows="15" 
+                            id="links" 
+                            placeholder="{{ lang('massorder.placeholder') }}"></textarea>
+                    </div>
+
+                    <input type="hidden" name="_csrf" value="{{csrftoken}}">
+
+                    <button type="submit" class="w-full flex items-center justify-center gap-2 bg-blue-600 text-white font-bold rounded-[15px] hover:bg-blue-700 transition-colors h-[56px]">
+                        <span>{{ lang('massorder.button') }}</span>
+                        <i class="ri-arrow-right-line text-xl font-light"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- How to Mass Order Modal -->
+<div id="massOrderModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center">
+    <div class="bg-white rounded-[20px] max-w-2xl w-full mx-4 max-h-[80vh] overflow-y-auto">
+        <div class="p-6">
+            <div class="flex items-center justify-between mb-6">
+                <h3 class="text-2xl font-bold text-gray-800">How to Mass Order?</h3>
+                <button id="closeModal" class="text-gray-500 hover:text-gray-700 text-2xl">
+                    <i class="ri-close-line"></i>
+                </button>
+            </div>
+            <div class="text-gray-600 leading-relaxed">
+                <p class="mb-6 text-base">Place service id , then put "|", place your link and after that put "|" again and place the quantity you'd like to get.</p>
+                
+                <div class="bg-gray-100 rounded-lg p-4 border border-gray-200">
+                    <div class="text-gray-500 text-sm mb-3 font-medium">Enter your service ID|Link (Your Order URL/username) | Quantity (The amount of likes/followers/views you want to add )</div>
+                    <div class="space-y-2 text-gray-700 font-mono text-sm overflow-x-auto">
+                        <div class="whitespace-nowrap">0000|https://www.facebook.com/username|1000</div>
+                        <div class="whitespace-nowrap">0001|https://www.facebook.com/username1|1000</div>
+                        <div class="whitespace-nowrap">0002|https://www.facebook.com/username2|1000</div>
+                        <div class="whitespace-nowrap">0003|https://www.facebook.com/username3|1000</div>
+                        <div class="whitespace-nowrap">0004|https://www.facebook.com/username4|1000</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Quick Format Generator Modal -->
+<div id="formatGeneratorModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center">
+    <div class="bg-white rounded-[20px] max-w-lg w-full mx-4 max-h-[90vh] overflow-y-auto">
+        <div class="bg-gradient-to-r from-blue-50 to-indigo-50 border-b border-gray-200 px-6 py-4 rounded-t-[20px]">
+            <div class="flex items-center justify-between">
+                <h3 class="text-lg font-bold text-gray-800 flex items-center gap-2">
+                    <i class="ri-magic-line text-blue-600 text-xl"></i>
+                    Quick Format Generator
+                </h3>
+                <button id="closeFormatModal" class="text-gray-500 hover:text-gray-700 text-2xl">
+                    <i class="ri-close-line"></i>
+                </button>
+            </div>
+            <p class="text-gray-500 text-sm mt-1">Enter links and auto-format them for mass order</p>
+        </div>
+        <div class="p-6 space-y-5">
+            <!-- Service ID & Quantity Row -->
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label for="genServiceId" class="block text-sm font-semibold text-gray-700 mb-2">Service ID</label>
+                    <input 
+                        type="text" 
+                        id="genServiceId" 
+                        placeholder="e.g. 5896" 
+                        class="w-full border border-gray-300 rounded-[12px] px-4 py-3 focus:ring-2 focus:ring-blue-200 focus:border-blue-400 font-medium outline-none text-gray-800"
+                    />
+                </div>
+                <div>
+                    <label for="genQuantity" class="block text-sm font-semibold text-gray-700 mb-2">Quantity</label>
+                    <input 
+                        type="number" 
+                        id="genQuantity" 
+                        placeholder="e.g. 1000" 
+                        class="w-full border border-gray-300 rounded-[12px] px-4 py-3 focus:ring-2 focus:ring-blue-200 focus:border-blue-400 font-medium outline-none text-gray-800"
+                    />
+                </div>
+            </div>
+
+            <!-- Links Textarea -->
+            <div>
+                <label for="genLinks" class="block text-sm font-semibold text-gray-700 mb-2">
+                    Links 
+                    <span class="text-gray-400 font-normal">(one per line)</span>
+                </label>
+                <textarea 
+                    id="genLinks" 
+                    rows="10" 
+                    placeholder="https://www.instagram.com/user1&#10;https://www.instagram.com/user2&#10;https://www.instagram.com/user3&#10;..." 
+                    class="w-full border border-gray-300 rounded-[15px] p-4 focus:ring-2 focus:ring-blue-200 focus:border-blue-400 font-medium resize-none outline-none font-mono text-sm"
+                ></textarea>
+                <div class="flex items-center justify-between mt-2">
+                    <span id="genLinkCount" class="text-xs text-gray-400">0 links entered</span>
+                </div>
+            </div>
+
+            <!-- Format Button -->
+            <button 
+                type="button" 
+                id="btnFormat" 
+                class="w-full flex items-center justify-center gap-2 bg-blue-600 text-white font-bold rounded-[12px] hover:bg-blue-700 transition-colors h-[48px] text-sm"
+            >
+                <i class="ri-arrow-left-line text-lg"></i>
+                <span>Format</span>
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // --- How to Mass Order Modal ---
+    var modal = document.getElementById('massOrderModal');
+    var openBtn = document.getElementById('howToMassOrderBtn');
+    var closeBtn = document.getElementById('closeModal');
+
+    openBtn.addEventListener('click', function() { modal.classList.remove('hidden'); });
+    closeBtn.addEventListener('click', function() { modal.classList.add('hidden'); });
+    modal.addEventListener('click', function(e) { if (e.target === modal) modal.classList.add('hidden'); });
+
+    // --- Format Generator Modal ---
+    var formatModal = document.getElementById('formatGeneratorModal');
+    var openFormatBtn = document.getElementById('openFormatGeneratorBtn');
+    var closeFormatBtn = document.getElementById('closeFormatModal');
+
+    openFormatBtn.addEventListener('click', function() { formatModal.classList.remove('hidden'); });
+    closeFormatBtn.addEventListener('click', function() { formatModal.classList.add('hidden'); });
+    formatModal.addEventListener('click', function(e) { if (e.target === formatModal) formatModal.classList.add('hidden'); });
+
+    // Close any modal with Escape
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            modal.classList.add('hidden');
+            formatModal.classList.add('hidden');
+        }
+    });
+
+    // --- Quick Format Generator Logic ---
+    var genServiceId = document.getElementById('genServiceId');
+    var genQuantity = document.getElementById('genQuantity');
+    var genLinks = document.getElementById('genLinks');
+    var genLinkCount = document.getElementById('genLinkCount');
+    var btnFormat = document.getElementById('btnFormat');
+    var massOrderTextarea = document.getElementById('links');
+
+    function parseLinks() {
+        return genLinks.value
+            .split('\n')
+            .map(function(line) { return line.trim(); })
+            .filter(function(line) { return line.length > 0; });
+    }
+
+    // Update link count
+    genLinks.addEventListener('input', function() {
+        var links = parseLinks();
+        genLinkCount.textContent = links.length + ' link' + (links.length !== 1 ? 's' : '') + ' entered';
+    });
+
+    // Format button click
+    btnFormat.addEventListener('click', function() {
+        var serviceId = genServiceId.value.trim();
+        var quantity = genQuantity.value.trim();
+        var links = parseLinks();
+
+        if (!serviceId) { alert('Please enter a Service ID'); return; }
+        if (!quantity) { alert('Please enter a Quantity'); return; }
+        if (links.length === 0) { alert('Please enter at least one link'); return; }
+
+        var formatted = links.map(function(link) {
+            return serviceId + '|' + link + '|' + quantity;
+        }).join('\n');
+
+        // Add to mass order textarea
+        var current = massOrderTextarea.value.trim();
+        if (current) {
+            massOrderTextarea.value = current + '\n' + formatted;
+        } else {
+            massOrderTextarea.value = formatted;
+        }
+
+        // Clear inputs
+        genLinks.value = '';
+        genServiceId.value = '';
+        genQuantity.value = '';
+        genLinkCount.textContent = '0 links entered';
+
+        // Close modal
+        formatModal.classList.add('hidden');
+    });
+});
+</script>

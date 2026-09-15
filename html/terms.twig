@@ -1,0 +1,23 @@
+{% if termsofservice %}
+{% if user['auth'] %}{% else %}
+<section class="page-header-ui">
+    <div class="container mx-auto px-4 text-center pb-10">
+        <h1 class="text-4xl md:text-5xl font-bold text-gray-800 tracking-tight">Terms</h1>
+        <p class="mt-4 text-lg text-gray-600 max-w-2xl mx-auto">Terms of Services</p>
+    </div>
+</section>
+{% endif %}
+
+<div class="relative z-10 pb-16 md:pb-15 bg-white pt-12">
+    <div class="container mx-auto px-4 relative z-10">
+
+        <!-- Blank Card -->
+        <div class="bg-white border border-gray-200 rounded-xl w-full mx-auto mb-8 overflow-hidden">
+            <div class="p-6 md:p-8">
+                  {{ termsofservice }}
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endif %}

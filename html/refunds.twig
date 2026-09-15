@@ -1,0 +1,220 @@
+<div class="relative z-10 pb-16 md:pb-15 bg-white pt-6">
+    <div class="mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Alert -->
+        <div class="space-y-6 mb-8">
+            <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 flex items-start gap-3">
+                <i class="ri-information-line text-blue-600 text-lg mt-0.5"></i>
+                <div class="flex-1">
+                    <p class="text-blue-800 text-sm">{{ lang('orders.refunds.alert') }}</p>
+                </div>
+                <button type="button" class="text-blue-400 hover:text-blue-600 transition-colors">
+                    <i class="ri-close-line text-lg"></i>
+                </button>
+            </div>
+            
+            <!-- Filters and Search Row -->
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                <!-- Filters -->
+                <div class="flex flex-wrap items-center gap-3 {% if site['rtl'] %} rtl-nav {% endif %}">
+                    <a href="{{ page['url'] }}{% if search %}?search={{ search }}{% endif %}" class="{% if 'all' == order_status %}filter-btn-active{% else %}flex items-center gap-2 px-4 py-2 text-gray-700 bg-white border border-gray-200 rounded-[25px] hover:bg-gray-50 font-medium{% endif %} flex items-center gap-2 px-4 py-2 font-medium">
+                        <i class="ri-layout-grid-fill"></i>
+                        <span>{{ lang('orders.refunds.all') }}</span>
+                    </a>
+                    <a href="{{ page['url'] }}?order_status=canceled{% if search %}&search={{ search }}{% endif %}" class="{% if 'canceled' == order_status %}filter-btn-active{% else %}flex items-center gap-2 px-4 py-2 text-gray-700 bg-white border border-gray-200 rounded-[25px] hover:bg-gray-50 font-medium{% endif %} flex items-center gap-2 px-4 py-2 font-medium">
+                        <i class="ri-close-circle-line"></i>
+                        <span>{{ lang('orders.refunds.canceled') }}</span>
+                    </a>
+                    <a href="{{ page['url'] }}?order_status=partial{% if search %}&search={{ search }}{% endif %}" class="{% if 'partial' == order_status %}filter-btn-active{% else %}flex items-center gap-2 px-4 py-2 text-gray-700 bg-white border border-gray-200 rounded-[25px] hover:bg-gray-50 font-medium{% endif %} flex items-center gap-2 px-4 py-2 font-medium">
+                        <i class="ri-percent-line"></i>
+                        <span>{{ lang('orders.refunds.partial') }}</span>
+                    </a>
+                </div>
+                
+                <!-- Search -->
+                <div class="relative w-full sm:w-80">
+                    <form action="{{ page['url'] }}" method="get" id="history-search" class="w-full">
+                        <div class="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none">
+                            <i class="ri-search-line text-gray-400"></i>
+                        </div>
+                        <input type="text" name="search" value="{{ search }}" placeholder="{{ lang('general.search.placeholder') }}" class="w-full bg-white border border-gray-200 rounded-[20px] pl-10 pr-4 py-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 transition">
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Refunds Table -->
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+            <!-- Desktop Table -->
+            <div class="hidden md:block overflow-x-auto">
+                <table class="w-full {% if site['rtl'] %} rtl-table {% endif %}">
+                    <thead class="bg-gray-50 border-b border-gray-200">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ lang('orders.refunds.id') }}</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ lang('orders.refunds.amount') }}</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ lang('orders.refunds.status') }}</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ lang('orders.refunds.date') }}</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200 font-medium">
+                        {% for refund in refundList %}
+                        <tr class="hover:bg-gray-50">
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-bold text-blue-600">
+                                <a href="{{ page_url('orders') }}?search={{ refund['order_id'] }}" class="hover:text-blue-800 transition-colors">
+                                    {{ refund['order_id'] }}
+                                </a>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-bold text-green-600">{{ refund['amount'] }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-center">
+                                <span class="inline-flex items-center px-3 py-1 bg-gray-100 border border-gray-500 rounded-full">
+                                    <span class="text-gray-800 text-xs font-semibold">{{ refund['order_status_name'] }}</span>
+                                </span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ refund['date'] }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Mobile Cards -->
+            <div class="md:hidden">
+                {% for refund in refundList %}
+                <div class="p-4 {% if not loop.last %}border-b border-gray-200{% endif %}">
+                    <div class="flex justify-between items-start mb-3">
+                        <div>
+                            <h3 class="text-sm font-medium text-gray-900">
+                                <a href="{{ page_url('orders') }}?search={{ refund['order_id'] }}" class="text-blue-600 hover:text-blue-800 transition-colors">
+                                    Order #{{ refund['order_id'] }}
+                                </a>
+                            </h3>
+                            <p class="text-xs text-gray-500">{{ refund['date'] }}</p>
+                        </div>
+                        <span class="inline-flex items-center px-3 py-1 bg-gray-100 border border-gray-500 rounded-full">
+                            <span class="text-gray-800 text-xs font-semibold">{{ refund['order_status_name'] }}</span>
+                        </span>
+                    </div>
+                    <div class="space-y-2 text-sm">
+                        <div class="flex justify-between">
+                            <span class="text-gray-500">Amount:</span>
+                            <span class="text-green-600 font-bold">{{ refund['amount'] }}</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-500">Status:</span>
+                            <span class="text-gray-900">{{ refund['order_status_name'] }}</span>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Pagination -->
+        {% if pagination['count'] > 100 %}
+            {% if searchList %}
+                {% set params = {} %}
+                {% for search in searchList %}
+                    {% set params = params | merge([search['name'] ~ '=' ~ search['value']]) %}
+                {% endfor %}
+                {% set params = '?' ~ params|join('&') %}
+            {% endif %}
+            <div class="flex justify-center mt-8">
+                <ul class="inline-flex items-center space-x-1 {% if site['rtl'] %} rtl-pagination {% endif %}">
+                    {% if pagination['current'] != 1 %}
+                        <li>
+                            <a href="{{ page['url'] }}?order_status={{ order_status }}&page={{ pagination['last'] }}{% if search %}&search={{ search }}{% endif %}" class="inline-flex items-center px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+                    {% endif %}
+
+                    {% set r, l = 3, 3 %}
+                    {% if pagination['current'] == 1 %}
+                        {% set r = 6 %}
+                    {% endif %}
+                    {% if pagination['current'] == 2 %}
+                        {% set r = 5 %}
+                    {% endif %}
+                    {% if pagination['current'] >= pagination['pages'] %}
+                        {% set l = 5 %}
+                    {% endif %}
+
+                    {% for i in 1..ceil(pagination['pages']) %}
+                        {% if i >= (pagination['current']-l) and i <= (pagination['current']+r) %}
+                            <li>
+                                <a href="{{ page['url'] }}?order_status={{ order_status }}&page={{ i }}{% if search %}&search={{ search }}{% endif %}" class="inline-flex items-center px-3 py-2 text-sm font-medium {% if i == pagination['current'] %}text-blue-600 bg-blue-50 border border-blue-300{% else %}text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700{% endif %}">
+                                    {{ i }}
+                                </a>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if pagination['current'] < pagination['pages'] %}
+                        <li>
+                            <a href="{{ page['url'] }}?order_status={{ order_status }}&page={{ pagination['next'] }}{% if search %}&search={{ search }}{% endif %}" class="inline-flex items-center px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+<script>
+    // Copy to clipboard function
+    function copyToClipboard(text) {
+        navigator.clipboard.writeText(text).then(function() {
+            showNotification('ID copied: ' + text, 'success');
+        }).catch(function(err) {
+            showNotification('Copy failed', 'error');
+        });
+    }
+
+    // Show notification function
+    function showNotification(message, type = 'success') {
+        // Remove existing notifications
+        const existingNotifications = document.querySelectorAll('.notification');
+        existingNotifications.forEach(notification => notification.remove());
+
+        // Create notification element
+        const notification = document.createElement('div');
+        notification.className = `notification fixed top-4 right-4 z-[99999] px-4 py-3 rounded-lg shadow-lg transform transition-all duration-300 translate-x-full ${
+            type === 'success' ? 'bg-green-500 text-white' : 'bg-red-500 text-white'
+        }`;
+        notification.innerHTML = `
+            <div class="flex items-center gap-2">
+                <i class="ri-${type === 'success' ? 'check-line' : 'close-line'}"></i>
+                <span>${message}</span>
+            </div>
+        `;
+
+        // Add to page
+        document.body.appendChild(notification);
+
+        // Animate in
+        setTimeout(() => {
+            notification.classList.remove('translate-x-full');
+        }, 10);
+
+        // Remove after 3 seconds
+        setTimeout(() => {
+            notification.classList.add('translate-x-full');
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.parentNode.removeChild(notification);
+                }
+            }, 300);
+        }, 3000);
+    }
+</script>
+
+<style>
+.filter-btn-active {
+    @apply bg-gradient-to-r from-blue-500 to-blue-600 text-white border-blue-600 shadow-md;
+}
+
+.status-badge {
+    @apply inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold;
+}
+</style>

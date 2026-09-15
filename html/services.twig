@@ -1,0 +1,1465 @@
+<style>
+#modal-service-description{
+    max-height: 250px;
+    overflow: auto;
+}
+/* Modal açıkken arka plan kaydırmayı kilitle */
+body.modal-open {
+    overflow: hidden !important;
+    height: 100vh;
+}
+</style>
+
+{% if user['auth'] %}{% else %}
+<section class="page-header-ui">
+    <div class="container mx-auto px-4 text-center pb-10">
+        <h1 class="text-4xl md:text-5xl font-bold text-gray-800 tracking-tight">Services</h1>
+        <p class="mt-4 text-lg text-gray-600 max-w-2xl mx-auto">Find the best services for your needs.</p>
+    </div>
+</section>
+{% endif %}
+
+{% if user['auth'] %}
+
+<div class="relative z-10 pb-16 md:pb-15 bg-white pt-6">
+    <div class="container mx-auto px-4 relative z-10 {% if site['rtl'] %} rtl-nav {% endif %}">
+
+        <!-- Blank Card -->
+        <div class="bg-white p-4 border border-gray-200 rounded-xl w-full mx-auto mb-8">
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between">
+              {% else %}
+              <main class="relative z-10 pb-16 md:pb-15 bg-white pt-12">
+    <div class="container mx-auto px-4 relative z-10">
+
+        <!-- Blank Card -->
+        <div class="bg-white p-4 border border-gray-200 rounded-xl w-full mx-auto mb-8 mt-[-80px]">
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between">
+              {% endif %}
+
+                <!-- Search -->
+                <div class="relative flex-grow mb-4 md:mb-0 md:mr-4">
+                    <span class="absolute inset-y-0 left-0 flex items-center pl-3">
+                        <svg class="w-5 h-5 text-gray-400" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M21 21L16.65 16.65M19 11C19 15.4183 15.4183 19 11 19C6.58172 19 3 15.4183 3 11C3 6.58172 6.58172 3 11 3C15.4183 3 19 6.58172 19 11Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                        </svg>
+                    </span>
+                    <input type="text" id="service-search-input" placeholder="{{ lang('general.search.placeholder') }}" class="w-full pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" data-search-service="#service-table">
+                </div>
+                <!-- Categories Dropdown -->
+                <div class="relative" id="categories-dropdown-container">
+                    <button id="categories-button" class="flex items-center px-4 py-2 border rounded-lg text-gray-600 hover:bg-gray-100 w-full md:w-auto justify-center">
+                        <span class="fal fa-filter"></span>
+                        <span data-filter-active-category="true"></span>
+                        <span class="caret"></span>
+                    </button>
+                    <div id="categories-menu" class="hidden absolute z-20 mt-2 w-full md:w-96 bg-white rounded-lg shadow-lg border border-gray-200 right-0">
+                        <div class="p-2">
+                            <input type="text" id="category-search" placeholder="Search Categories" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        </div>
+                        <ul class="max-h-60 overflow-y-auto" id="category-list">
+                            {% if serviceCategoryList is empty %}
+                            {% else %}
+                                <li class="px-4 py-2 hover:bg-gray-100 cursor-pointer category-filter-item" data-category-target="all" data-filter-category-id="All">{{ lang('services.all') }}</li>
+                            {% endif %}
+                            {% if user.favorite_services %}
+                                <li class="px-4 py-2 hover:bg-gray-100 cursor-pointer category-filter-item" data-category-target="favorites" data-filter-category-id="favorites" data-filter-category-name="{{ lang('services.favorite') }}">
+                                    <span class="fas fa-star"></span>
+                                    <span>{{ lang('services.favorite') }}</span>
+                                </li>
+                            {% endif %}
+                            {% for category in serviceCategoryList %}
+                                {% if category.name %}
+                                    <li class="px-4 py-2 hover:bg-gray-100 cursor-pointer category-filter-item" data-category-target="{{ category.name }}" data-filter-category-id="{{ category.id }}" data-filter-category-name="{{ category.name }}">
+                                        <span>{{ category['name'] }}</span>
+                                    </li>
+                                {% endif %}
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+                <!-- Currency Dropdown -->
+                {% if site.currencies and not user['auth'] %}
+                    <div class="relative ml-2" id="currency-dropdown-container">
+                        <button id="currency-button" class="flex items-center px-4 py-2 border rounded-lg text-gray-600 hover:bg-gray-100 w-full md:w-auto justify-center">
+                            <span>
+                                {% if user.currency %}
+                                    {{ user.currency.label }}
+                                {% else %}
+                                    {{ site.currency.label }}
+                                {% endif %}
+                            </span>
+                            <span class="caret"></span>
+                        </button>
+                        <div id="currency-menu" class="hidden absolute z-20 mt-2 w-full md:w-48 bg-white rounded-lg shadow-lg border border-gray-200 right-0">
+                            <ul class="max-h-60 overflow-y-auto" id="currencies-list">
+                                {% for key, rate in site.currencies %}
+                                    <li class="px-4 py-2 hover:bg-gray-100 cursor-pointer" id="currencies-item" data-rate-key="{{ key }}" data-rate-symbol="{{ rate.symbol }}">{{ key }} {{ rate.symbol }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+            <!-- Social Filters -->
+            <div id="social-filters" class="mt-4 flex flex-wrap items-center gap-2">
+                <button data-social="all" class="social-filter-button px-4 py-2 rounded-lg text-sm font-semibold flex items-center gap-2 transition-colors">
+                    <i class="ri-apps-line text-base font-normal"></i><span class="hidden md:inline">All</span>
+                </button>
+                <button data-social="instagram" class="social-filter-button px-4 py-2 rounded-lg text-sm font-semibold flex items-center gap-2 transition-colors">
+                    <i class="ri-instagram-line text-pink-500 text-base font-normal"></i><span class="hidden md:inline">Instagram</span>
+                </button>
+                <button data-social="tiktok" class="social-filter-button px-4 py-2 rounded-lg text-sm font-semibold flex items-center gap-2 transition-colors">
+                    <i class="ri-tiktok-fill text-black text-base font-normal"></i><span class="hidden md:inline">TikTok</span>
+                </button>
+                <button data-social="youtube" class="social-filter-button px-4 py-2 rounded-lg text-sm font-semibold flex items-center gap-2 transition-colors">
+                    <i class="ri-youtube-fill text-red-600 text-base font-normal"></i><span class="hidden md:inline">YouTube</span>
+                </button>
+                <button data-social="facebook" class="social-filter-button px-4 py-2 rounded-lg text-sm font-semibold flex items-center gap-2 transition-colors">
+                    <i class="ri-facebook-box-fill text-blue-600 text-base font-normal"></i><span class="hidden md:inline">Facebook</span>
+                </button>
+                <button data-social="twitter" class="social-filter-button px-4 py-2 rounded-lg text-sm font-semibold flex items-center gap-2 transition-colors">
+                    <i class="ri-twitter-x-line text-black text-base font-normal"></i><span class="hidden md:inline">Twitter</span>
+                </button>
+                <button data-social="telegram" class="social-filter-button px-4 py-2 rounded-lg text-sm font-semibold flex items-center gap-2 transition-colors">
+                    <i class="ri-telegram-fill text-sky-500 text-base font-normal"></i><span class="hidden md:inline">Telegram</span>
+                </button>
+                <div class="flex items-center gap-2 ml-auto">
+  <div class="relative">
+    <button id="more-filters-button" class="px-4 py-2 rounded-lg bg-gray-100 text-gray-700 text-sm font-semibold flex items-center hover:bg-gray-200 transition-colors">
+      More 
+      <svg class="w-4 h-4 ml-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+        <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+      </svg>
+    </button>
+
+    <div id="more-filters-dropdown" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-20 border border-gray-200">
+      <a href="#" data-social="linkedin" class="social-filter-button flex items-center gap-2 px-4 py-2 text-sm font-semibold text-gray-700 hover:bg-gray-100 transition-colors">
+        <i class="ri-linkedin-box-fill text-blue-700 text-base font-normal"></i>LinkedIn
+      </a>
+      <a href="#" data-social="twitch" class="social-filter-button flex items-center gap-3 px-4 py-2 text-sm font-semibold text-gray-700 hover:bg-gray-100">
+        <img src="https://storage.perfectcdn.com/ed17j7/26xp9ng9n4ykf8u4.png" alt="Twitch" class="h-4 w-auto">Twitch
+      </a>
+      <a href="#" data-social="rumble" class="social-filter-button flex items-center gap-3 px-4 py-2 text-sm font-semibold text-gray-700 hover:bg-gray-100">
+        <img src="https://storage.perfectcdn.com/ed17j7/qca62hwq1k70riht.png" alt="Rumble" class="h-4 w-auto">Rumble
+      </a>
+      <a href="#" data-social="kwai" class="social-filter-button flex items-center gap-3 px-4 py-2 text-sm font-semibold text-gray-700 hover:bg-gray-100">
+        <img src="https://storage.perfectcdn.com/ed17j7/6w1735blhfq5ce4f.png" alt="Kwai" class="h-4 w-auto">Kwai
+      </a>
+      <a href="#" data-social="snackvideo" class="social-filter-button flex items-center gap-3 px-4 py-2 text-sm font-semibold text-gray-700 hover:bg-gray-100">
+        <img src="https://storage.perfectcdn.com/ed17j7/rs4mesfy5mjlfilr.png" alt="SnackVideo" class="h-4 w-auto">SnackVideo
+      </a>
+      <a href="#" data-social="threads" class="social-filter-button flex items-center gap-3 px-4 py-2 text-sm font-semibold text-gray-700 hover:bg-gray-100">
+        <img src="https://storage.perfectcdn.com/ed17j7/fxm1jrdli8ajwbxw.jpeg" alt="Threads" class="h-4 w-auto">Threads
+      </a>
+      <a href="#" data-social="spotify" class="social-filter-button flex items-center gap-3 px-4 py-2 text-sm font-semibold text-gray-700 hover:bg-gray-100">
+        <img src="https://storage.perfectcdn.com/ed17j7/0hdxcj369y1huz5q.png" alt="Spotify" class="h-4 w-auto">Spotify
+      </a>
+      <a href="#" data-social="rednote" class="social-filter-button flex items-center gap-3 px-4 py-2 text-sm font-semibold text-gray-700 hover:bg-gray-100">
+        <img src="https://storage.perfectcdn.com/ed17j7/zzhlpxzlmzao00r6.png" alt="rednote" class="h-4 w-4 rounded-sm object-contain">Rednote
+      </a>
+    </div>
+  </div>
+
+
+                    <button id="collapse-expand-all-button" class="px-4 py-2 rounded-lg bg-blue-100 text-blue-700 text-sm font-semibold flex items-center hover:bg-blue-200 transition-colors">
+                        <i class="ri-arrow-down-s-line mr-1"></i>
+                        <span id="collapse-expand-text">Expand All</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- No Results Message -->
+        <div id="no-results-message" class="hidden text-center py-10 px-4">
+            <i class="ri-emotion-sad-line text-5xl text-gray-400"></i>
+            <h3 class="mt-4 text-xl font-semibold text-gray-700">No Services Found</h3>
+            <p class="mt-1 text-gray-500">We couldn't find any services matching your search. Please try again.</p>
+        </div>
+
+        <!-- JSON Data for JavaScript -->
+        <script type="application/json" id="services-data">
+        {
+            "categories": [
+                {% for category in serviceCategoryList %}
+                {% if category['name'] %}
+                {
+                    "id": {{ category.id }},
+                    "name": {{ category.name|json_encode }},
+                    "icon": {
+                        "type": {% if category['icon'] %}{{ category['icon']['icon_type']|json_encode }}{% else %}"default"{% endif %},
+                        "value": {% if category['icon'] %}{{ category['icon']['icon']|json_encode }}{% else %}""{% endif %},
+                        "url": {% if category['icon'] and category['icon']['icon_type'] == 'image' %}{{ category['icon']['url']|json_encode }}{% else %}null{% endif %}
+                    },
+                    "services": [
+                        {% for service in category['services'] %}
+                        {
+                            "id": {{ service.id }},
+                            "name": {{ service.name|json_encode }},
+                            "rate": {{ service.rate|json_encode }},
+                            "min": "{{ service.min }}",
+                            "max": "{{ service.max }}",
+                            "category_id": {{ category.id }},
+                            "favorite": {% if user.favorite_services and service.favorite %}true{% else %}false{% endif %},
+                            "original_rate": {% if converted and service.original_rate %}{{ service.original_rate|json_encode }}{% else %}null{% endif %},
+                            "average_time": {% if site['average_time'] and service.average_time %}{{ service.average_time|json_encode }}{% else %}null{% endif %},
+                            "description": {% if service.description %}{{ service.description|json_encode }}{% else %}null{% endif %}
+                        }{% if not loop.last %},{% endif %}
+                        {% endfor %}
+                    ]
+                }{% if not loop.last %},{% endif %}
+                {% endif %}
+                {% endfor %}
+            ],
+            "config": {
+                "user_favorites_enabled": {% if user.favorite_services %}true{% else %}false{% endif %},
+                "average_time_enabled": {% if site['average_time'] %}true{% else %}false{% endif %},
+                "service_description_enabled": {% if serviceDescription %}true{% else %}false{% endif %},
+                "converted_rates": {% if converted %}true{% else %}false{% endif %},
+                "rtl": {% if site['rtl'] %}true{% else %}false{% endif %},
+                "pagination": {
+                    "items_per_page": 20,
+                    "initial_load": 20
+                },
+                "lang": {
+                    "services_id": {{ lang('services.id')|json_encode }},
+                    "services_name": {{ lang('services.name')|json_encode }},
+                    "services_rate": {{ lang('services.rate')|json_encode }},
+                    "services_min": {{ lang('services.min')|json_encode }},
+                    "services_max": {{ lang('services.max')|json_encode }},
+                    "services_all": {{ lang('services.all')|json_encode }},
+                    "services_favorite": {{ lang('services.favorite')|json_encode }},
+                    "general_search_placeholder": {{ lang('general.search.placeholder')|json_encode }},
+                    "services_average_time": {% if site['average_time'] %}{{ lang('services.average_time')|json_encode }}{% else %}null{% endif %},
+                    "services_average_time_description": {% if site['average_time'] %}{{ lang('services.average_time.description')|json_encode }}{% else %}null{% endif %},
+                    "services_description": {% if serviceDescription %}{{ lang('services.description')|json_encode }}{% else %}null{% endif %}
+                }
+            }
+        }
+        </script>
+
+        <!-- Services Container -->
+        <div id="services-container">
+            <!-- Loading Indicator -->
+            <div id="loading-indicator" class="hidden">
+                <div class="flex justify-center items-center py-8">
+                    <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+                </div>
+            </div>
+            
+            <!-- Services List will be populated by JavaScript -->
+            <div id="services-list"></div>
+            
+            <!-- End of List Message -->
+            <div id="end-of-list" class="hidden text-center py-8">
+                <p class="text-gray-500">End</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Service Details Modal -->
+<div id="service-details-modal" class="fixed inset-0 bg-black bg-opacity-60 backdrop-blur-sm z-[99999] hidden items-center justify-center p-4 transition-opacity duration-300" style="z-index: 99999;">
+    <div id="modal-content" class="bg-white rounded-xl shadow-2xl w-full max-w-md mx-auto transform transition-all duration-300 opacity-0 -translate-y-4">
+        <!-- Modal Header -->
+        <div class="p-4 border-b flex justify-between items-center">
+            <h2 class="text-lg font-semibold text-gray-800 flex items-center gap-3">
+                <i class="ri-information-line text-blue-700 text-2xl"></i>
+                Service Description
+            </h2>
+            <button id="modal-close-button" class="text-gray-500 hover:text-gray-800">
+                <i class="ri-close-line text-2xl"></i>
+            </button>
+        </div>
+
+        <!-- Modal Body -->
+        <div class="p-6">
+            <div class="text-center">
+                <img id="modal-service-icon" src="" alt="Service Icon" class="w-16 h-16 mx-auto mb-4 rounded-lg p-1 border">
+                <h3 id="modal-service-name" class="text-xl font-bold text-gray-800"></h3>
+                <p id="modal-service-subtitle" class="text-sm text-gray-500 mt-1"></p>
+            </div>
+
+            <div class="mt-6">
+                <div id="modal-service-description" class="text-sm text-gray-600 bg-gray-100 p-4 rounded-lg text-center">
+                    <!-- Dynamic content here -->
+                </div>
+                <a href="#" id="modal-order-button" class="mt-6 text-sm font-semibold text-white bg-blue-700 hover:bg-blue-800 rounded-full px-8 py-2.5 transition-colors flex items-center justify-center gap-2 w-full md:w-auto mx-auto">
+                    Order Now <i class="ri-shopping-cart-line"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if servicesText %}
+    <div class="container mx-auto px-4">
+        <div class="max-w-4xl mx-auto">
+            <div class="bg-white p-6 rounded-lg border border-gray-200 {% if site['rtl'] %} rtl-content {% endif %}">
+                {{ servicesText }}
+            </div>
+        </div>
+    </div>
+{% endif %}
+
+<style>
+@keyframes wiggle {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-2px);
+  }
+  75% {
+    transform: translateX(2px);
+  }
+}
+.group:hover .expand-text,
+.group:hover .expand-icon {
+  animation: wiggle 1.5s ease-in-out infinite;
+}
+
+.category-toggle-button::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 2rem;
+    height: 2rem;
+    background: rgba(0, 0, 0, 0.05);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: width 0.4s ease-out, height 0.4s ease-out;
+    z-index: 0;
+    opacity: 0;
+}
+
+.category-toggle-button:hover::before {
+    width: 250%; 
+    height: 500px;
+    opacity: 1;
+}
+
+/* Social Filter Button Styles */
+.social-filter-button {
+    background-color: #f3f4f6; /* gray-100 */
+    color: #374151; /* gray-700 */
+}
+.social-filter-button:hover {
+    background-color: #e5e7eb; /* gray-200 */
+}
+.social-filter-button.active {
+    background-color: #1d4ed8; /* blue-700 */
+    color: #ffffff; /* white */
+}
+.social-filter-button.active:hover {
+    background-color: #1e40af; /* blue-800 */
+}
+/* Styles for dropdown links */
+#more-filters-dropdown .social-filter-button {
+    background-color: transparent;
+    color: #374151; /* gray-700 */
+}
+#more-filters-dropdown .social-filter-button:hover {
+    background-color: #f3f4f6; /* gray-100 */
+}
+#more-filters-dropdown .social-filter-button.active {
+    background-color: #e5e7eb; /* gray-200 */
+}
+
+/* Active state for category dropdown item */
+#category-list .category-filter-item.active {
+    background-color: #f3f4f6; /* gray-100 */
+    font-weight: 600; /* semibold */
+}
+
+/* More Filters Dropdown Styles */
+#more-filters-dropdown {
+    z-index: 9999 !important;
+    position: absolute !important;
+    right: 0;
+    top: 100%;
+    margin-top: 0.5rem;
+    min-width: 12rem;
+    background: white;
+    border-radius: 0.375rem;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    border: 1px solid #e5e7eb;
+    padding: 0.25rem 0;
+}
+
+#more-filters-dropdown.hidden {
+    display: none !important;
+}
+
+#more-filters-dropdown:not(.hidden) {
+    display: block !important;
+}
+
+/* More filters button container positioning */
+.relative {
+    position: relative !important;
+}
+
+</style>
+
+<script>
+$(function() {
+    // Description sanitizer function
+    function sanitizeServiceDescriptions(servicesData) {
+        if (!servicesData || !servicesData.categories) {
+            return servicesData;
+        }
+
+        // Varsayılan açıklama metni
+        const defaultDescription = "🚨⚠ Your profile or your post must be public!<br>🚨⚠ When the service is overloaded, described start time and daily speed can change!<br>🚨⚠ Do not place multiple order to the same link before your order is completed on the system.";
+
+        servicesData.categories.forEach(category => {
+            if (category.services && Array.isArray(category.services)) {
+                category.services.forEach(service => {
+                    // Eğer açıklama yoksa veya boşsa varsayılan açıklamayı ekle
+                    if (!service.description || service.description === null || service.description.trim() === '') {
+                        service.description = defaultDescription;
+                    } else if (typeof service.description === 'string') {
+                        // " karakterlerini ' karakterine çevir
+                        service.description = service.description.replace(/"/g, "'");
+                    }
+                });
+            }
+        });
+
+        return servicesData;
+    }
+
+    // Parse JSON data from script tag
+    let servicesData = {};
+    try {
+        const jsonText = $('#services-data').text();
+        servicesData = JSON.parse(jsonText);
+        
+        // Description alanlarını temizle
+        servicesData = sanitizeServiceDescriptions(servicesData);
+    } catch (e) {
+        console.error('JSON parse error:', e);
+        console.error('JSON Text causing error:', $('#services-data').text());
+        
+        // Fallback empty data structure
+        servicesData = {
+            categories: [],
+            config: {
+                user_favorites_enabled: false,
+                average_time_enabled: false,
+                service_description_enabled: false,
+                converted_rates: false,
+                rtl: false,
+                pagination: {
+                    items_per_page: 20,
+                    initial_load: 20
+                },
+                lang: {
+                    services_id: "ID",
+                    services_name: "Name",
+                    services_rate: "Rate",
+                    services_min: "Min",
+                    services_max: "Max",
+                    services_all: "All",
+                    services_favorite: "Favorites",
+                    general_search_placeholder: "Search services..."
+                }
+            }
+        };
+    }
+
+    // Cache DOM elements for performance
+    const $searchInput = $('#service-search-input');
+    const $noResultsMessage = $('#no-results-message');
+    const $servicesContainer = $('#services-container');
+    const $servicesList = $('#services-list');
+    const $loadingIndicator = $('#loading-indicator');
+    const $endOfList = $('#end-of-list');
+
+    // Application state
+    let currentPage = 0;
+    let isLoading = false;
+    let allServicesLoaded = false;
+    let activeSocialFilter = 'all';
+    let activeCategoryFilter = 'all';
+    let searchTimeout;
+    let filteredServices = [];
+    let showAllCategories = false; // İlk yüklemede 10 kategori göstermek için false
+
+    // Configuration
+    const itemsPerPage = servicesData.config.pagination.items_per_page || 20;
+    const maxCategoriesOnLoad = 25; // İlk yüklemede 25 kategori göster
+
+    // Icon mappings cache
+    const iconCache = new Map();
+    
+    function getRemixIconForCategory(categoryName) {
+        if (iconCache.has(categoryName)) return iconCache.get(categoryName);
+        
+        categoryName = categoryName.toLowerCase();
+        let result;
+        
+        if (categoryName.includes('instagram')) {
+            result = { icon: 'ri-instagram-line', color: 'text-pink-500' };
+        } else if (categoryName.includes('facebook')) {
+            result = { icon: 'ri-facebook-box-fill', color: 'text-blue-600' };
+        } else if (categoryName.includes('twitter') || categoryName.includes(' x ')) {
+            result = { icon: 'ri-twitter-x-line', color: 'text-black' };
+        } else if (categoryName.includes('tiktok')) {
+            result = { icon: 'ri-tiktok-fill', color: 'text-black' };
+        } else if (categoryName.includes('telegram')) {
+            result = { icon: 'ri-telegram-fill', color: 'text-sky-500' };
+        } else if (categoryName.includes('youtube')) {
+            result = { icon: 'ri-youtube-fill', color: 'text-red-600' };
+        } else if (categoryName.includes('spotify')) {
+            result = { icon: 'ri-spotify-fill', color: 'text-green-500' };
+        } else if (categoryName.includes('linkedin')) {
+            result = { icon: 'ri-linkedin-box-fill', color: 'text-blue-700' };
+        } else if (categoryName.includes('twitch')) {
+            result = { icon: 'ri-twitch-fill', color: 'text-purple-600' };
+        } else if (categoryName.includes('discord')) {
+            result = { icon: 'ri-discord-fill', color: 'text-indigo-500' };
+        } else if (categoryName.includes('threads')) {
+            result = { imageUrl: 'https://storage.perfectcdn.com/ed17j7/fxm1jrdli8ajwbxw.jpeg' };
+        } else if (categoryName.includes('rumble')) {
+            result = { imageUrl: 'https://storage.perfectcdn.com/ed17j7/qca62hwq1k70riht.png' };
+        } else if (categoryName.includes('kwai')) {
+            result = { imageUrl: 'https://storage.perfectcdn.com/ed17j7/6w1735blhfq5ce4f.png' };
+        } else if (categoryName.includes('snack') || categoryName.includes('snackvideo')) {
+            result = { imageUrl: 'https://storage.perfectcdn.com/ed17j7/rs4mesfy5mjlfilr.png' };
+        } else if (categoryName.includes('rednote')) {
+            result = { imageUrl: 'https://storage.perfectcdn.com/ed17j7/zzhlpxzlmzao00r6.png' };
+        } else if (categoryName.includes('kick')) {
+            result = { imageUrl: 'https://storage.perfectcdn.com/ed17j7/05ep5op2cpx59fs9.svg' };
+        } else {
+            result = { icon: 'ri-star-fill', color: 'text-yellow-500' };
+        }
+        
+        iconCache.set(categoryName, result);
+        return result;
+    }
+
+    function getIconForService(serviceName) {
+        if (iconCache.has(serviceName)) return iconCache.get(serviceName);
+        
+        serviceName = serviceName.toLowerCase();
+        let iconUrl;
+        
+        if (serviceName.includes('instagram')) {
+            iconUrl = 'https://storage.perfectcdn.com/f3b92e/hhzsztp4pjw79lq6.svg';
+        } else if (serviceName.includes('facebook')) {
+            iconUrl = 'https://storage.perfectcdn.com/f3b92e/fcxdcr0rcj7yy89q.svg';
+        } else if (serviceName.includes('twitter')) {
+            iconUrl = 'https://storage.perfectcdn.com/f3b92e/oihba445llengou2.svg';
+        } else if (serviceName.includes('tiktok')) {
+            iconUrl = 'https://i.hizliresim.com/cjkftds.png';
+        } else if (serviceName.includes('telegram')) {
+            iconUrl = 'https://storage.perfectcdn.com/f3b92e/yp1fm63ad8prc97k.svg';
+        } else if (serviceName.includes('youtube')) {
+            iconUrl = 'https://storage.perfectcdn.com/f3b92e/613d1l69p0oz9rzr.svg';
+        } else if (serviceName.includes('spotify')) {
+            iconUrl = 'https://storage.perfectcdn.com/f3b92e/3xwmuk6fdihz3oec.svg';
+        } else if (serviceName.includes('soundcloud')) {
+            iconUrl = 'https://storage.perfectcdn.com/f3b92e/mx742d328ixt2q25.svg';
+        } else if (serviceName.includes('linkedin')) {
+            iconUrl = 'https://storage.perfectcdn.com/f3b92e/di7o1f3alp4q8t6j.svg';
+        } else if (serviceName.includes('twitch')) {
+            iconUrl = 'https://i.hizliresim.com/nhbvs75.png';
+        } else if (serviceName.includes('discord')) {
+            iconUrl = 'https://i.hizliresim.com/in44apl.png';
+        } else if (serviceName.includes('threads')) {
+            iconUrl = 'https://storage.perfectcdn.com/ed17j7/fxm1jrdli8ajwbxw.jpeg';
+        } else if (serviceName.includes('rumble')) {
+            iconUrl = 'https://storage.perfectcdn.com/ed17j7/qca62hwq1k70riht.png';
+        } else if (serviceName.includes('kwai')) {
+            iconUrl = 'https://storage.perfectcdn.com/ed17j7/6w1735blhfq5ce4f.png';
+        } else if (serviceName.includes('snack') || serviceName.includes('snackvideo')) {
+            iconUrl = 'https://storage.perfectcdn.com/ed17j7/rs4mesfy5mjlfilr.png';
+        } else if (serviceName.includes('rednote')) {
+            iconUrl = 'https://storage.perfectcdn.com/ed17j7/zzhlpxzlmzao00r6.png';
+        } else if (serviceName.includes('kick')) {
+            iconUrl = 'https://storage.perfectcdn.com/ed17j7/05ep5op2cpx59fs9.svg';
+        } else {
+            iconUrl = 'https://storage.perfectcdn.com/ed17j7/snoz2ubzdwbqghgs.png';
+        }
+        
+        iconCache.set(serviceName, iconUrl);
+        return iconUrl;
+    }
+
+    // Render functions
+    function renderCategoryHeader(category) {
+        const iconData = getRemixIconForCategory(category.name);
+        let iconHtml = '';
+        // Admin panelden gelen ikon öncelikli
+        if (category.icon && category.icon.type && (category.icon.value || category.icon.url)) {
+            if (category.icon.type === 'image' && category.icon.url) {
+                iconHtml = `<img src="${category.icon.url}" alt="${category.name}" class="w-6 h-6 object-contain rounded-sm">`;
+            } else if (category.icon.type === 'icon' && category.icon.value) {
+                iconHtml = `<span class="${category.icon.value} text-xl"></span>`;
+            } else if (category.icon.type === 'emoji' && category.icon.value) {
+                iconHtml = `<span>${category.icon.value}</span>`;
+            }
+        }
+        if (!iconHtml) {
+            iconHtml = iconData.imageUrl ? `<img src="${iconData.imageUrl}" alt="${category.name}" class="w-6 h-6 object-contain rounded-sm">` : `<i class="${iconData.icon} ${iconData.color} text-2xl"></i>`;
+        }
+        
+        return `
+            <div class="service-category-container bg-white border border-gray-200 rounded-xl mb-4" data-category-id="${category.id}" data-category-name="${category.name}">
+                <div class="category-toggle-button relative overflow-hidden border-gray-200 p-4 cursor-pointer group transition-all duration-300 hover:bg-gray-50">
+                    <div class="flex items-center justify-between relative z-10">
+                        <h2 class="text-lg md:text-xl font-semibold text-gray-800 flex items-center gap-3">
+                            ${iconHtml}
+                            ${category.name}
+                        </h2>
+                        <button class="flex items-center gap-2 text-gray-600 hover:text-gray-800 transition-colors">
+                            <span class="expand-text text-sm font-medium">Expand</span>
+                            <i class="ri-arrow-right-s-line expand-icon text-lg transform transition-transform"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="services-table-content" style="display: none;">
+                    <div class="hidden md:flex p-4 text-sm font-semibold text-gray-500 border-b bg-gray-50">
+                        <div class="flex-1">ID/ Service</div>
+                        <div class="flex items-center justify-between flex-1 ml-4">
+                            <div class="flex items-center gap-x-6">
+                                <div class="w-20 text-right">Price</div>
+                                <div class="w-16 text-right">Min</div>
+                                <div class="w-16 text-right">Max</div>
+                                <div class="w-40 text-center">Average Time</div>
+                            </div>
+                            <div class="w-[124px] text-right">More</div>
+                        </div>
+                    </div>
+                    <div class="category-services-list" data-category-id="${category.id}">
+                        <!-- Services will be populated here -->
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+
+    function renderService(service, category) {
+        const iconUrl = getIconForService(service.name);
+        
+        return `
+            <div class="flex flex-col p-4 border-b hover:bg-gray-50 service-row"
+                 data-service-id="${service.id}"
+                 data-service-name="${service.name}"
+                 data-description="${service.description || ''}"
+                 style="display: flex;">
+                <!-- Desktop görünümü -->
+                <div class="hidden md:flex md:items-center w-full">
+                    <!-- Sol taraf: Icon, Favorite ve Servis Adı -->
+                    <div class="flex items-center w-full mb-2 md:mb-0 flex-1">
+                        <img alt="Service Icon" class="w-8 h-8 mr-[10px] rounded-lg shrink-0" src="${iconUrl}">
+                        ${servicesData.config.user_favorites_enabled ? `
+                            <button class="like-button w-9 h-8 flex items-center justify-center bg-white hover:bg-gray-100 rounded-lg transition-colors border border-gray-200 mr-4 shrink-0"
+                                    ${service.favorite ? 'data-favorite-active="true"' : ''}
+                                    data-favorite-service-id="${service.id}">
+                                <span data-favorite-icon class="${service.favorite ? 'fas fa-star text-yellow-500' : 'far fa-star text-gray-500'} text-lg"></span>
+                            </button>
+                        ` : ''}
+                        <div class="service-name-wrapper">
+                            <p class="font-semibold text-gray-800 text-sm">
+                                <span class="font-semibold text-gray-500">${service.id}</span> - ${service.name}
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <!-- Sağ taraf: Rate, Min, Max -->
+                    <div class="flex items-center justify-between flex-1 md:ml-4">
+                        <div class="flex w-full items-center gap-x-6 text-sm">
+                            <div class="font-bold text-gray-800 w-20 text-right">${service.rate}</div>
+                            <div class="text-gray-600 font-medium w-16 text-right">${service.min}</div>
+                            <div class="text-gray-600 font-medium w-16 text-right">${service.max}</div>
+                            ${servicesData.config.average_time_enabled && service.average_time ? `
+                                <div class="text-gray-600 font-medium w-40 text-center">${service.average_time}</div>
+                            ` : `
+                                <div class="text-gray-600 font-medium w-40 text-center">-</div>
+                            `}
+                        </div>
+                        <div class="flex items-center gap-2 justify-end w-[124px]">
+                            ${servicesData.config.service_description_enabled && service.description ? `
+                                <button class="details-button flex items-center justify-center h-[34px] w-[34px] bg-orange-500 hover:bg-orange-600 text-white rounded-lg transition-colors">
+                                    <i class="ri-menu-line text-lg"></i>
+                                </button>
+                            ` : ''}
+                            <a href="/?service=${service.id}" class="flex items-center justify-center h-[34px] px-4 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors gap-2 text-sm">
+                                <i class="ri-shopping-cart-line text-lg"></i>Buy
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Mobil görünümü -->
+                <div class="flex md:hidden flex-col items-center w-full text-center">
+                    <!-- 1. İkon ve Favori Butonu (Ortalanmış) -->
+                    <div class="flex items-center justify-center gap-3 mb-3">
+                        <img alt="Service Icon" class="w-10 h-10 rounded-lg" src="${iconUrl}">
+                        ${servicesData.config.user_favorites_enabled ? `
+                            <button class="like-button w-9 h-8 flex items-center justify-center bg-white hover:bg-gray-100 rounded-lg transition-colors border border-gray-200"
+                                    ${service.favorite ? 'data-favorite-active="true"' : ''}
+                                    data-favorite-service-id="${service.id}">
+                                <span data-favorite-icon class="${service.favorite ? 'fas fa-star text-yellow-500' : 'far fa-star text-gray-500'} text-lg"></span>
+                            </button>
+                        ` : ''}
+                    </div>
+                    
+                    <!-- 2. Servis Adı (Ortalanmış) -->
+                    <div class="mb-3">
+                        <p class="font-semibold text-gray-800 text-sm text-center">
+                            <span class="font-semibold text-gray-500">${service.id}</span> - ${service.name}
+                        </p>
+                    </div>
+                    
+                    <!-- 3. Price, Min, Max -->
+                    <div class="w-full mb-3">
+                        <div class="flex items-center gap-x-4 mb-1">
+                            <div class="text-gray-500 text-xs text-center flex-1">Price</div>
+                            <div class="text-gray-500 text-xs text-center flex-1">Min</div>
+                            <div class="text-gray-500 text-xs text-center flex-1">Max</div>
+                        </div>
+                        <div class="flex items-center gap-x-4">
+                            <div class="font-bold text-gray-800 text-center flex-1">${service.rate}</div>
+                            <div class="text-gray-600 font-medium text-center flex-1">${service.min}</div>
+                            <div class="text-gray-600 font-medium text-center flex-1">${service.max}</div>
+                        </div>
+                    </div>
+                    
+                    <!-- 4. Average Time (Ortalanmış) -->
+                    ${servicesData.config.average_time_enabled && service.average_time ? `
+                        <div class="mb-3">
+                            <div class="text-gray-500 text-xs mb-1">Average Time</div>
+                            <div class="flex items-center justify-center gap-1 text-gray-600 font-medium text-sm bg-gray-100 px-3 py-1 rounded">
+                                <i class="ri-time-line text-gray-500"></i>
+                                ${service.average_time}
+                            </div>
+                        </div>
+                    ` : ''}
+                    
+                    <!-- 5. Butonlar (Ortalanmış) -->
+                    <div class="flex items-center justify-center gap-2">
+                        ${servicesData.config.service_description_enabled && service.description ? `
+                            <button class="details-button flex items-center justify-center h-[34px] px-3 bg-orange-500 hover:bg-orange-600 text-white font-medium rounded-lg transition-colors gap-1 text-sm">
+                                <i class="ri-menu-line text-lg"></i>Description
+                            </button>
+                        ` : ''}
+                        <a href="/?service=${service.id}" class="flex items-center justify-center h-[34px] px-4 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors gap-2 text-sm">
+                            <i class="ri-shopping-cart-line text-lg"></i>Buy
+                        </a>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+
+    // Filter and search functions
+    function getAllServices() {
+        const allServices = [];
+        servicesData.categories.forEach(category => {
+            category.services.forEach(service => {
+                allServices.push({
+                    ...service,
+                    category_name: category.name
+                });
+            });
+        });
+        return allServices;
+    }
+
+    function filterServices() {
+        const searchTerm = $searchInput.val().toLowerCase().trim();
+        const socialNameToMatch = activeSocialFilter === 'x' ? 'twitter' : activeSocialFilter;
+        
+        let filtered = getAllServices();
+
+        // Apply social filter
+        if (activeSocialFilter !== 'all') {
+            filtered = filtered.filter(service =>
+                service.name.toLowerCase().includes(socialNameToMatch)
+            );
+        }
+
+        // Apply category filter
+        if (activeCategoryFilter !== 'all') {
+            if (activeCategoryFilter === 'favorites') {
+                filtered = filtered.filter(service => service.favorite);
+            } else {
+                filtered = filtered.filter(service => service.category_name === activeCategoryFilter);
+            }
+        }
+
+        // Apply search filter
+        if (searchTerm) {
+            filtered = filtered.filter(service =>
+                service.name.toLowerCase().includes(searchTerm) ||
+                service.id.toString().includes(searchTerm)
+            );
+        }
+
+        return filtered;
+    }
+
+    function renderServices(services, append = false) {
+        if (!append) {
+            $servicesList.empty();
+            currentPage = 0;
+            allServicesLoaded = false;
+        }
+
+        if (services.length === 0) {
+            $noResultsMessage.show();
+            $endOfList.hide();
+            return;
+        }
+
+        $noResultsMessage.hide();
+
+        // Group services by category
+        const servicesByCategory = {};
+        services.forEach(service => {
+            if (!servicesByCategory[service.category_name]) {
+                servicesByCategory[service.category_name] = [];
+            }
+            servicesByCategory[service.category_name].push(service);
+        });
+
+        // Get category entries
+        let categoryEntries = Object.entries(servicesByCategory);
+        
+        // Apply category limit if not showing all categories and no filters are active
+        if (!showAllCategories && activeSocialFilter === 'all' && activeCategoryFilter === 'all' && !$searchInput.val().trim()) {
+            categoryEntries = categoryEntries.slice(0, maxCategoriesOnLoad);
+        }
+
+        // Render each category with batch processing
+        categoryEntries.forEach(([categoryName, categoryServices]) => {
+            const category = servicesData.categories.find(cat => cat.name === categoryName);
+            if (!category) return;
+
+            let $categoryContainer = $(`.service-category-container[data-category-id="${category.id}"]`);
+            
+            if ($categoryContainer.length === 0) {
+                // Create new category container
+                $servicesList.append(renderCategoryHeader(category));
+                $categoryContainer = $(`.service-category-container[data-category-id="${category.id}"]`);
+            }
+
+            const $categoryServicesList = $categoryContainer.find('.category-services-list');
+            
+            // Batch render services for better performance
+            const servicesHtml = categoryServices.map(service =>
+                renderService(service, category)
+            ).join('');
+            
+            $categoryServicesList.append(servicesHtml);
+        });
+
+        // Buton kaldırıldı - scroll ile otomatik yükleme
+    }
+
+    function loadMoreServices() {
+        if (isLoading || allServicesLoaded) return;
+
+        isLoading = true;
+        $loadingIndicator.show();
+
+        // Use requestAnimationFrame for smoother rendering
+        requestAnimationFrame(() => {
+            const startIndex = currentPage * itemsPerPage;
+            const endIndex = startIndex + itemsPerPage;
+            const servicesToLoad = filteredServices.slice(startIndex, endIndex);
+
+            if (servicesToLoad.length === 0) {
+                allServicesLoaded = true;
+                $endOfList.show();
+            } else {
+                renderServices(servicesToLoad, true);
+                currentPage++;
+            }
+
+            $loadingIndicator.hide();
+            isLoading = false;
+        });
+    }
+
+    function applyFiltersAndReload() {
+        // Her durumda false olsun - her zaman ilk 10 kategori göster
+        showAllCategories = false;
+        
+        filteredServices = filterServices();
+        currentPage = 0;
+        allServicesLoaded = false;
+        $servicesList.empty();
+        $endOfList.hide();
+        
+        // Filtrelenmiş servisleri kategori bazında grupla
+        const servicesByCategory = {};
+        filteredServices.forEach(service => {
+            if (!servicesByCategory[service.category_name]) {
+                servicesByCategory[service.category_name] = [];
+            }
+            servicesByCategory[service.category_name].push(service);
+        });
+        
+        // İlk 25 kategoriyi al ve render et
+        const categoryEntries = Object.entries(servicesByCategory).slice(0, 25);
+        
+        categoryEntries.forEach(([categoryName, categoryServices]) => {
+            const category = servicesData.categories.find(cat => cat.name === categoryName);
+            if (!category) return;
+
+            // Kategori header'ını ekle
+            $servicesList.append(renderCategoryHeader(category));
+            
+            // Bu kategorinin servislerini ekle
+            const $categoryContainer = $(`.service-category-container[data-category-id="${category.id}"]`);
+            const $categoryServicesList = $categoryContainer.find('.category-services-list');
+            
+            const servicesHtml = categoryServices.map(service =>
+                renderService(service, category)
+            ).join('');
+            
+            $categoryServicesList.append(servicesHtml);
+        });
+        
+        // Global değişkenleri güncelle
+        window.filteredServicesByCategory = servicesByCategory;
+        window.loadedFilteredCategories = 25;
+        
+        // Eğer 25'ten az kategori varsa bitmiş demektir
+        const totalCategories = Object.keys(servicesByCategory).length;
+        if (totalCategories <= 25) {
+            allServicesLoaded = true;
+            if (totalCategories > 0) {
+                $endOfList.show();
+            }
+        } else {
+            allServicesLoaded = false;
+        }
+        
+        if (filteredServices.length === 0) {
+            $noResultsMessage.show();
+        } else {
+            $noResultsMessage.hide();
+        }
+    }
+    
+    // İlk yükleme için özel fonksiyon
+    function initialLoad() {
+        console.log('Initial load starting...');
+        
+        // İlk yüklemede kesinlikle showAllCategories false olsun
+        showAllCategories = false;
+        activeSocialFilter = 'all';
+        activeCategoryFilter = 'all';
+        
+        currentPage = 0;
+        allServicesLoaded = false;
+        $servicesList.empty();
+        $endOfList.hide();
+        $noResultsMessage.hide();
+        
+        // Tüm servisleri al
+        const allServices = getAllServices();
+        console.log('Total services:', allServices.length);
+        
+        // Kategori bazında grupla
+        const servicesByCategory = {};
+        allServices.forEach(service => {
+            if (!servicesByCategory[service.category_name]) {
+                servicesByCategory[service.category_name] = [];
+            }
+            servicesByCategory[service.category_name].push(service);
+        });
+        
+        // İlk 25 kategoriyi al
+        const categoryEntries = Object.entries(servicesByCategory).slice(0, 25);
+        console.log('Categories to show:', categoryEntries.length);
+        
+        // Her kategoriyi render et
+        categoryEntries.forEach(([categoryName, categoryServices]) => {
+            const category = servicesData.categories.find(cat => cat.name === categoryName);
+            if (!category) return;
+
+            // Kategori header'ını ekle
+            $servicesList.append(renderCategoryHeader(category));
+            
+            // Bu kategorinin servislerini ekle
+            const $categoryContainer = $(`.service-category-container[data-category-id="${category.id}"]`);
+            const $categoryServicesList = $categoryContainer.find('.category-services-list');
+            
+            const servicesHtml = categoryServices.map(service =>
+                renderService(service, category)
+            ).join('');
+            
+            $categoryServicesList.append(servicesHtml);
+        });
+        
+        // Kategorileri global değişkene kaydet scroll için
+        window.allServicesByCategory = servicesByCategory;
+        window.loadedCategories = 25;
+        
+        console.log('Initial load completed');
+    }
+
+    // Yeni kategorileri yüklemek için fonksiyon
+    function loadMoreCategories() {
+        if (!window.allServicesByCategory || isLoading) return;
+        
+        const totalCategories = Object.keys(window.allServicesByCategory).length;
+        const remainingCategories = totalCategories - window.loadedCategories;
+        
+        if (remainingCategories <= 0) {
+            allServicesLoaded = true;
+            $endOfList.show();
+            return;
+        }
+        
+        isLoading = true;
+        $loadingIndicator.show();
+        
+        // Sıradaki 10 kategoriyi yükle
+        const categoriesToLoad = Math.min(10, remainingCategories);
+        const categoryEntries = Object.entries(window.allServicesByCategory)
+            .slice(window.loadedCategories, window.loadedCategories + categoriesToLoad);
+        
+        // Her kategoriyi render et
+        categoryEntries.forEach(([categoryName, categoryServices]) => {
+            const category = servicesData.categories.find(cat => cat.name === categoryName);
+            if (!category) return;
+
+            // Kategori header'ını ekle
+            $servicesList.append(renderCategoryHeader(category));
+            
+            // Bu kategorinin servislerini ekle
+            const $categoryContainer = $(`.service-category-container[data-category-id="${category.id}"]`);
+            const $categoryServicesList = $categoryContainer.find('.category-services-list');
+            
+            const servicesHtml = categoryServices.map(service =>
+                renderService(service, category)
+            ).join('');
+            
+            $categoryServicesList.append(servicesHtml);
+        });
+        
+        window.loadedCategories += categoriesToLoad;
+        
+        // Eğer tüm kategoriler yüklendiyse
+        if (window.loadedCategories >= totalCategories) {
+            allServicesLoaded = true;
+            $endOfList.show();
+        }
+        
+        $loadingIndicator.hide();
+        isLoading = false;
+    }
+
+    // Filtrelenmiş kategorileri yüklemek için fonksiyon
+    function loadMoreFilteredCategories() {
+        if (!window.filteredServicesByCategory || isLoading) return;
+        
+        const totalCategories = Object.keys(window.filteredServicesByCategory).length;
+        const remainingCategories = totalCategories - window.loadedFilteredCategories;
+        
+        if (remainingCategories <= 0) {
+            allServicesLoaded = true;
+            $endOfList.show();
+            return;
+        }
+        
+        isLoading = true;
+        $loadingIndicator.show();
+        
+        // Sıradaki 10 kategoriyi yükle
+        const categoriesToLoad = Math.min(10, remainingCategories);
+        const categoryEntries = Object.entries(window.filteredServicesByCategory)
+            .slice(window.loadedFilteredCategories, window.loadedFilteredCategories + categoriesToLoad);
+        
+        // Her kategoriyi render et
+        categoryEntries.forEach(([categoryName, categoryServices]) => {
+            const category = servicesData.categories.find(cat => cat.name === categoryName);
+            if (!category) return;
+
+            // Kategori header'ını ekle
+            $servicesList.append(renderCategoryHeader(category));
+            
+            // Bu kategorinin servislerini ekle
+            const $categoryContainer = $(`.service-category-container[data-category-name="${categoryName}"]`);
+            const $categoryServicesList = $categoryContainer.find('.category-services-list');
+            
+            const servicesHtml = categoryServices.map(service =>
+                renderService(service, category)
+            ).join('');
+            
+            $categoryServicesList.append(servicesHtml);
+        });
+        
+        window.loadedFilteredCategories += categoriesToLoad;
+        
+        // Eğer tüm kategoriler yüklendiyse
+        if (window.loadedFilteredCategories >= totalCategories) {
+            allServicesLoaded = true;
+            $endOfList.show();
+        }
+        
+        $loadingIndicator.hide();
+        isLoading = false;
+    }
+
+    // Optimized infinite scroll handler with throttling
+    let scrollTimeout;
+    function handleScroll() {
+        if (scrollTimeout) return;
+        
+        scrollTimeout = setTimeout(() => {
+            const scrollTop = $(window).scrollTop();
+            const windowHeight = $(window).height();
+            const documentHeight = $(document).height();
+            
+            if (scrollTop + windowHeight >= documentHeight - 200) {
+                // Eğer filtre yoksa orijinal kategorileri yükle, varsa filtrelenmiş kategorileri yükle
+                if (activeSocialFilter === 'all' && activeCategoryFilter === 'all' && !$searchInput.val().trim()) {
+                    loadMoreCategories();
+                } else {
+                    loadMoreFilteredCategories();
+                }
+            }
+            
+            scrollTimeout = null;
+        }, 100);
+    }
+
+    // Social filter icon color handling
+    $('.social-filter-button').each(function() {
+        const $icon = $(this).find('i');
+        if ($icon.length) {
+            const colorClass = Array.from($icon.attr('class').split(' ')).find(cls =>
+                cls.startsWith('text-') &&
+                !['text-white', 'text-base', 'text-lg', 'text-xl', 'text-2xl', 'text-sm'].includes(cls)
+            );
+            if (colorClass) {
+                $icon.data('original-color', colorClass);
+            }
+        }
+    });
+
+    // Set initial active category in dropdown
+    $('#category-list li[data-category-target="all"]').addClass('active');
+
+    // Category Dropdown Logic
+    const $categoriesButton = $('#categories-button');
+    const $categoriesMenu = $('#categories-menu');
+    const $categoryList = $('#category-list');
+    
+    if ($categoriesButton.length && $categoriesMenu.length && $categoryList.length) {
+        $categoriesButton.on('click', function(event) {
+            event.stopPropagation();
+            $categoriesMenu.toggleClass('hidden');
+        });
+
+        $(document).on('click', function(event) {
+            if (!$categoriesMenu.is(event.target) && $categoriesMenu.has(event.target).length === 0 && !$categoriesButton.is(event.target) && $categoriesButton.has(event.target).length === 0) {
+                $categoriesMenu.addClass('hidden');
+            }
+        });
+
+        $('#category-search').on('input', function() {
+            const searchTerm = $(this).val().toLowerCase();
+            $categoryList.find('li').each(function() {
+                const text = $(this).text().toLowerCase();
+                $(this).toggle(text.includes(searchTerm));
+            });
+        });
+
+        $categoryList.on('click', 'li.category-filter-item', function() {
+            const $item = $(this);
+            activeCategoryFilter = $item.data('category-target');
+
+            $categoryList.find('li.category-filter-item').removeClass('active');
+            $item.addClass('active');
+            
+            $categoriesMenu.addClass('hidden');
+            
+            applyFiltersAndReload();
+        });
+    }
+
+    // Currency Dropdown Logic
+    const $currencyButton = $('#currency-button');
+    const $currencyMenu = $('#currency-menu');
+    
+    if ($currencyButton.length && $currencyMenu.length) {
+        $currencyButton.on('click', function(event) {
+            event.stopPropagation();
+            $currencyMenu.toggleClass('hidden');
+        });
+
+        $(document).on('click', function(event) {
+            if (!$currencyMenu.is(event.target) && $currencyMenu.has(event.target).length === 0 && !$currencyButton.is(event.target) && $currencyButton.has(event.target).length === 0) {
+                $currencyMenu.addClass('hidden');
+            }
+        });
+
+        $('#currencies-list').on('click', 'li', function() {
+            const $item = $(this);
+            const rateKey = $item.data('rate-key');
+            const rateSymbol = $item.data('rate-symbol');
+            
+            $currencyButton.find('span').first().text(rateKey + ' ' + rateSymbol);
+            $currencyMenu.addClass('hidden');
+        });
+    }
+
+    // Service List Toggling - Delegated events for dynamic content
+    $(document).on('click', '.category-toggle-button', function() {
+        const $button = $(this);
+        const $servicesTableContent = $button.next('.services-table-content');
+        if (!$servicesTableContent.length) return;
+
+        const isExpanding = !$servicesTableContent.is(':visible');
+        const $icon = $button.find('button i');
+        const $buttonText = $button.find('button span');
+        
+        $icon.toggleClass('rotate-90', isExpanding).toggleClass('expand-icon', !isExpanding);
+        $button.toggleClass('border-b', isExpanding);
+        if ($buttonText.length) {
+            $buttonText.text(isExpanding ? 'Collapse' : 'Expand').toggleClass('expand-text', !isExpanding);
+        }
+
+        $servicesTableContent.slideToggle(200);
+    });
+
+    // Modal Logic
+    const $modal = $('#service-details-modal');
+    if ($modal.length) {
+        const $modalContent = $('#modal-content');
+        
+        const openModal = function(serviceData) {
+            const serviceId = serviceData.id;
+            const fullServiceName = serviceData.name;
+            const parts = fullServiceName.split(' | ');
+            const title = parts[0];
+            const subtitle = parts.slice(1).join(' | ');
+            const iconUrl = getIconForService(fullServiceName);
+
+            $('#modal-service-name').html(`<span class="font-semibold text-gray-500">${serviceId}</span> - ${title}`);
+            $('#modal-service-icon').attr('src', iconUrl);
+            $('#modal-service-subtitle').text(subtitle);
+            $('#modal-service-description').html(serviceData.description || '');
+            $('#modal-order-button').attr('href', `/?service=${serviceId}`);
+
+            // Arka plan kaydırmayı kilitle
+            $('body').addClass('modal-open');
+            $modal.removeClass('hidden').addClass('flex').css('opacity', 0).animate({ opacity: 1 }, 150);
+            $modalContent.css({ opacity: 0, transform: 'translateY(-1rem)' }).animate({ opacity: 1, transform: 'translateY(0)' }, 150);
+        };
+
+        const closeModal = function() {
+            $modal.animate({ opacity: 0 }, 150, function() {
+                $(this).addClass('hidden').removeClass('flex');
+            });
+            $modalContent.animate({ opacity: 0, transform: 'translateY(-1rem)' }, 150);
+            // Kilidi kaldır
+            $('body').removeClass('modal-open');
+        };
+
+        $(document).on('click', '.details-button', function(e) {
+            e.preventDefault();
+            const $serviceRow = $(this).closest('.service-row');
+            const serviceId = parseInt($serviceRow.data('service-id'));
+            
+            // Find service data from JSON
+            let serviceData = null;
+            servicesData.categories.forEach(category => {
+                const service = category.services.find(s => s.id === serviceId);
+                if (service) serviceData = service;
+            });
+            
+            if (serviceData) {
+                openModal(serviceData);
+            }
+        });
+
+        $('#modal-close-button').on('click', closeModal);
+        $modal.on('click', function(event) {
+            if (event.target === this) {
+                closeModal();
+            }
+        });
+        $(document).on('keydown', function(event) {
+            if (event.key === 'Escape' && !$modal.hasClass('hidden')) {
+                closeModal();
+            }
+        });
+    }
+
+    // Optimized debounced search input
+    $searchInput.on('input', function() {
+        clearTimeout(searchTimeout);
+        const searchValue = $(this).val();
+        
+        // Immediate clear if empty
+        if (!searchValue.trim()) {
+            applyFiltersAndReload();
+            return;
+        }
+        
+        // Debounce for non-empty searches
+        searchTimeout = setTimeout(applyFiltersAndReload, 250);
+    });
+
+    // Social filter buttons - Using delegated event for dropdown buttons
+    $(document).on('click', '.social-filter-button', function(e) {
+        e.preventDefault();
+        const $button = $(this);
+        activeSocialFilter = $button.data('social');
+
+        $('.social-filter-button').each(function() {
+            const $btn = $(this);
+            $btn.removeClass('active');
+            const $icon = $btn.find('i');
+            if ($icon.length && $icon.data('original-color')) {
+                $icon.removeClass('text-white').addClass($icon.data('original-color'));
+            }
+        });
+
+        $button.addClass('active');
+        const $clickedIcon = $button.find('i');
+        const isInDropdown = $button.closest('#more-filters-dropdown').length > 0;
+
+        if (!isInDropdown) {
+            if ($clickedIcon.length && $clickedIcon.data('original-color')) {
+                $clickedIcon.removeClass($clickedIcon.data('original-color')).addClass('text-white');
+            }
+        }
+
+        if (isInDropdown) {
+            $('#more-filters-dropdown').addClass('hidden');
+        }
+
+        applyFiltersAndReload();
+    });
+
+    // More filters dropdown - Using delegated event for better reliability
+    $(document).on('click', '#more-filters-button', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        const $dropdown = $('#more-filters-dropdown');
+        
+        // Close other dropdowns first
+        $('#categories-menu').addClass('hidden');
+        $('#currency-menu').addClass('hidden');
+        
+        // Toggle this dropdown
+        $dropdown.toggleClass('hidden');
+        
+        // Ensure z-index is high enough
+        if (!$dropdown.hasClass('hidden')) {
+            $dropdown.css({
+                'z-index': '9999',
+                'position': 'absolute'
+            });
+        }
+    });
+
+    $(document).on('click', function(event) {
+        const $target = $(event.target);
+        if (!$target.closest('#more-filters-button').length && !$target.closest('#more-filters-dropdown').length) {
+            $('#more-filters-dropdown').addClass('hidden');
+        }
+    });
+
+    // Collapse/Expand All functionality
+    let allExpanded = false;
+    
+    $('#collapse-expand-all-button').on('click', function() {
+        const $button = $(this);
+        const $icon = $button.find('i');
+        const $text = $('#collapse-expand-text');
+        
+        if (allExpanded) {
+            // Collapse all categories
+            $('.service-category-container').each(function() {
+                const $container = $(this);
+                const $toggleButton = $container.find('.category-toggle-button');
+                const $content = $container.find('.services-table-content');
+                const $toggleIcon = $toggleButton.find('button i');
+                const $toggleText = $toggleButton.find('button span');
+                
+                if ($content.is(':visible')) {
+                    $toggleIcon.removeClass('rotate-90').addClass('expand-icon');
+                    $toggleButton.removeClass('border-b');
+                    if ($toggleText.length) {
+                        $toggleText.text('Expand').addClass('expand-text');
+                    }
+                    $content.hide();
+                }
+            });
+            
+            $icon.removeClass('ri-arrow-up-s-line').addClass('ri-arrow-down-s-line');
+            $text.text('Expand All');
+            allExpanded = false;
+        } else {
+            // Expand all categories
+            $('.service-category-container').each(function() {
+                const $container = $(this);
+                const $toggleButton = $container.find('.category-toggle-button');
+                const $content = $container.find('.services-table-content');
+                const $toggleIcon = $toggleButton.find('button i');
+                const $toggleText = $toggleButton.find('button span');
+                
+                if (!$content.is(':visible')) {
+                    $toggleIcon.removeClass('expand-icon').addClass('rotate-90');
+                    $toggleButton.addClass('border-b');
+                    if ($toggleText.length) {
+                        $toggleText.text('Collapse').removeClass('expand-text');
+                    }
+                    $content.show();
+                }
+            });
+            
+            $icon.removeClass('ri-arrow-down-s-line').addClass('ri-arrow-up-s-line');
+            $text.text('Collapse All');
+            allExpanded = true;
+        }
+    });
+
+    // Show More Categories button handler
+    $(document).on('click', '#show-more-categories-btn', function() {
+        showAllCategories = true;
+        $(this).closest('.show-more-categories-wrapper').remove();
+        applyFiltersAndReload();
+    });
+
+    // Like button functionality
+    $(document).on('click', '.like-button', function(e) {
+        e.preventDefault();
+        const $button = $(this);
+        const $icon = $button.find('[data-favorite-icon]');
+        const isActive = $button.attr('data-favorite-active') === 'true';
+        
+        if (isActive) {
+            // Remove active classes
+            $icon.removeClass('fas fa-star text-yellow-500').addClass('far fa-star text-gray-500');
+            $button.removeAttr('data-favorite-active');
+        } else {
+            // Add active classes
+            $icon.removeClass('far fa-star text-gray-500').addClass('fas fa-star text-yellow-500');
+            $button.attr('data-favorite-active', 'true');
+        }
+    });
+
+    // Initialize scroll handler
+    $(window).on('scroll', handleScroll);
+
+    // Set initial active button and load initial data
+    $('.social-filter-button[data-social="all"]').addClass('active');
+    
+    // Initial load - özel fonksiyon kullan
+    initialLoad();
+});
+</script>

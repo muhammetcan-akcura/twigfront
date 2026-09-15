@@ -1,0 +1,736 @@
+<style>
+@keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+}
+</style>
+
+    <div class="container relative pb-16 md:pb-15 pt-12">
+    <div class="mx-auto relative z-10">
+
+        
+        <!-- Account Status Overview -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+            
+                        <!-- Current Account Card -->
+            <div class="bg-white p-6 border border-blue-200 h-full flex flex-col lg:col-span-1 rounded-2xl shadow-sm">
+                <div class="flex items-center justify-between mb-4">
+                    <h2 class="text-xl font-bold text-gray-800">Your Current Status</h2>
+                    <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
+                        <i class="ri-user-line text-blue-600 text-sm"></i>
+                    </div>
+                </div>
+                
+                <div class="flex items-center mb-4">
+                    <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center mr-3 shadow-sm border border-gray-200">
+                        <img src="https://cdn-icons-png.flaticon.com/512/12927/12927172.png" alt="New Account" class="w-10 h-10" id="current-level-icon">
+                    </div>
+                    <div>
+                        <div class="text-2xl font-bold text-gray-800" id="current-level-name">New Account</div>
+                        <div class="text-gray-600 text-base" id="current-level-spent">$0 spent</div>
+                    </div>
+                </div>
+                
+                <div class="space-y-2 flex-grow">
+                        <h3 class="font-bold text-base text-gray-700 mb-2">Active Benefits</h3>
+                        <div class="space-y-1" id="current-benefits-list">
+                        <!-- Benefits will be populated from config -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Next Level Preview -->
+            <div class="bg-white p-6 border border-amber-400 h-full flex flex-col lg:col-span-2 rounded-2xl" style="background-image: radial-gradient(circle at 1px 1px, #e5e7eb 1.5px, transparent 0); background-size: 22px 22px; box-shadow: 0 4px 20px rgba(245, 158, 11, 0.15);">
+                <div class="flex items-center justify-between mb-4">
+                    <h2 class="text-xl font-bold text-gray-800 flex items-center">
+                        <i class="ri-arrow-right-line text-amber-600 mr-2 text-lg"></i>
+                        Next Level
+                    </h2>
+                    <div class="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center">
+                        <i class="ri-award-line text-amber-600 text-sm"></i>
+                    </div>
+                </div>
+                
+                <div class="flex items-center mb-4">
+                    <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center mr-3 shadow-sm border border-gray-200">
+                        <img src="https://cdn-icons-png.flaticon.com/512/12927/12927321.png" alt="Junior" class="w-10 h-10" id="next-level-icon">
+                    </div>
+                    <div>
+                        <div class="text-2xl font-bold text-gray-800" id="next-level-name">Junior</div>
+                        <div class="text-gray-600 text-base" id="next-level-required">$1000 required</div>
+                    </div>
+                </div>
+                
+                <!-- Progress Chart -->
+                <div class="mb-4">
+                    <div class="flex justify-between text-sm mb-2">
+                        <span class="text-gray-600" id="progress-current">Current: $700</span>
+                        <span class="text-gray-600" id="progress-target">Target: $1000</span>
+                    </div>
+                
+                    <!-- Progress Bar -->
+                    <div class="relative w-full bg-gray-200 rounded-full h-2 overflow-hidden">
+                        <div class="absolute inset-0 bg-amber-500 h-2 rounded-full transition-all duration-1000 ease-out animate-pulse" 
+                             id="progress-bar" style="width: 70%; background: linear-gradient(90deg, #d97706 0%, #fbbf24 50%, #d97706 100%); background-size: 200% 100%; animation: shimmer 3s ease-in-out infinite;"></div>
+                    </div>
+                    
+                    <div class="text-center mt-2">
+                        <div class="text-sm font-semibold text-gray-700" id="progress-remaining">$300 more to unlock</div>
+                    </div>
+                </div>
+                
+                <!-- Additional Benefits -->
+                <div class="grid grid-cols-2 gap-2 flex-grow" id="next-level-benefits">
+                    <!-- Additional benefits will be populated from config -->
+                </div>
+            </div>
+            </div>
+        </div>
+
+        <!-- Levels Explorer -->
+        <div class="bg-white p-6 border border-gray-200 rounded-2xl">
+            <div class="text-center mb-6">
+                <h2 class="text-2xl font-bold text-gray-800 mb-2">Level Progression</h2>
+                <p class="text-gray-600 text-base max-w-2xl mx-auto">Explore all available levels and their exclusive benefits. Choose your path to success.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-5 gap-6">
+                
+                <!-- Level Navigation -->
+                <div class="lg:col-span-1">
+                    <div class="space-y-2">
+                        <button class="level-btn active w-full text-white py-3 px-4 font-medium transition-all duration-300 border border-gray-200 rounded-3xl" style="background-color: #134de2;">
+                            <div class="flex items-center">
+                                <div class="w-6 h-6 bg-white rounded-full flex items-center justify-center mr-2">
+                                    <img src="https://cdn-icons-png.flaticon.com/512/12927/12927172.png" alt="New Account" class="w-4 h-4">
+                                </div>
+                                <span class="text-base">New Account</span>
+                            </div>
+                        </button>
+                        
+                        <button class="level-btn w-full bg-white text-gray-700 py-3 px-4 font-medium transition-all duration-300 border border-gray-200 hover:bg-gray-50 rounded-3xl">
+                            <div class="flex items-center">
+                                <div class="w-6 h-6 mr-2 bg-white rounded-full flex items-center justify-center border border-gray-200">
+                                    <img src="https://cdn-icons-png.flaticon.com/512/12927/12927321.png" alt="Junior" class="w-4 h-4">
+                                </div>
+                                <span class="text-base">Junior</span>
+                            </div>
+                        </button>
+                        
+                        <button class="level-btn w-full bg-white text-gray-700 py-3 px-4 font-medium transition-all duration-300 border border-gray-200 hover:bg-gray-50 rounded-3xl">
+                            <div class="flex items-center">
+                                <div class="w-6 h-6 mr-2 bg-white rounded-full flex items-center justify-center border border-gray-200">
+                                    <img src="https://cdn-icons-png.flaticon.com/512/12927/12927216.png" alt="Elit" class="w-4 h-4">
+                                </div>
+                                <span class="text-base">Elit</span>
+                            </div>
+                        </button>
+                        
+                        <button class="level-btn w-full bg-white text-gray-700 py-3 px-4 font-medium transition-all duration-300 border border-gray-200 hover:bg-gray-50 rounded-3xl">
+                            <div class="flex items-center">
+                                <div class="w-6 h-6 mr-2 bg-white rounded-full flex items-center justify-center border border-gray-200">
+                                    <img src="https://cdn-icons-png.flaticon.com/512/12927/12927285.png" alt="VIP" class="w-4 h-4">
+                                </div>
+                                <span class="text-base">VIP</span>
+                            </div>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Level Details -->
+                <div class="lg:col-span-4">
+                    <div class="bg-white p-6 border border-gray-200 rounded-2xl">
+                        <div class="flex items-center mb-4">
+                            <div class="w-16 h-16 bg-gradient-to-br from-blue-50 to-blue-100 rounded-full flex items-center justify-center mr-4 shadow-sm border border-blue-200">
+                                <img src="https://cdn-icons-png.flaticon.com/512/12927/12927172.png" alt="New Account" class="w-10 h-10">
+                            </div>
+                            <div>
+                                <div class="text-sm text-gray-500 font-medium">Current Status</div>
+                                <div class="text-2xl font-bold text-gray-800">New Account</div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-gradient-to-r from-slate-50 to-gray-50 p-4 rounded-xl border border-gray-100 mb-6">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center">
+                                    <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center mr-3">
+                                        <i class="ri-money-dollar-circle-line text-white text-sm"></i>
+                                    </div>
+                                    <div>
+                                        <div class="text-sm font-semibold text-gray-700">Required Spending</div>
+                                        <div class="text-2xl font-bold text-gray-800" id="level-required-amount">$0</div>
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <div class="text-xs font-medium px-3 py-1.5 rounded-full" id="level-progress-info">Already achieved</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="bg-gradient-to-r from-green-50 to-emerald-50 p-4 rounded-xl border border-green-100">
+                                <div class="flex items-center mb-3">
+                                    <div class="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center mr-3">
+                                        <i class="ri-customer-service-2-line text-white text-sm"></i>
+                                    </div>
+                                    <span class="font-semibold text-gray-800">24/7 Premium Support</span>
+                                </div>
+                                <p class="text-sm text-gray-600 ml-11">Round-the-clock customer support with dedicated agents</p>
+                            </div>
+                            
+                            <div class="bg-gradient-to-r from-blue-50 to-indigo-50 p-4 rounded-xl border border-blue-100">
+                                <div class="flex items-center mb-3">
+                                    <div class="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center mr-3">
+                                        <i class="ri-ticket-line text-white text-sm"></i>
+                                    </div>
+                                    <span class="font-semibold text-gray-800">Priority Ticket Handling</span>
+                                </div>
+                                <p class="text-sm text-gray-600 ml-11">Your support tickets get processed first</p>
+                            </div>
+                            
+                            <div class="bg-gradient-to-r from-purple-50 to-violet-50 p-4 rounded-xl border border-purple-100">
+                                <div class="flex items-center mb-3">
+                                    <div class="w-8 h-8 bg-purple-500 rounded-full flex items-center justify-center mr-3">
+                                        <i class="ri-percent-line text-white text-sm"></i>
+                                    </div>
+                                    <span class="font-semibold text-gray-800">24% Service Discount</span>
+                                </div>
+                                <p class="text-sm text-gray-600 ml-11">Significant savings on all service purchases</p>
+                            </div>
+                            
+                            <div class="bg-gradient-to-r from-orange-50 to-amber-50 p-4 rounded-xl border border-orange-100">
+                                <div class="flex items-center mb-3">
+                                    <div class="w-8 h-8 bg-orange-500 rounded-full flex items-center justify-center mr-3">
+                                        <i class="ri-coins-line text-white text-sm"></i>
+                                    </div>
+                                    <span class="font-semibold text-gray-800">2% Bonus on all funds</span>
+                                </div>
+                                <p class="text-sm text-gray-600 ml-11">Extra credits added to every deposit</p>
+                            </div>
+                            
+                            <div class="bg-gradient-to-r from-teal-50 to-cyan-50 p-4 rounded-xl border border-teal-100">
+                                <div class="flex items-center mb-3">
+                                    <div class="w-8 h-8 bg-teal-500 rounded-full flex items-center justify-center mr-3">
+                                        <i class="ri-gift-line text-white text-sm"></i>
+                                    </div>
+                                    <span class="font-semibold text-gray-800">10% Bonus on all funds</span>
+                                </div>
+                                <p class="text-sm text-gray-600 ml-11">Additional bonus credits for your account</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const levelButtons = document.querySelectorAll('.level-btn');
+    const detailsCard = document.querySelector('.lg\\:col-span-4 .bg-white');
+    
+    const userSpent = {{ user["spent"] }};
+    
+    const levelData = {
+        'New Account': {
+            badge: 'https://cdn-icons-png.flaticon.com/512/12927/12927172.png',
+            status: 'New Account',
+            price: 'Free',
+            required: 0,
+            availableBenefits: [
+                {
+                    name: 'Basic Ticket Support',
+                    icon: 'ri-mail-line',
+                    gradient: 'from-blue-50 to-indigo-50',
+                    border: 'border-blue-100',
+                    bg: 'bg-blue-500'
+                },
+                {
+                    name: 'Standard Order Processing',
+                    icon: 'ri-send-plane-line',
+                    gradient: 'from-gray-50 to-slate-50',
+                    border: 'border-gray-100',
+                    bg: 'bg-gray-500'
+                },
+                {
+                    name: 'No Service Discount',
+                    icon: 'ri-percent-line',
+                    gradient: 'from-green-50 to-emerald-50',
+                    border: 'border-green-100',
+                    bg: 'bg-green-500'
+                },
+                {
+                    name: 'No Bonus on Funds',
+                    icon: 'ri-coins-line',
+                    gradient: 'from-yellow-50 to-amber-50',
+                    border: 'border-yellow-100',
+                    bg: 'bg-yellow-500'
+                },
+                {
+                    name: 'Basic Account Features',
+                    icon: 'ri-user-line',
+                    gradient: 'from-purple-50 to-violet-50',
+                    border: 'border-purple-100',
+                    bg: 'bg-purple-500'
+                }
+            ]
+        },
+        'Junior': {
+            badge: 'https://cdn-icons-png.flaticon.com/512/12927/12927321.png',
+            status: 'Junior',
+            price: '$1000',
+            required: 100000,
+            availableBenefits: [
+                {
+                    name: 'Priority Ticket Support',
+                    icon: 'ri-mail-send-line',
+                    gradient: 'from-blue-50 to-cyan-50',
+                    border: 'border-blue-100',
+                    bg: 'bg-blue-500'
+                },
+                {
+                    name: 'Fast Order Processing',
+                    icon: 'ri-rocket-line',
+                    gradient: 'from-orange-50 to-red-50',
+                    border: 'border-orange-100',
+                    bg: 'bg-orange-500'
+                },
+                {
+                    name: '5% Service Discount',
+                    icon: 'ri-percent-line',
+                    gradient: 'from-green-50 to-teal-50',
+                    border: 'border-green-100',
+                    bg: 'bg-green-500'
+                },
+                {
+                    name: '1% Bonus on Funds',
+                    icon: 'ri-coins-line',
+                    gradient: 'from-yellow-50 to-orange-50',
+                    border: 'border-yellow-100',
+                    bg: 'bg-yellow-500'
+                },
+                {
+                    name: 'Advanced Dashboard',
+                    icon: 'ri-dashboard-line',
+                    gradient: 'from-purple-50 to-indigo-50',
+                    border: 'border-purple-100',
+                    bg: 'bg-purple-500'
+                },
+                {
+                    name: 'Exclusive Payment Options',
+                    icon: 'ri-list-check-2',
+                    gradient: 'from-teal-50 to-cyan-50',
+                    border: 'border-teal-100',
+                    bg: 'bg-teal-500'
+                },
+                {
+                    name: 'Order History Export',
+                    icon: 'ri-file-download-line',
+                    gradient: 'from-emerald-50 to-green-50',
+                    border: 'border-emerald-100',
+                    bg: 'bg-emerald-500'
+                },
+                {
+                    name: '25% Child Panel Discount',
+                    icon: 'ri-bar-chart-line',
+                    gradient: 'from-violet-50 to-purple-50',
+                    border: 'border-violet-100',
+                    bg: 'bg-violet-500'
+                }
+            ]
+        },
+        'Elit': {
+            badge: 'https://cdn-icons-png.flaticon.com/512/12927/12927216.png',
+            status: 'Elit',
+            price: '$5000',
+            required: 500000,
+            availableBenefits: [
+                {
+                    name: '24/7 Telegram Support',
+                    icon: 'ri-customer-service-2-line',
+                    gradient: 'from-green-50 to-emerald-50',
+                    border: 'border-green-100',
+                    bg: 'bg-green-500'
+                },
+                {
+                    name: 'Instant Order Processing',
+                    icon: 'ri-flashlight-line',
+                    gradient: 'from-yellow-50 to-orange-50',
+                    border: 'border-yellow-100',
+                    bg: 'bg-yellow-500'
+                },
+                {
+                    name: '10% Service Discount',
+                    icon: 'ri-percent-line',
+                    gradient: 'from-blue-50 to-indigo-50',
+                    border: 'border-blue-100',
+                    bg: 'bg-blue-500'
+                },
+                {
+                    name: '3% Bonus on Funds',
+                    icon: 'ri-coins-line',
+                    gradient: 'from-amber-50 to-yellow-50',
+                    border: 'border-amber-100',
+                    bg: 'bg-amber-500'
+                },
+                {
+                    name: 'Premium Analytics',
+                    icon: 'ri-line-chart-line',
+                    gradient: 'from-purple-50 to-violet-50',
+                    border: 'border-purple-100',
+                    bg: 'bg-purple-500'
+                },
+                {
+                    name: 'Early Notification On New Services',
+                    icon: 'ri-code-s-slash-line',
+                    gradient: 'from-gray-50 to-slate-50',
+                    border: 'border-gray-100',
+                    bg: 'bg-gray-500'
+                },
+                {
+                    name: '50% Child Panel Discount',
+                    icon: 'ri-palette-line',
+                    gradient: 'from-pink-50 to-rose-50',
+                    border: 'border-pink-100',
+                    bg: 'bg-pink-500'
+                },
+                {
+                    name: 'Priority Queue',
+                    icon: 'ri-time-line',
+                    gradient: 'from-red-50 to-pink-50',
+                    border: 'border-red-100',
+                    bg: 'bg-red-500'
+                },
+                {
+                    name: 'Exclusive Payment Options',
+                    icon: 'ri-file-chart-line',
+                    gradient: 'from-indigo-50 to-blue-50',
+                    border: 'border-indigo-100',
+                    bg: 'bg-indigo-500'
+                },
+                {
+                    name: 'Priority Ticket Support by Team',
+                    icon: 'ri-building-line',
+                    gradient: 'from-slate-50 to-gray-50',
+                    border: 'border-slate-100',
+                    bg: 'bg-slate-500'
+                }
+            ]
+        },
+        'VIP': {
+            badge: 'https://cdn-icons-png.flaticon.com/512/12927/12927285.png',
+            status: 'VIP',
+            price: '$10000',
+            required: 1000000,
+            availableBenefits: [
+                {
+                    name: 'Exclusive Payment Options',
+                    icon: 'ri-user-settings-line',
+                    gradient: 'from-red-50 to-pink-50',
+                    border: 'border-red-100',
+                    bg: 'bg-red-500'
+                },
+                {
+                    name: 'Instant VIP Processing',
+                    icon: 'ri-zap-line',
+                    gradient: 'from-yellow-50 to-amber-50',
+                    border: 'border-yellow-100',
+                    bg: 'bg-yellow-500'
+                },
+                {
+                    name: '20% Service Discount',
+                    icon: 'ri-percent-line',
+                    gradient: 'from-green-50 to-emerald-50',
+                    border: 'border-green-100',
+                    bg: 'bg-green-500'
+                },
+                {
+                    name: '5% Bonus on Funds',
+                    icon: 'ri-coins-line',
+                    gradient: 'from-amber-50 to-orange-50',
+                    border: 'border-amber-100',
+                    bg: 'bg-amber-500'
+                },
+                {
+                    name: 'AI-Powered Analytics',
+                    icon: 'ri-brain-line',
+                    gradient: 'from-purple-50 to-violet-50',
+                    border: 'border-purple-100',
+                    bg: 'bg-purple-500'
+                },
+                {
+                    name: 'Custom API Development',
+                    icon: 'ri-code-box-line',
+                    gradient: 'from-blue-50 to-indigo-50',
+                    border: 'border-blue-100',
+                    bg: 'bg-blue-500'
+                },
+                {
+                    name: '24/7 Whatsapp-Telegram Support',
+                    icon: 'ri-calendar-event-line',
+                    gradient: 'from-pink-50 to-rose-50',
+                    border: 'border-pink-100',
+                    bg: 'bg-pink-500'
+                },
+                {
+                    name: 'Priority Support by Admin',
+                    icon: 'ri-phone-line',
+                    gradient: 'from-emerald-50 to-teal-50',
+                    border: 'border-emerald-100',
+                    bg: 'bg-emerald-500'
+                },
+                {
+                    name: 'Early Notification On New Services',
+                    icon: 'ri-plug-line',
+                    gradient: 'from-violet-50 to-purple-50',
+                    border: 'border-violet-100',
+                    bg: 'bg-violet-500'
+                },
+                {
+                    name: 'Exclusive Beta Features',
+                    icon: 'ri-test-tube-line',
+                    gradient: 'from-cyan-50 to-blue-50',
+                    border: 'border-cyan-100',
+                    bg: 'bg-cyan-500'
+                },
+                {
+                    name: 'Free Child Panel',
+                    icon: 'ri-hotel-line',
+                    gradient: 'from-orange-50 to-red-50',
+                    border: 'border-orange-100',
+                    bg: 'bg-orange-500'
+                },
+                {
+                    name: 'Personal Success Coach',
+                    icon: 'ri-user-heart-line',
+                    gradient: 'from-teal-50 to-cyan-50',
+                    border: 'border-teal-100',
+                    bg: 'bg-teal-500'
+                }
+            ]
+        }
+    };
+    
+    const levelRequirements = Object.fromEntries(
+        Object.entries(levelData).map(([level, data]) => [level, data.required])
+    );
+    
+
+    
+
+    
+    function getCurrentLevel() {
+        const levels = Object.keys(levelRequirements).sort((a, b) => levelRequirements[b] - levelRequirements[a]);
+        for (let level of levels) {
+            if (userSpent >= levelRequirements[level]) {
+                return level;
+            }
+        }
+        return levels[levels.length - 1];
+    }
+    
+    function getNextLevel() {
+        const current = getCurrentLevel();
+        const levels = Object.keys(levelRequirements).sort((a, b) => levelRequirements[a] - levelRequirements[b]);
+        const currentIndex = levels.indexOf(current);
+        if (currentIndex < levels.length - 1) {
+            return levels[currentIndex + 1];
+        }
+        return current;
+    }
+    
+    function getProgress() {
+        const current = getCurrentLevel();
+        const next = getNextLevel();
+        const currentReq = levelRequirements[current];
+        const nextReq = levelRequirements[next];
+        const progress = ((userSpent - currentReq) / (nextReq - currentReq)) * 100;
+        return Math.min(progress, 100);
+    }
+    
+    function getRemaining() {
+        const next = getNextLevel();
+        const nextReq = levelRequirements[next];
+        return nextReq - userSpent;
+    }
+
+    
+    levelButtons.forEach(button => {
+        button.addEventListener('click', function() {
+
+            levelButtons.forEach(btn => {
+                btn.classList.remove('active', 'text-white');
+                btn.classList.add('bg-white', 'text-gray-700', 'border', 'border-gray-200', 'hover:bg-gray-50');
+                btn.style.backgroundColor = '';
+            });
+            
+
+            this.classList.remove('bg-white', 'text-gray-700', 'border', 'border-gray-200', 'hover:bg-gray-50');
+            this.classList.add('active', 'text-white', 'border', 'border-gray-200');
+            this.style.backgroundColor = '#134de2';
+            
+
+            const spanElement = this.querySelector('span');
+            let levelName = spanElement.textContent.trim();
+            updateLevelDetails(levelName);
+        });
+    });
+    
+
+    
+    function updateLevelDetails(level) {
+        const data = levelData[level];
+        if (!data) return;
+        
+        const badgeContainer = detailsCard.querySelector('.w-16.h-16');
+        const badgeIcon = detailsCard.querySelector('.w-16.h-16 img');
+        
+        badgeContainer.className = 'w-16 h-16 bg-gradient-to-br from-blue-50 to-blue-100 rounded-full flex items-center justify-center mr-4 shadow-sm border border-blue-200';
+        
+        badgeIcon.src = data.badge;
+        badgeIcon.alt = data.status;
+        badgeIcon.className = 'w-10 h-10';
+        
+        const levelNameElement = detailsCard.querySelector('.text-2xl.font-bold');
+        if (levelNameElement) {
+            levelNameElement.textContent = data.status;
+        }
+        
+
+        const requiredAmountElement = document.getElementById('level-required-amount');
+        const progressInfoElement = document.getElementById('level-progress-info');
+        
+        if (requiredAmountElement && progressInfoElement) {
+            requiredAmountElement.textContent = `$${data.required.toLocaleString()}`;
+            
+            if (userSpent >= data.required) {
+                progressInfoElement.textContent = '✓ Already achieved';
+                progressInfoElement.className = 'text-xs font-medium px-3 py-1.5 rounded-full bg-green-100 text-green-700 border border-green-200';
+                requiredAmountElement.className = 'text-2xl font-bold text-green-600';
+            } else {
+                const remaining = data.required - userSpent;
+                progressInfoElement.textContent = `$${remaining.toLocaleString()} more needed`;
+                progressInfoElement.className = 'text-xs font-medium px-3 py-1.5 rounded-full bg-orange-100 text-orange-700 border border-orange-200';
+                requiredAmountElement.className = 'text-2xl font-bold text-gray-800';
+            }
+        }
+        
+
+        const benefitsContainer = detailsCard.querySelector('.grid.grid-cols-1.md\\:grid-cols-2');
+        if (benefitsContainer) {
+            benefitsContainer.innerHTML = '';
+            
+            // Display only the benefits available for this level
+            data.availableBenefits.forEach((benefit) => {
+                const benefitDiv = document.createElement('div');
+                benefitDiv.className = `bg-gradient-to-r ${benefit.gradient} p-4 rounded-xl border ${benefit.border}`;
+                benefitDiv.innerHTML = `
+                    <div class="flex items-center">
+                        <div class="w-8 h-8 ${benefit.bg} rounded-full flex items-center justify-center mr-3">
+                            <i class="${benefit.icon} text-white text-sm"></i>
+                        </div>
+                        <span class="font-semibold text-gray-800">${benefit.name}</span>
+                    </div>
+                `;
+                
+                benefitsContainer.appendChild(benefitDiv);
+            });
+        }
+    }
+    
+
+    
+
+    function updateCurrentBenefits() {
+        const currentLevel = getCurrentLevel();
+        const currentBenefitsContainer = document.getElementById('current-benefits-list');
+        
+        if (currentBenefitsContainer) {
+            currentBenefitsContainer.innerHTML = '';
+            
+            const currentLevelData = levelData[currentLevel];
+            if (currentLevelData && currentLevelData.availableBenefits) {
+                currentLevelData.availableBenefits.forEach(benefit => {
+                    const benefitDiv = document.createElement('div');
+                    benefitDiv.className = 'flex items-center';
+                    benefitDiv.innerHTML = `
+                        <div class="w-1.5 h-1.5 bg-green-500 rounded-full mr-2"></div>
+                        <span class="text-sm text-gray-700">${benefit.name}</span>
+                    `;
+                    currentBenefitsContainer.appendChild(benefitDiv);
+                });
+            }
+        }
+    }
+    
+    function updateNextLevelBenefits() {
+        const currentLevel = getCurrentLevel();
+        const nextLevel = getNextLevel();
+        const nextBenefitsContainer = document.getElementById('next-level-benefits');
+        
+        if (nextBenefitsContainer) {
+            nextBenefitsContainer.innerHTML = '';
+            
+            const currentLevelData = levelData[currentLevel];
+            const nextLevelData = levelData[nextLevel];
+            
+            if (currentLevelData && nextLevelData && currentLevelData.availableBenefits && nextLevelData.availableBenefits) {
+                // Find benefits that are in next level but not in current level
+                const currentBenefitNames = currentLevelData.availableBenefits.map(b => b.name);
+                const additionalBenefits = nextLevelData.availableBenefits.filter(benefit => 
+                    !currentBenefitNames.includes(benefit.name)
+                );
+                
+                additionalBenefits.forEach(benefit => {
+                    const benefitDiv = document.createElement('div');
+                    benefitDiv.className = 'flex items-center text-sm';
+                    benefitDiv.innerHTML = `
+                        <div class="w-1.5 h-1.5 bg-yellow-500 rounded-full mr-2"></div>
+                        <span class="text-gray-700">+${benefit.name}</span>
+                    `;
+                    nextBenefitsContainer.appendChild(benefitDiv);
+                });
+            }
+        }
+    }
+    
+    function updateAllContent() {
+        const currentLevel = getCurrentLevel();
+        const nextLevel = getNextLevel();
+        const progress = getProgress();
+        const remaining = getRemaining();
+        
+
+        document.getElementById('current-level-name').textContent = currentLevel;
+        document.getElementById('current-level-spent').textContent = `$${userSpent} spent`;
+        
+
+        document.getElementById('next-level-name').textContent = nextLevel;
+        document.getElementById('next-level-required').textContent = `$${levelRequirements[nextLevel]} required`;
+        
+
+        document.getElementById('progress-current').textContent = `Current: $${userSpent}`;
+        document.getElementById('progress-target').textContent = `Target: $${levelRequirements[nextLevel]}`;
+        document.getElementById('progress-bar').style.width = `${progress}%`;
+        document.getElementById('progress-remaining').textContent = `$${remaining} more to unlock`;
+        
+
+        document.getElementById('current-level-icon').src = levelData[currentLevel].badge;
+        document.getElementById('next-level-icon').src = levelData[nextLevel].badge;
+        
+        // Update current benefits from config
+        updateCurrentBenefits();
+        
+        // Update next level benefits from config
+        updateNextLevelBenefits();
+    }
+    
+    updateAllContent();
+    
+
+    updateLevelDetails('New Account');
+});
+</script>
+

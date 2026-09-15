@@ -1,0 +1,243 @@
+<div class="relative pb-16 md:pb-15 bg-white pt-6">
+    <div class="mx-auto px-4 sm:px-6 lg:px-8">
+
+        <!-- Top bar -->
+        <div class="space-y-6 mb-8">
+            <!-- Search -->
+            <div class="relative w-full sm:max-w-sm">
+                <form action="{{ page['url'] }}" method="get" id="history-search">
+                    <div class="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none">
+                        <i class="ri-search-line text-gray-400"></i>
+                    </div>
+                    <input type="text" name="search" value="{{ search }}" placeholder="{{ lang('general.search.placeholder') }}" class="w-full bg-white border border-gray-200 rounded-full pl-10 pr-28 py-3 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 transition">
+                    <div class="absolute inset-y-0 right-0 flex items-center pr-1.5">
+                        <button type="submit" class="px-5 py-2 bg-[#e8f0ff] text-[#145ff5] font-semibold rounded-full hover:bg-[#dbe7ff] transition-colors text-sm">
+                            <i class="fa fa-search" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+            
+            <!-- Filters -->
+            <div class="flex flex-wrap items-center gap-3">
+                {% if types %}
+                    {% for typeItem in types %}
+                        <a href="{{ page['url'] }}{% if typeItem.key != 'all' %}{{ '/' ~ typeItem.key }}{% endif %}" 
+                           class="flex items-center gap-2 px-4 py-2 font-medium{% if typeItem.key == type.key %} filter-btn-active{% else %} text-gray-700 bg-white border border-gray-200 rounded-[25px] hover:bg-gray-50{% endif %}">
+                            {% if typeItem.key == 'all' %}
+                                <i class="ri-layout-grid-fill"></i>
+                            {% elseif typeItem.key == 'new_service' or 'new' in typeItem.key|lower %}
+                                <i class="ri-star-line"></i>
+                            {% elseif typeItem.key == 'rate_decreased' or 'decreased' in typeItem.key|lower %}
+                                <i class="ri-arrow-left-down-line"></i>
+                            {% elseif typeItem.key == 'rate_increased' or 'increased' in typeItem.key|lower %}
+                                <i class="ri-arrow-right-up-line"></i>
+                            {% elseif typeItem.key == 'service_enabled' or 'enabled' in typeItem.key|lower %}
+                                <i class="ri-check-line"></i>
+                            {% elseif typeItem.key == 'service_disabled' or 'disabled' in typeItem.key|lower %}
+                                <i class="ri-close-circle-line"></i>
+                            {% elseif 'price' in typeItem.key|lower or 'cost' in typeItem.key|lower %}
+                                <i class="ri-money-dollar-circle-line"></i>
+                            {% elseif 'update' in typeItem.key|lower %}
+                                <i class="ri-refresh-line"></i>
+                            {% elseif 'maintenance' in typeItem.key|lower %}
+                                <i class="ri-tools-line"></i>
+                            {% elseif 'speed' in typeItem.key|lower %}
+                                <i class="ri-speed-line"></i>
+                            {% elseif 'quality' in typeItem.key|lower %}
+                                <i class="ri-medal-line"></i>
+                            {% else %}
+                                <i class="ri-information-line"></i>
+                            {% endif %}
+                            <span>{{ typeItem.label }}</span>
+                        </a>
+                    {% endfor %}
+                {% else %}
+                    <div class="flex flex-wrap items-center gap-3">
+                        <button class="filter-btn-active flex items-center gap-2 px-4 py-2 font-medium">
+                            <i class="ri-layout-grid-fill"></i>
+                            <span>All</span>
+                        </button>
+                        <button class="flex items-center gap-2 px-4 py-2 text-gray-700 bg-white border border-gray-200 rounded-[25px] hover:bg-gray-50 font-medium">
+                            <i class="ri-star-line"></i>
+                            <span>New service</span>
+                        </button>
+                        <button class="flex items-center gap-2 px-4 py-2 text-gray-700 bg-white border border-gray-200 rounded-[25px] hover:bg-gray-50 font-medium">
+                            <i class="ri-arrow-left-down-line"></i>
+                            <span>Rate decreased</span>
+                        </button>
+                        <button class="flex items-center gap-2 px-4 py-2 text-gray-700 bg-white border border-gray-200 rounded-[25px] hover:bg-gray-50 font-medium">
+                            <i class="ri-arrow-right-up-line"></i>
+                            <span>Rate increased</span>
+                        </button>
+                        <button class="flex items-center gap-2 px-4 py-2 text-gray-700 bg-white border border-gray-200 rounded-[25px] hover:bg-gray-50 font-medium">
+                            <i class="ri-check-line"></i>
+                            <span>Service enabled</span>
+                        </button>
+                        <button class="flex items-center gap-2 px-4 py-2 text-gray-700 bg-white border border-gray-200 rounded-[25px] hover:bg-gray-50 font-medium">
+                            <i class="ri-close-circle-line"></i>
+                            <span>Service disabled</span>
+                        </button>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Service List -->
+        <div class="space-y-4">
+            {% for update in updatesList %}
+        
+            <div class="update-item bg-white border border-gray-200/80 rounded-[25px] p-4 flex flex-col sm:flex-row items-start sm:items-center gap-4 hover:shadow-lg hover:border-gray-300/80 transition-all duration-200">
+                <div class="w-12 h-12 bg-gray-100 rounded-lg rounded-[25px] flex items-center justify-center flex-shrink-0 service-icon-container">
+                    <i class="ri-layout-grid-fill text-gray-500 text-2xl"></i>
+                </div>
+                <div class="flex-grow">
+                    <h3 class="font-semibold text-gray-800 service-name">{{ update['service'] }}</h3>
+                    <div class="flex items-center gap-2 text-gray-500 text-sm mt-1">
+                        <i class="ri-calendar-2-line"></i>
+                        <span>{{ update['date'] }}</span>
+                    </div>
+                </div>
+                <div class="flex items-center gap-4 mt-2 sm:mt-0 ml-auto sm:ml-0 pl-16 sm:pl-0">
+                    <div class="service-status">
+                        {% set status_lower = update['update']|lower %}
+                        {% set badge_class = 'bg-gray-100 text-gray-700' %}
+                        {% set icon_class = 'ri-information-line' %}
+                        
+                        {% if 'new service' in status_lower or 'new' in status_lower %}
+                            {% set badge_class = 'bg-purple-100 text-purple-800' %}
+                            {% set icon_class = 'ri-star-line' %}
+                        {% elseif 'rate decreased' in status_lower or 'decreased' in status_lower %}
+                            {% set badge_class = 'bg-blue-100 text-blue-800' %}
+                            {% set icon_class = 'ri-arrow-left-down-line' %}
+                        {% elseif 'rate increased' in status_lower or 'increased' in status_lower %}
+                            {% set badge_class = 'bg-yellow-100 text-yellow-800' %}
+                            {% set icon_class = 'ri-arrow-right-up-line' %}
+                        {% elseif 'service enabled' in status_lower or 'enabled' in status_lower %}
+                            {% set badge_class = 'bg-green-100 text-green-800' %}
+                            {% set icon_class = 'ri-check-line' %}
+                        {% elseif 'service disabled' in status_lower or 'disabled' in status_lower %}
+                            {% set badge_class = 'bg-red-100 text-red-800' %}
+                            {% set icon_class = 'ri-close-circle-line' %}
+                        {% endif %}
+                        
+                        <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium {{ badge_class }}">
+                            <i class="{{ icon_class }}"></i>
+                            {{ update['update'] }}
+                        </span>
+                    </div>
+                    {% if 'disabled' not in update['update']|lower %} 
+                    <div class="w-px h-6 bg-gray-200/80"></div>
+                    <a href="/?service={{ update['service_id'] }}" class="w-11 h-11 flex items-center justify-center bg-[#e8f0ff] text-[#145ff5] rounded-full hover:bg-[#dbe7ff] transition-colors flex-shrink-0">
+                        <i class="ri-shopping-cart-line text-xl"></i>
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+
+            
+            {% endfor %}
+        </div>
+
+        <!-- Pagination -->
+        {% if pagination['count'] > 100 %}
+            {% if search %}
+                {% set params = {} %}
+                {% set params = params | merge(['search=' ~ search]) %}
+                {% set params = '?' ~ params|join('&') %}
+            {% endif %}
+            <div class="flex justify-center mt-8">
+                <ul class="flex items-center space-x-1{% if site['rtl'] %} rtl-pagination{% endif %}">
+                    {% if pagination['current'] != 1 %}
+                        <li>
+                            <a href="{{ page['url'] }}{{ type.key != 'all' ? '/' ~ type.key : '' }}{{ pagination['prev'] > 1 ? '/' ~ pagination['prev'] : '' }}{{ params }}" 
+                               class="flex items-center justify-center w-10 h-10 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors" 
+                               aria-label="Previous">
+                                <i class="ri-arrow-left-s-line text-lg"></i>
+                            </a>
+                        </li>
+                    {% endif %}
+
+                    {% set r, l = 3, 3 %}
+
+                    {% if pagination['current'] == 1 %}
+                        {% set r = 6 %}
+                    {% endif %}
+
+                    {% if pagination['current'] == 2 %}
+                        {% set r = 5 %}
+                    {% endif %}
+
+                    {% if pagination['current'] >= pagination['pages'] %}
+                        {% set l = 5 %}
+                    {% endif %}
+
+                    {% for i in 1..ceil(pagination['pages']) %}
+                        {% if i >= (pagination['current']-l) and i <= (pagination['current']+r) %}
+                            <li>
+                                <a href="{{ page['url'] }}{{ type.key != 'all' ? '/' ~ type.key : '' }}{{ i > 1 ? '/' ~ i : '' }}{{ params }}"
+                                   class="flex items-center justify-center w-10 h-10 {% if i == pagination['current'] %}bg-[#145ff5] text-white{% else %}bg-white border border-gray-200 hover:bg-gray-50{% endif %} rounded-lg transition-colors font-medium">
+                                    {{ i }}
+                                </a>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if pagination['current'] < pagination['pages'] %}
+                        <li>
+                            <a href="{{ page['url'] }}{{ type.key != 'all' ? '/' ~ type.key : '' }}/{{ pagination['next'] }}{{ params }}" 
+                               class="flex items-center justify-center w-10 h-10 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors" 
+                               aria-label="Next">
+                                <i class="ri-arrow-right-s-line text-lg"></i>
+                            </a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+
+<script>
+$(document).ready(function() {
+    function getIconForService(serviceName) {
+      serviceName = serviceName.toLowerCase();
+    
+      if (serviceName.includes('instagram')) {
+        return 'https://storage.perfectcdn.com/f3b92e/hhzsztp4pjw79lq6.svg';
+      } else if (serviceName.includes('facebook')) {
+        return 'https://storage.perfectcdn.com/f3b92e/fcxdcr0rcj7yy89q.svg';
+      } else if (serviceName.includes('twitter')) {
+        return 'https://storage.perfectcdn.com/f3b92e/oihba445llengou2.svg';
+      } else if (serviceName.includes('tiktok')) {
+        return 'https://i.hizliresim.com/cjkftds.png';
+      } else if (serviceName.includes('telegram')) {
+        return 'https://storage.perfectcdn.com/f3b92e/yp1fm63ad8prc97k.svg';
+      } else if (serviceName.includes('youtube')) {
+        return 'https://storage.perfectcdn.com/f3b92e/613d1l69p0oz9rzr.svg';
+      } else if (serviceName.includes('spotify')) {
+        return 'https://storage.perfectcdn.com/f3b92e/3xwmuk6fdihz3oec.svg';
+      } else if (serviceName.includes('soundcloud')) {
+        return 'https://storage.perfectcdn.com/f3b92e/mx742d328ixt2q25.svg';
+      } else if (serviceName.includes('linkedin')) {
+        return 'https://storage.perfectcdn.com/f3b92e/di7o1f3alp4q8t6j.svg';
+      } else if (serviceName.includes('twitch')) {
+        return 'https://i.hizliresim.com/nhbvs75.png';
+      } else if (serviceName.includes('discord')) {
+        return 'https://i.hizliresim.com/in44apl.png';
+      } else {
+        return 'https://storage.perfectcdn.com/ed17j7/snoz2ubzdwbqghgs.png';
+      }
+    }
+
+    $('.service-icon-container').each(function() {
+        var serviceName = $(this).closest('.update-item').find('.service-name').text();
+        var iconUrl = getIconForService(serviceName);
+        $(this).html('<img src="' + iconUrl + '" alt="Service Icon" class="w-full h-full object-contain rounded-lg" style="max-height: 28px; max-width: 28px;">');
+        $(this).addClass('p-1.5');
+    });
+
+    // Service status badges are now handled in Twig template
+});
+</script>

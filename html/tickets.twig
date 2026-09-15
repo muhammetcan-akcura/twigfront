@@ -1,0 +1,1252 @@
+<div class="relative z-10 pb-16 md:pb-15 bg-white pt-6">
+    <div class="container mx-auto px-4 relative z-10">
+        
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-8 gap-4">
+        <!-- Tab Navigation -->
+        <div class="inline-flex items-center gap-[2px] list-none p-[6px] m-0 rounded-full border border-gray-200 bg-white w-fit">
+            <a href="#" id="create-tab" class="tab-btn active flex items-center justify-center gap-[10px] py-[12px] px-[14px] rounded-full font-medium whitespace-nowrap text-[15px] leading-[160%] tracking-[-0.3px] !text-white border border-white/15 btn-custom-active shadow-[0px_0px_3px_0px_#0139ff,0px_0px_0px_1.182px_#0139ff] cursor-pointer">
+                <i class="ri-add-line text-[22px]"></i>
+                <span>Create Ticket</span>
+            </a>
+            <a href="#" id="list-tab" class="tab-btn flex items-center justify-center gap-[10px] py-[12px] px-[14px] rounded-full font-medium whitespace-nowrap text-[15px] leading-[160%] tracking-[-0.3px] text-gray-600 hover:bg-gray-200 hover:text-gray-800 cursor-pointer">
+                <i class="ri-list-check text-[22px]"></i>
+                <span>Ticket List</span>
+            </a>
+        </div>
+
+        {% if ticketList or search %}
+        <!-- Search Bar -->
+        <div class="flex items-center w-full md:w-auto">
+            <form action="{{ page['url'] }}" method="get" id="history-search" class="relative w-full md:w-auto">
+                <div class="relative">
+                    <input type="text" 
+                           class="w-full md:w-[250px] h-[48px] pl-10 pr-4 py-3 border border-gray-300 rounded-full focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors text-base bg-white" 
+                           name="search" 
+                           value="{{ search }}"
+                           placeholder="{{ lang('general.search.placeholder') }}">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <i class="ri-search-line text-gray-400 text-lg"></i>
+                    </div>
+                </div>
+            </form>
+        </div>
+        {% endif %}
+        </div>
+
+        <!-- Two Cards Layout -->
+        <div id="create-tab-content" class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            
+            <!-- Main Ticket Form Card -->
+            <div class="lg:col-span-2 bg-white border border-gray-200 rounded-xl overflow-hidden">
+                <div class="border-b border-gray-200 px-6 py-4">
+                    <h2 class="text-lg font-semibold text-gray-800 flex items-center gap-2">
+                        <i class="ri-customer-service-2-line text-blue-600 text-xl font-normal"></i>
+                        Create Support Ticket
+                    </h2>
+                </div>
+                
+                <div class="p-6">
+                    <form {% if site['rtl'] %}class="rtl-form"{% endif %} method="post" action="" id="ticketsend" class="space-y-6">
+                        <div class="alert alert-dismissible alert-danger ticket-danger {% if site['rtl'] %} rtl-alert {% endif %}" style="display: none">
+                            <button type="button" class="close">&times;</button>
+                            <div></div>
+                        </div>
+                        
+                        <!-- Hidden inputs for final subject and message -->
+                        <input type="hidden" id="final-subject" name="TicketForm[subject]" value="">
+                        <input type="hidden" id="final-message" name="TicketForm[message]" value="">
+                        {% if additionalFieldsEnabled %}
+                        <!-- Category Selection -->
+                        <div>
+                            <label for="ticket-category-field" class="block text-sm font-medium text-gray-700 mb-3">{{ lang('tickets.category') }}</label>
+                            <select id="ticket-category-field" name="TicketForm[category]" class="w-full px-[0.625rem] py-[0.875rem] md:px-4 md:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors text-[0.9rem] md:text-[0.95rem] font-normal min-h-[48px] leading-[1.5]">
+                                {% for categoryField in additionalFields %}
+                                  <option value="{{ categoryField.id }}">{{ categoryField.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div id="ticket-fields" data-ticket-fields="true"></div>
+                        {% else %}
+                        <!-- Issue Type Selection -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-3">Select Issue Type</label>
+                            <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                                <button type="button" class="issue-type-btn active p-4 border-2 border-green-500 bg-green-50 rounded-lg hover:border-green-500 transition-colors text-center group cursor-pointer">
+                                    <div class="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center mb-3 mx-auto">
+                                        <i class="ri-shopping-cart-line text-2xl text-white"></i>
+                                    </div>
+                                    <div class="text-sm font-semibold text-gray-700">Orders</div>
+                                    <div class="text-xs font-normal text-gray-500 mt-1">Problems with your orders</div>
+                                </button>
+                                <button type="button" class="issue-type-btn p-4 border-2 border-gray-200 rounded-lg hover:border-blue-500 transition-colors text-center group cursor-pointer">
+                                    <div class="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center mb-3 mx-auto">
+                                        <i class="ri-bank-card-line text-2xl text-white font-normal"></i>
+                                    </div>
+                                    <div class="text-sm font-semibold text-gray-700">Payment</div>
+                                    <div class="text-xs font-normal text-gray-500 mt-1">Billing and payment issues</div>
+                                </button>
+                                <button type="button" class="issue-type-btn p-4 border-2 border-gray-200 rounded-lg hover:border-purple-500 transition-colors text-center group cursor-pointer">
+                                    <div class="w-12 h-12 bg-purple-500 rounded-full flex items-center justify-center mb-3 mx-auto">
+                                        <i class="ri-question-line text-2xl text-white font-normal"></i>
+                                    </div>
+                                    <div class="text-sm font-semibold text-gray-700">General</div>
+                                    <div class="text-xs font-normal text-gray-500 mt-1">Other questions or concerns</div>
+                                </button>
+                                <button type="button" class="issue-type-btn p-4 border-2 border-gray-200 rounded-lg hover:border-orange-500 transition-colors text-center group cursor-pointer">
+                                    <div class="w-12 h-12 bg-orange-500 rounded-full flex items-center justify-center mb-3 mx-auto">
+                                        <i class="ri-team-line text-2xl text-white font-normal"></i>
+                                    </div>
+                                    <div class="text-sm font-semibold text-gray-700">Cooperation</div>
+                                    <div class="text-xs font-normal text-gray-500 mt-1">Cooperate with Smmexclusive</div>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Request Type -->
+                        <div id="requestTypeContainer">
+                            <label for="requestType" class="block text-sm font-semibold text-gray-700 mb-2 text-[0.9rem] md:text-[0.95rem]">Select issue type</label>
+                            <select id="requestType" name="request_type_field" class="w-full px-[0.625rem] py-[0.875rem] md:px-4 md:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors text-[0.9rem] md:text-[0.95rem] font-normal min-h-[48px] leading-[1.5]">
+                               
+                            </select>
+                        </div>
+
+                        <!-- Dynamic Form Fields -->
+                        <div id="dynamicFields">
+                            <!-- Fields will be populated by JavaScript -->
+                        </div>
+
+                        <!-- Order ID (initially hidden, shown for Orders type) -->
+                        <div id="orderIdField" style="display: none;">
+                            <label for="orderId" class="block text-sm font-semibold text-gray-700 mb-2 text-[0.9rem] md:text-[0.95rem]">Order ID</label>
+                            <input type="text" id="orderId" name="order_id_field" class="w-full px-[0.625rem] py-[0.875rem] md:px-4 md:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors text-[0.9rem] md:text-[0.95rem] font-normal min-h-[48px] leading-[1.5] placeholder:text-gray-400 placeholder:font-normal" placeholder="Enter order ID">
+                            <p class="text-xs text-gray-500 mt-1">For multiple orders, pls separate them with comma. (78565714,78565715)</p>
+                        </div>
+
+                        <!-- Payment Fields (initially hidden) -->
+                        <div id="paymentFields" style="display: none;">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label for="transactionId" class="block text-sm font-semibold text-gray-700 mb-2 text-[0.95rem]">Transaction ID</label>
+                                    <input type="text" id="transactionId" name="transaction_id_field" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors text-[0.95rem] font-normal min-h-[48px] leading-[1.5] placeholder:text-gray-400 placeholder:font-normal" placeholder="Enter transaction ID">
+                                </div>
+                                <div>
+                                    <label for="paymentMethod" class="block text-sm font-semibold text-gray-700 mb-2 text-[0.95rem]">Payment Method</label>
+                                    <select id="paymentMethod" name="payment_method_field" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors text-[0.95rem] font-normal min-h-[48px] leading-[1.5]">
+                                        <option value="credit-card">Credit Card</option>
+                                        <option value="payeer">Payeer</option>
+                                        <option value="cryptomus">Cryptomus</option>
+                                        <option value="heleket">Heleket</option>
+                                        <option value="payoneer">Payoneer</option>
+                                        <option value="wise">Wise</option>
+                                        <option value="binance">Binance</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Cooperation Fields (initially hidden) -->
+                        <div id="cooperationFields" style="display: none;">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label for="companyName" class="block text-sm font-semibold text-gray-700 mb-2 text-[0.95rem]">Company Name</label>
+                                    <input type="text" id="companyName" name="company_name_field" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors text-[0.95rem] font-normal min-h-[48px] leading-[1.5] placeholder:text-gray-400 placeholder:font-normal" placeholder="Enter your company name">
+                                </div>
+                                <div>
+                                    <label for="website" class="block text-sm font-semibold text-gray-700 mb-2 text-[0.95rem]">Website</label>
+                                    <input type="url" id="website" name="website_field" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors text-[0.95rem] font-normal min-h-[48px] leading-[1.5] placeholder:text-gray-400 placeholder:font-normal" placeholder="https://yourwebsite.com">
+                                </div>
+                                <div>
+                                    <label for="contactPerson" class="block text-sm font-semibold text-gray-700 mb-2 text-[0.95rem]">Contact Person</label>
+                                    <input type="text" id="contactPerson" name="contact_person_field" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors text-[0.95rem] font-normal min-h-[48px] leading-[1.5] placeholder:text-gray-400 placeholder:font-normal" placeholder="Enter contact person name">
+                                </div>
+                                <div>
+                                    <label for="phone" class="block text-sm font-semibold text-gray-700 mb-2 text-[0.95rem]">Phone Number</label>
+                                    <input type="tel" id="phone" name="phone_field" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors text-[0.95rem] font-normal min-h-[48px] leading-[1.5] placeholder:text-gray-400 placeholder:font-normal" placeholder="Enter phone number">
+                                </div>
+                            </div>
+                        </div>
+
+                        {% endif %}
+
+                        <!-- Priority -->
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-3">Priority</label>
+                            <div class="flex gap-2">
+                                <button type="button" class="priority-btn active px-3 py-1.5 rounded-full border-2 border-emerald-400 text-white bg-emerald-400 font-medium hover:bg-emerald-500 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 cursor-pointer text-sm">
+                                    Low
+                                </button>
+                                <button type="button" class="priority-btn px-3 py-1.5 rounded-full border-2 border-amber-400 text-amber-600 bg-transparent font-medium hover:bg-amber-50 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 cursor-pointer text-sm">
+                                    Medium
+                                </button>
+                                <button type="button" class="priority-btn px-3 py-1.5 rounded-full border-2 border-rose-400 text-rose-600 bg-transparent font-medium hover:bg-rose-50 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 cursor-pointer text-sm">
+                                    High
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Message -->
+                        <div>
+                            <label for="message" class="block text-sm font-semibold text-gray-700 mb-2 text-[0.9rem] md:text-[0.95rem]">{{ lang('tickets.message') }}</label>
+                            <textarea id="message" name="message_field" rows="6" class="w-full px-[0.625rem] py-[0.875rem] md:px-4 md:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors resize-none text-[0.9rem] md:text-[0.95rem] font-normal min-h-[110px] leading-[1.5] placeholder:text-gray-400 placeholder:font-normal" placeholder="Describe your issue in detail..."></textarea>
+                        </div>
+
+                        <!-- File Upload -->
+                        <div class="tickets-uploader" 
+                             data-rtl="{% if site['rtl'] %}true{% else %}false{% endif %}"
+                             data-lang-button-attach="{{ lang('tickets.button.attach') }}"
+                             data-lang-file-format-incorrect="{{ lang('tickets.error.file_format.incorrect') }}"
+                             data-lang-file-size-incorrect="{{ lang('tickets.error.file_size.incorrect') }}">
+                            <input type="file" id="files-input" multiple="" accept="image/jpg,image/jpeg,image/png,image/gif,text/plain,text/csv,application/pdf" style="display: none;">
+                            <div class="files-wrapper">
+                                <button type="button" id="uploader-button" style="background: none;display: flex;align-items: center;align-self: flex-start;padding: 0;border: none; cursor: pointer;">
+                                    <a href="#" onclick="event.preventDefault()" class="paperclip" style="display: flex;align-items: center;justify-content: center; cursor: pointer;">
+                                        <svg width="24px" height="24px" fill="currentColor" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                                            <title>paperclip</title>
+                                            <g id="paperclip" stroke="none" stroke-width="1" fill-rule="evenodd">
+                                                <path d="M15.4604059,6.38639442 C14.683645,5.60296995 13.4230004,5.60296995 12.6462396,6.38639442 L6.78869877,12.2941855 C5.44846797,13.6459138 5.44846797,15.8356494 6.78869877,17.1873777 C8.12892957,18.539106 10.3000398,18.539106 11.6402706,17.1873777 L16.4791086,12.3070285 C16.8261043,11.9570561 17.3927577,11.9570561 17.7397533,12.3070285 C18.0867489,12.657001 18.0867489,13.2285155 17.7397533,13.5784879 L12.9009152,18.4588371 C10.8635097,20.513721 7.56545961,20.513721 5.52805412,18.4588371 C3.49064863,16.4039532 3.49064863,13.07761 5.52805412,11.0227261 L11.3855949,5.11493503 C12.8595304,3.62835499 15.247115,3.62835499 16.7210505,5.11493503 C18.1949861,6.60151508 18.1949861,9.0095821 16.7210505,10.4961621 L11.1181854,16.1470928 C10.2077199,17.065369 8.73060088,17.065369 7.8201353,16.1470928 C6.90966972,15.2288165 6.90966972,13.7390257 7.8201353,12.8207495 L12.4042977,8.19726082 C12.7512933,7.84728842 13.3179467,7.84728842 13.6649423,8.19726082 C14.0119379,8.54723323 14.0119379,9.11874781 13.6649423,9.46872021 L9.08077994,14.0922089 C8.86748906,14.3073296 8.86748906,14.6605127 9.08077994,14.8756334 C9.29407083,15.090754 9.6442499,15.090754 9.85754079,14.8756334 L15.4604059,9.22470275 C16.2371667,8.44127828 16.2371667,7.16981889 15.4604059,6.38639442 Z" id="Path" fill-rule="nonzero"></path>
+                                            </g>
+                                        </svg>
+                                    </a>
+                                    <span style="margin: 0px 8px" class="files-label">{{ lang('tickets.button.attach') }}</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <input type="hidden" name="_csrf" value="{{csrftoken}}">
+                        <!-- Submit Button -->
+                        <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors flex items-center justify-center gap-2" id="submitBtn">
+                            <i class="ri-send-plane-line"></i>
+                            {{ lang('tickets.button') }}
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Right Side Cards -->
+            <div class="space-y-6">
+                <!-- Support Stats Card -->
+                <div class="bg-white border border-gray-200 rounded-xl overflow-hidden h-fit">
+                                    <div class="border-b border-gray-200 px-6 py-4">
+                    <div class="flex items-center justify-between">
+                        <h2 class="text-lg font-semibold text-gray-800 flex items-center gap-2">
+                            <i class="ri-bar-chart-box-line text-green-600 text-xl font-normal"></i>
+                            Support Stats
+                        </h2>
+                        <div class="flex items-center gap-2">
+                            <div class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                            <span class="text-sm font-semibold text-green-600">Live</span>
+                        </div>
+                    </div>
+                </div>
+                    
+                    <div class="p-6 space-y-6">
+                        <!-- Response Time -->
+                        <div class="flex items-center gap-4">
+                            <div class="w-10 h-10 bg-blue-100 border border-blue-600 rounded-lg flex items-center justify-center">
+                                <i class="ri-time-line text-blue-600"></i>
+                            </div>
+                            <div>
+                                <div class="text-lg font-semibold text-blue-600">2h 15m</div>
+                                <div class="text-sm text-gray-600">85% faster than average</div>
+                            </div>
+                        </div>
+
+                        <!-- Resolution Rate -->
+                        <div class="flex items-center gap-4">
+                            <div class="w-10 h-10 bg-green-100 border border-green-600 rounded-lg flex items-center justify-center">
+                                <i class="ri-check-line text-green-600"></i>
+                            </div>
+                            <div>
+                                <div class="text-lg font-semibold text-green-600">99.2%</div>
+                                <div class="text-sm text-gray-600">First contact resolution</div>
+                            </div>
+                        </div>
+
+                        <!-- Satisfaction -->
+                        <div class="flex items-center gap-4">
+                            <div class="w-10 h-10 bg-purple-100 dark:bg-purple-900/20 border border-purple-300 dark:border-purple-500 rounded-lg flex items-center justify-center">
+                                <i class="ri-bar-chart-line text-purple-300 dark:text-purple-500"></i>
+                            </div>
+                            <div>
+                                <div class="text-lg font-semibold text-purple-300 dark:text-purple-500">4.9/5</div>
+                                <div class="text-sm text-gray-600 dark:text-gray-400">Based on 2,847 reviews</div>
+                            </div>
+                        </div>
+
+                        <!-- Support Availability -->
+                        <div class="flex-1">
+                            <div class="w-full h-px bg-gray-200 mb-4"></div>
+                            <div class="flex items-center gap-2 mb-3">
+                                <i class="ri-customer-service-line text-orange-600 text-lg"></i>
+                                <span class="text-sm font-medium text-gray-700">Support Availability</span>
+                            </div>
+                                <div class="grid grid-cols-2 gap-3">
+                                    <div class="p-2 bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-lg shadow-sm flex flex-col justify-center">
+                                        <div class="flex items-center justify-center gap-2 mb-1">
+                                            <div class="w-2 h-2 bg-green-500 rounded-full"></div>
+                                            <span class="text-xs font-semibold text-gray-700">Weekdays</span>
+                                        </div>
+                                        <div class="text-center">
+                                            <span class="text-sm font-bold text-green-700">24/7</span>
+                                        </div>
+                                    </div>
+                                    <div class="p-2 bg-gradient-to-r from-orange-50 to-amber-50 border border-orange-200 rounded-lg shadow-sm flex flex-col justify-center">
+                                        <div class="flex items-center justify-center gap-2 mb-1">
+                                            <div class="w-2 h-2 bg-orange-500 rounded-full"></div>
+                                            <span class="text-xs font-semibold text-gray-700">Weekend</span>
+                                        </div>
+                                        <div class="text-center">
+                                            <span class="text-sm font-bold text-orange-700">0-3 Hours</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                </div>
+
+       
+            </div>
+        </div>
+
+        <!-- Ticket List Tab Content -->
+        <div id="list-tab-content" class="hidden container mx-auto px-4 relative z-10">
+            {% if ticketList %}
+            <!-- Tickets Table -->
+            <div class="bg-white border border-gray-200 rounded-xl overflow-hidden">
+                <div class="overflow-x-auto hidden md:block">
+                    <table class="w-full {% if site['rtl'] %} rtl-table {% endif %}">
+                        <thead class="bg-gray-50 border-b border-gray-200">
+                            <tr>
+                                <th class="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">{{ lang('tickets.id') }}</th>
+                                <th class="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">{{ lang('tickets.subject') }}</th>
+                                <th class="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">{{ lang('tickets.status') }}</th>
+                                <th class="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">{{ lang('tickets.updated') }}</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            {% for ticket in ticketList %}
+                            <tr class="hover:bg-gray-50 transition-colors">
+                                <td class="px-4 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ ticket['id'] }}</td>
+                                <td class="px-4 py-4 text-sm text-gray-900">
+                                    {% if ticket['new'] == 1 %}
+                                    <a href="{{ page_url('viewticket') }}/{{ ticket['id'] }}" class="text-blue-600 hover:text-blue-800 font-medium hover:underline">
+                                        <strong>{{ ticket['theme'] }}</strong>
+                                    </a>
+                                    {% else %}
+                                    <a href="{{ page_url('viewticket') }}/{{ ticket['id'] }}" class="text-blue-600 hover:text-blue-800 font-medium hover:underline">
+                                        {{ ticket['theme'] }}
+                                    </a>
+                                    {% endif %}
+                                </td>
+                                <td class="px-4 py-4 whitespace-nowrap">
+                                    {% if ticket['status']|lower == 'pending' %}
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-amber-100 text-amber-800 border border-amber-300">
+                                            {{ ticket['status'] }}
+                                        </span>
+                                    {% elseif ticket['status']|lower == 'answered' %}
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 border border-green-300">
+                                            {{ ticket['status'] }}
+                                        </span>
+                                    {% elseif ticket['status']|lower == 'closed' %}
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800 border border-gray-300">
+                                            {{ ticket['status'] }}
+                                        </span>
+                                    {% else %}
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 border border-blue-300">
+                                            {{ ticket['status'] }}
+                                        </span>
+                                    {% endif %}
+                                </td>
+                                <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-500">
+                                    <span class="nowrap">{{ ticket['time'] }}</span>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                
+                <!-- Mobile Card View -->
+                <div class="md:hidden">
+                    {% for ticket in ticketList %}
+                    <div class="p-4 {% if not loop.last %}border-b border-gray-200{% endif %}">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-sm font-medium text-gray-900">#{{ ticket['id'] }}</span>
+                            {% if ticket['status']|lower == 'pending' %}
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-amber-100 text-amber-800 border border-amber-300">
+                                    {{ ticket['status'] }}
+                                </span>
+                            {% elseif ticket['status']|lower == 'answered' %}
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 border border-green-300">
+                                    {{ ticket['status'] }}
+                                </span>
+                            {% elseif ticket['status']|lower == 'closed' %}
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800 border border-gray-300">
+                                    {{ ticket['status'] }}
+                                </span>
+                            {% else %}
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 border border-blue-300">
+                                    {{ ticket['status'] }}
+                                </span>
+                            {% endif %}
+                        </div>
+                        {% if ticket['new'] == 1 %}
+                        <a href="{{ page_url('viewticket') }}/{{ ticket['id'] }}" class="text-blue-600 hover:text-blue-800 font-medium hover:underline block mb-2">
+                            <strong>{{ ticket['theme'] }}</strong>
+                        </a>
+                        {% else %}
+                        <a href="{{ page_url('viewticket') }}/{{ ticket['id'] }}" class="text-blue-600 hover:text-blue-800 font-medium hover:underline block mb-2">
+                            {{ ticket['theme'] }}
+                        </a>
+                        {% endif %}
+                        <div class="text-xs text-gray-500 mb-3">Last updated: {{ ticket['time'] }}</div>
+                        <div class="flex gap-2">
+                            <a href="{{ page_url('viewticket') }}/{{ ticket['id'] }}" class="text-blue-600 hover:text-blue-800 text-sm">
+                                <i class="ri-eye-line mr-1"></i>View
+                            </a>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+            
+            {% if pagination['count'] > 50 %}
+            <!-- Pagination -->
+            <div class="flex justify-center mt-8">
+                <div class="nav-pills">
+                    <ul class="pagination {% if site['rtl'] %} rtl-pagination {% endif %} flex items-center space-x-1">
+                        {% if pagination['current'] != 1 %}
+                        <li>
+                            <a href="{{ page['url'] }}/{{ pagination['last'] }}" 
+                               class="flex items-center justify-center w-8 h-8 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 hover:text-gray-700">
+                                <span>&laquo;</span>
+                            </a>
+                        </li>
+                        {% endif %}
+
+                        {% set r, l = 3, 3 %}
+                        {% if pagination['current'] == 1 %}
+                            {% set r = 6 %}
+                        {% endif %}
+                        {% if pagination['current'] == 2 %}
+                            {% set r = 5 %}
+                        {% endif %}
+                        {% if pagination['current'] >= pagination['pages'] %}
+                            {% set l = 5 %}
+                        {% endif %}
+
+                        {% for i in 1..ceil(pagination['pages']) %}
+                            {% if i >= (pagination['current']-l) and i <= (pagination['current']+r) %}
+                            <li>
+                                <a href="{{ page['url'] }}/{{ i }}" 
+                                   class="flex items-center justify-center w-8 h-8 text-sm font-medium {% if i == pagination['current'] %}text-blue-600 border border-blue-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700{% else %}text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700{% endif %} rounded-lg">
+                                    {{ i }}
+                                </a>
+                            </li>
+                            {% endif %}
+                        {% endfor %}
+
+                        {% if pagination['current'] < pagination['pages'] %}
+                        <li>
+                            <a href="{{ page['url'] }}/{{ pagination['next'] }}" 
+                               class="flex items-center justify-center w-8 h-8 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 hover:text-gray-700">
+                                <span>&raquo;</span>
+                            </a>
+                        </li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+
+    </div>
+</div>
+
+{% if ticketsText %}
+<div class="container mx-auto px-4 mt-8">
+    <div class="max-w-4xl mx-auto">
+        <div class="bg-white border border-gray-200 rounded-xl p-6 {% if site['rtl'] %} rtl-content {% endif %}">
+            {{ ticketsText }}
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<style>
+
+
+/* Cursor pointer for all clickable elements */
+.issue-type-btn,
+.priority-btn,
+button,
+a[href],
+[role="button"],
+.nice-select,
+.nice-select .current,
+.nice-select .option,
+.faq-container button,
+#uploader-button,
+.paperclip,
+.files-label {
+    cursor: pointer !important;
+}
+
+/* Nice Select Styles */
+.nice-select {
+    position: relative;
+    display: block;
+    width: 100%;
+    background: #fff;
+    border: 1px solid #d1d5db;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    user-select: none;
+}
+
+.nice-select:hover {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.nice-select.open {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.nice-select .current {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem 1rem;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: #374151;
+    min-height: 48px;
+}
+
+.nice-select .current.placeholder {
+    color: #9ca3af;
+}
+
+.nice-select .list {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    right: 0;
+    background: #fff;
+    border: 1px solid #d1d5db;
+    border-radius: 0.5rem;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all 0.2s ease;
+    z-index: 1000;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.nice-select.open .list {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.nice-select .option {
+    padding: 0.75rem 1rem;
+    font-size: 0.95rem;
+    font-weight: 400;
+    color: #374151;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    border-bottom: 1px solid #f3f4f6;
+}
+
+.nice-select .option:last-child {
+    border-bottom: none;
+}
+
+.nice-select .option:hover {
+    background-color: #f8fafc;
+}
+
+.nice-select .option.selected {
+    background-color: #f3f4f6;
+    color: #374151;
+    font-weight: 600;
+}
+
+.nice-select .option.disabled {
+    color: #9ca3af;
+    cursor: not-allowed;
+    background-color: #f9fafb;
+}
+
+.nice-select .arrow {
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 5px solid #6b7280;
+    transition: transform 0.2s ease;
+}
+
+.nice-select.open .arrow {
+    transform: rotate(180deg);
+}
+
+/* Custom scrollbar for dropdown */
+.nice-select .list::-webkit-scrollbar {
+    width: 6px;
+}
+
+.nice-select .list::-webkit-scrollbar-track {
+    background: #f1f5f9;
+    border-radius: 3px;
+}
+
+.nice-select .list::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 3px;
+}
+
+.nice-select .list::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+}
+
+/* Focus styles */
+.nice-select:focus-within {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+/* Animation for options */
+.nice-select .option {
+    transform: translateX(-10px);
+    opacity: 0;
+    animation: slideIn 0.2s ease forwards;
+}
+
+.nice-select .option:nth-child(1) { animation-delay: 0.05s; }
+.nice-select .option:nth-child(2) { animation-delay: 0.1s; }
+.nice-select .option:nth-child(3) { animation-delay: 0.15s; }
+.nice-select .option:nth-child(4) { animation-delay: 0.2s; }
+.nice-select .option:nth-child(5) { animation-delay: 0.25s; }
+.nice-select .option:nth-child(6) { animation-delay: 0.3s; }
+
+@keyframes slideIn {
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+
+
+/* Input focus styles - ensure consistent blue focus */
+input[type="text"],
+input[type="email"],
+input[type="url"],
+input[type="tel"],
+input[type="password"],
+input[type="number"],
+textarea {
+    outline: none !important;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="url"]:focus,
+input[type="tel"]:focus,
+input[type="password"]:focus,
+input[type="number"]:focus,
+textarea:focus {
+    border-color: #3b82f6 !important;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1) !important;
+    outline: none !important;
+}
+
+
+</style>
+
+<script>
+// Nice Select Component
+class NiceSelect {
+    constructor(element) {
+        this.element = element;
+        this.options = Array.from(element.options);
+        this.selectedIndex = element.selectedIndex;
+        this.placeholder = element.getAttribute('placeholder') || 'Select an option';
+        this.init();
+    }
+
+    init() {
+        // Create nice select wrapper
+        this.wrapper = document.createElement('div');
+        this.wrapper.className = 'nice-select';
+        
+        // Create current display
+        this.current = document.createElement('div');
+        this.current.className = 'current';
+        this.current.textContent = this.getCurrentText();
+        
+        // Create arrow
+        this.arrow = document.createElement('div');
+        this.arrow.className = 'arrow';
+        
+        // Create options list
+        this.list = document.createElement('div');
+        this.list.className = 'list';
+        
+        this.options.forEach((option, index) => {
+  // HIDDEN veya (value==='' ve disabled) ise listeye hiç ekleme
+  if (option.hidden || (option.value === '' && option.disabled)) return;
+
+  const optionElement = document.createElement('div');
+  optionElement.className = 'option';
+  optionElement.textContent = option.textContent;
+  optionElement.dataset.value = option.value;
+  optionElement.dataset.index = index;
+
+  if (option.disabled) optionElement.classList.add('disabled');
+  if (index === this.selectedIndex) optionElement.classList.add('selected');
+
+  optionElement.addEventListener('click', () => {
+    if (!option.disabled) this.select(index);
+  });
+
+  this.list.appendChild(optionElement);
+});
+        
+        // Assemble the component
+        this.current.appendChild(this.arrow);
+        this.wrapper.appendChild(this.current);
+        this.wrapper.appendChild(this.list);
+        
+        // Add event listeners
+        this.wrapper.addEventListener('click', (e) => {
+            if (e.target === this.wrapper || e.target === this.current || e.target === this.arrow) {
+                this.toggle();
+            }
+        });
+        
+        // Close on outside click
+        document.addEventListener('click', (e) => {
+            if (!this.wrapper.contains(e.target)) {
+                this.close();
+            }
+        });
+        
+        // Keyboard navigation
+        this.wrapper.addEventListener('keydown', (e) => {
+            switch(e.key) {
+                case 'Enter':
+                case ' ':
+                    e.preventDefault();
+                    this.toggle();
+                    break;
+                case 'Escape':
+                    this.close();
+                    break;
+                case 'ArrowDown':
+                    e.preventDefault();
+                    this.next();
+                    break;
+                case 'ArrowUp':
+                    e.preventDefault();
+                    this.previous();
+                    break;
+            }
+        });
+        
+        // Replace original select
+        this.element.style.display = 'none';
+        this.element.parentNode.insertBefore(this.wrapper, this.element);
+        
+        // Make wrapper focusable
+        this.wrapper.tabIndex = 0;
+    }
+    
+    getCurrentText() {
+        if (this.selectedIndex >= 0 && this.selectedIndex < this.options.length) {
+            return this.options[this.selectedIndex].textContent;
+        }
+        return this.placeholder;
+    }
+    
+    toggle() {
+        if (this.wrapper.classList.contains('open')) {
+            this.close();
+        } else {
+            this.open();
+        }
+    }
+    
+    open() {
+        this.wrapper.classList.add('open');
+        this.wrapper.focus();
+    }
+    
+    close() {
+        this.wrapper.classList.remove('open');
+    }
+    
+    select(index) {
+        if (index >= 0 && index < this.options.length) {
+            this.selectedIndex = index;
+            this.current.textContent = this.options[index].textContent;
+            this.current.appendChild(this.arrow);
+            
+            // Update original select
+            this.element.selectedIndex = index;
+            this.element.value = this.options[index].value;
+            
+            // Trigger change event
+            const event = new Event('change', { bubbles: true });
+            this.element.dispatchEvent(event);
+            
+            // Update visual selection
+            this.list.querySelectorAll('.option').forEach((option, i) => {
+                option.classList.toggle('selected', i === index);
+            });
+            
+            this.close();
+        }
+    }
+    
+    next() {
+        let nextIndex = this.selectedIndex + 1;
+        while (nextIndex < this.options.length && this.options[nextIndex].disabled) {
+            nextIndex++;
+        }
+        if (nextIndex < this.options.length) {
+            this.select(nextIndex);
+        }
+    }
+    
+    previous() {
+        let prevIndex = this.selectedIndex - 1;
+        while (prevIndex >= 0 && this.options[prevIndex].disabled) {
+            prevIndex--;
+        }
+        if (prevIndex >= 0) {
+            this.select(prevIndex);
+        }
+    }
+}
+
+// Initialize nice selects
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize all select elements as nice selects
+    const selects = document.querySelectorAll('select');
+    selects.forEach(select => {
+        new NiceSelect(select);
+    });
+});
+
+// Issue type selection
+document.querySelectorAll('.issue-type-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+        // Remove active state from all buttons and reset to default
+        document.querySelectorAll('.issue-type-btn').forEach(b => {
+            b.classList.remove('active', 'issue-type-orders', 'issue-type-payment', 'issue-type-general', 'issue-type-cooperation');
+            // Reset to default state based on button position
+            const buttonText = b.querySelector('.text-sm.font-semibold').textContent.trim();
+            if (buttonText === 'Orders') {
+                b.className = 'issue-type-btn p-4 border-2 border-gray-200 rounded-lg hover:border-green-500 transition-colors text-center group cursor-pointer';
+            } else if (buttonText === 'Payment') {
+                b.className = 'issue-type-btn p-4 border-2 border-gray-200 rounded-lg hover:border-blue-500 transition-colors text-center group cursor-pointer';
+            } else if (buttonText === 'General') {
+                b.className = 'issue-type-btn p-4 border-2 border-gray-200 rounded-lg hover:border-purple-500 transition-colors text-center group cursor-pointer';
+            } else if (buttonText === 'Cooperation') {
+                b.className = 'issue-type-btn p-4 border-2 border-gray-200 rounded-lg hover:border-orange-500 transition-colors text-center group cursor-pointer';
+            }
+        });
+        
+        // Add active state to clicked button
+        this.classList.add('active');
+        
+        // Set active styling based on button type
+        const issueType = this.querySelector('.text-sm.font-semibold').textContent.trim();
+        if (issueType === 'Orders') {
+            this.className = 'issue-type-btn active issue-type-orders p-4 border-2 border-green-500 bg-green-50 rounded-lg hover:border-green-500 transition-colors text-center group cursor-pointer';
+        } else if (issueType === 'Payment') {
+            this.className = 'issue-type-btn active issue-type-payment p-4 border-2 border-blue-500 bg-blue-50 rounded-lg hover:border-blue-500 transition-colors text-center group cursor-pointer';
+        } else if (issueType === 'General') {
+            this.className = 'issue-type-btn active issue-type-general p-4 border-2 border-purple-500 bg-purple-50 rounded-lg hover:border-purple-500 transition-colors text-center group cursor-pointer';
+        } else if (issueType === 'Cooperation') {
+            this.className = 'issue-type-btn active issue-type-cooperation p-4 border-2 border-orange-500 bg-orange-50 rounded-lg hover:border-orange-500 transition-colors text-center group cursor-pointer';
+        }
+        
+        updateFormContent(issueType);
+    });
+});
+
+// Function to update form content based on selected issue type
+function updateFormContent(issueType) {
+    const requestTypeSelect = document.getElementById('requestType');
+    const orderIdField = document.getElementById('orderIdField');
+    const paymentFields = document.getElementById('paymentFields');
+    const cooperationFields = document.getElementById('cooperationFields');
+    
+    // Clear previous options
+   // Clear previous options
+requestTypeSelect.innerHTML = '';
+
+// SADECE seçim yoksa placeholder ekle (listede görünmesin)
+const needPlaceholder = !requestTypeSelect.value;
+if (needPlaceholder) {
+  const placeholder = document.createElement('option');
+  placeholder.value = '';
+  placeholder.textContent = 'Choose an issue type';
+  placeholder.disabled = true;  // seçilemez
+  placeholder.hidden = true;    // listede görünmez
+  placeholder.selected = true;  // başlangıç değeri
+  requestTypeSelect.appendChild(placeholder);
+}
+
+    
+    // Hide all dynamic fields initially
+    orderIdField.style.display = 'none';
+    paymentFields.style.display = 'none';
+    cooperationFields.style.display = 'none';
+    
+    // Remove existing nice select if it exists
+    const existingNiceSelect = requestTypeSelect.parentNode.querySelector('.nice-select');
+    if (existingNiceSelect) {
+        existingNiceSelect.remove();
+        requestTypeSelect.style.display = 'block';
+    }
+    
+    // Update form based on selected issue type
+    switch(issueType) {
+        case 'Orders':
+            // Add order-specific options
+            const orderOptions = [
+                { value: 'refill', text: 'Refill' },
+                { value: 'cancel-partial', text: 'Cancel/Partial' },
+                { value: 'speed-up', text: 'Speed up' },
+                { value: 'mark-completed-without-done', text: 'Mark completed without done' },
+                { value: 'stuck', text: 'Stuck' },
+                { value: 'not-started', text: 'Not started' }
+            ];
+            orderOptions.forEach(option => {
+                const optionElement = document.createElement('option');
+                optionElement.value = option.value;
+                optionElement.textContent = option.text;
+                requestTypeSelect.appendChild(optionElement);
+            });
+            orderIdField.style.display = 'block';
+            break;
+            
+        case 'Payment':
+            // Add payment-specific options
+            const paymentOptions = [
+                { value: 'cant-add-funds', text: 'I can’t add funds' },
+                { value: 'added-funds-but-not-updated', text: 'Added funds but not updated' },
+                { value: 'payment-failed', text: 'Payment failed' },
+                { value: 'underpaid-or-overpaid', text: 'Underpaid or overpaid' },
+                { value: 'billing-issue', text: 'Billing issue' }
+            ];
+            paymentOptions.forEach(option => {
+                const optionElement = document.createElement('option');
+                optionElement.value = option.value;
+                optionElement.textContent = option.text;
+                requestTypeSelect.appendChild(optionElement);
+            });
+            paymentFields.style.display = 'block';
+            break;
+            
+        case 'General':
+            // Add general options
+            const generalOptions = [
+                { value: 'general-question', text: 'General question' },
+                { value: 'technical-support', text: 'Technical support' },
+                { value: 'account-issue', text: 'Account issue' },
+                { value: 'feature-request', text: 'Feature request' },
+                { value: 'bug-report', text: 'Bug report' }
+            ];
+            generalOptions.forEach(option => {
+                const optionElement = document.createElement('option');
+                optionElement.value = option.value;
+                optionElement.textContent = option.text;
+                requestTypeSelect.appendChild(optionElement);
+            });
+            break;
+            
+        case 'Cooperation':
+            // Add cooperation options
+            const cooperationOptions = [
+                { value: 'partnership', text: 'Partnership inquiry' },
+                { value: 'reseller-program', text: 'Reseller program' },
+                { value: 'wholesale', text: 'Wholesale inquiry' },
+                { value: 'api-integration', text: 'API integration' },
+                { value: 'business-proposal', text: 'Business proposal' }
+            ];
+            cooperationOptions.forEach(option => {
+                const optionElement = document.createElement('option');
+                optionElement.value = option.value;
+                optionElement.textContent = option.text;
+                requestTypeSelect.appendChild(optionElement);
+            });
+            cooperationFields.style.display = 'block';
+            break;
+    }
+    
+    // Reinitialize nice select for the updated select element
+    new NiceSelect(requestTypeSelect);
+}
+
+// Initialize form with default selection (Orders)
+document.addEventListener('DOMContentLoaded', function() {
+    updateFormContent('Orders');
+});
+
+// Priority selection
+document.querySelectorAll('.priority-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+        // Remove active class and reset to default state
+        document.querySelectorAll('.priority-btn').forEach(b => {
+            b.classList.remove('active');
+            // Reset to default state
+            if (b.textContent.trim() === 'Low') {
+                b.className = 'priority-btn px-3 py-1.5 rounded-full border-2 border-emerald-400 text-emerald-600 bg-transparent font-medium hover:bg-emerald-50 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 cursor-pointer text-sm';
+            } else if (b.textContent.trim() === 'Medium') {
+                b.className = 'priority-btn px-3 py-1.5 rounded-full border-2 border-amber-400 text-amber-600 bg-transparent font-medium hover:bg-amber-50 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 cursor-pointer text-sm';
+            } else if (b.textContent.trim() === 'High') {
+                b.className = 'priority-btn px-3 py-1.5 rounded-full border-2 border-rose-400 text-rose-600 bg-transparent font-medium hover:bg-rose-50 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 cursor-pointer text-sm';
+            }
+        });
+        
+        // Add active class and set active state
+        this.classList.add('active');
+        if (this.textContent.trim() === 'Low') {
+            this.className = 'priority-btn active px-3 py-1.5 rounded-full border-2 border-emerald-500 text-white bg-emerald-500 font-medium hover:bg-emerald-600 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 cursor-pointer text-sm shadow-[0_2px_8px_rgba(16,185,129,0.3)]';
+        } else if (this.textContent.trim() === 'Medium') {
+            this.className = 'priority-btn active px-3 py-1.5 rounded-full border-2 border-amber-500 text-white bg-amber-500 font-medium hover:bg-amber-600 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 cursor-pointer text-sm shadow-[0_2px_8px_rgba(245,158,11,0.3)]';
+        } else if (this.textContent.trim() === 'High') {
+            this.className = 'priority-btn active px-3 py-1.5 rounded-full border-2 border-rose-500 text-white bg-rose-500 font-medium hover:bg-rose-600 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 cursor-pointer text-sm shadow-[0_2px_8px_rgba(244,63,94,0.3)]';
+        }
+    });
+});
+
+
+
+    // Tab Switching Functionality
+    document.addEventListener('DOMContentLoaded', function() {
+        const createTab = document.getElementById('create-tab');
+        const listTab = document.getElementById('list-tab');
+        const createContent = document.getElementById('create-tab-content');
+        const listContent = document.getElementById('list-tab-content');
+
+        function switchToCreate() {
+            // Update tab styles
+            createTab.className = 'tab-btn active flex items-center justify-center gap-[10px] py-[12px] px-[14px] rounded-full font-medium whitespace-nowrap text-[15px] leading-[160%] tracking-[-0.3px] !text-white border border-white/15 btn-custom-active shadow-[0px_0px_3px_0px_#0139ff,0px_0px_0px_1.182px_#0139ff] cursor-pointer';
+            listTab.className = 'tab-btn flex items-center justify-center gap-[10px] py-[12px] px-[14px] rounded-full font-medium whitespace-nowrap text-[15px] leading-[160%] tracking-[-0.3px] text-gray-600 hover:bg-gray-200 hover:text-gray-800 cursor-pointer';
+            
+            // Show/hide content
+            createContent.classList.remove('hidden');
+            listContent.classList.add('hidden');
+        }
+
+        function switchToList() {
+            // Update tab styles
+            listTab.className = 'tab-btn active flex items-center justify-center gap-[10px] py-[12px] px-[14px] rounded-full font-medium whitespace-nowrap text-[15px] leading-[160%] tracking-[-0.3px] !text-white border border-white/15 btn-custom-active shadow-[0px_0px_3px_0px_#0139ff,0px_0px_0px_1.182px_#0139ff] cursor-pointer';
+            createTab.className = 'tab-btn flex items-center justify-center gap-[10px] py-[12px] px-[14px] rounded-full font-medium whitespace-nowrap text-[15px] leading-[160%] tracking-[-0.3px] text-gray-600 hover:bg-gray-200 hover:text-gray-800 cursor-pointer';
+            
+            // Show/hide content
+            listContent.classList.remove('hidden');
+            createContent.classList.add('hidden');
+        }
+
+        // Add event listeners
+        createTab.addEventListener('click', function(e) {
+            e.preventDefault();
+            switchToCreate();
+        });
+
+        listTab.addEventListener('click', function(e) {
+            e.preventDefault();
+            switchToList();
+        });
+    });
+
+    // Real-time update hidden inputs
+    function updateHiddenInputs() {
+        // Get selected priority
+        const selectedPriority = document.querySelector('.priority-btn.active');
+        let priority = 'LOW';
+        if (selectedPriority) {
+            priority = selectedPriority.textContent.trim().toUpperCase();
+        }
+        
+        // Get selected issue type
+        const selectedIssueType = document.querySelector('.issue-type-btn.active');
+        let issueTypeText = 'Orders';
+        if (selectedIssueType) {
+            issueTypeText = selectedIssueType.querySelector('.text-sm.font-semibold').textContent.trim();
+        }
+        
+        // Get selected request type
+        const requestTypeSelect = document.getElementById('requestType');
+        const selectedRequestTypeOption = requestTypeSelect.options[requestTypeSelect.selectedIndex];
+        const requestTypeText = selectedRequestTypeOption ? selectedRequestTypeOption.textContent : '';
+        
+        // Build subject: "PRIORITY - Issue Type - Request Type"
+        let subject = priority + ' - ' + issueTypeText;
+        if (requestTypeText && requestTypeText !== 'Choose an issue type') {
+            subject += ' - ' + requestTypeText;
+        }
+        
+        // Build message content based on issue type
+        let messageContent = '';
+        
+        // Add selected issue type to message
+        if (requestTypeText && requestTypeText !== 'Choose an issue type') {
+            messageContent += 'Issue Type: ' + requestTypeText + '\n';
+        }
+        
+        if (issueTypeText === 'Orders') {
+            const orderId = document.getElementById('orderId').value;
+            if (orderId) {
+                messageContent += 'Order ID: ' + orderId + '\n';
+            }
+        } else if (issueTypeText === 'Payment') {
+            const transactionId = document.getElementById('transactionId').value;
+            const paymentMethodSelect = document.getElementById('paymentMethod');
+            const selectedPaymentOption = paymentMethodSelect.options[paymentMethodSelect.selectedIndex];
+            const paymentMethodText = selectedPaymentOption ? selectedPaymentOption.textContent : '';
+            
+            if (transactionId) {
+                messageContent += 'Transaction ID: ' + transactionId + '\n';
+            }
+            if (paymentMethodText && paymentMethodText !== 'Select payment method') {
+                messageContent += 'Payment Method: ' + paymentMethodText + '\n';
+            }
+        } else if (issueTypeText === 'Cooperation') {
+            const companyName = document.getElementById('companyName').value;
+            const website = document.getElementById('website').value;
+            const contactPerson = document.getElementById('contactPerson').value;
+            const phone = document.getElementById('phone').value;
+            
+            if (companyName) {
+                messageContent += 'Company Name: ' + companyName + '\n';
+            }
+            if (website) {
+                messageContent += 'Website: ' + website + '\n';
+            }
+            if (contactPerson) {
+                messageContent += 'Contact Person: ' + contactPerson + '\n';
+            }
+            if (phone) {
+                messageContent += 'Phone Number: ' + phone + '\n';
+            }
+        }
+        
+        // Add main message
+        const mainMessage = document.getElementById('message').value;
+        if (messageContent) {
+            messageContent += '\n' + mainMessage;
+        } else {
+            messageContent = mainMessage;
+        }
+        
+        // Update hidden inputs
+        document.getElementById('final-subject').value = subject;
+        document.getElementById('final-message').value = messageContent;
+    }
+    
+    // Form validation before submit
+    document.getElementById('ticketsend').addEventListener('submit', function(e) {
+        const message = document.getElementById('message').value.trim();
+        const requestTypeSelect = document.getElementById('requestType');
+        const selectedRequestType = requestTypeSelect.value;
+        
+        // Check if message is empty
+        if (!message) {
+            e.preventDefault();
+            showValidationError('Please enter a message describing your issue.');
+            return;
+        }
+        
+        // Check if request type is selected
+        if (!selectedRequestType || selectedRequestType === '') {
+            e.preventDefault();
+            showValidationError('Please select an issue type from the dropdown.');
+            return;
+        }
+        
+        // Update hidden inputs one final time before submit
+        updateHiddenInputs();
+    });
+    
+    // Add event listeners for real-time updates
+    document.addEventListener('DOMContentLoaded', function() {
+        // Update on form changes
+        const form = document.getElementById('ticketsend');
+        if (form) {
+            form.addEventListener('input', updateHiddenInputs);
+            form.addEventListener('change', updateHiddenInputs);
+        }
+        
+        // Update on priority button clicks
+        document.querySelectorAll('.priority-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                setTimeout(updateHiddenInputs, 100); // Small delay to ensure UI is updated
+            });
+        });
+        
+        // Update on issue type button clicks
+        document.querySelectorAll('.issue-type-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                setTimeout(updateHiddenInputs, 100); // Small delay to ensure UI is updated
+            });
+        });
+        
+        // Initial update
+        setTimeout(updateHiddenInputs, 500);
+    });
+
+    // Function to show validation errors as div with Tailwind CSS
+    function showValidationError(message) {
+        // Create or update error alert with Tailwind CSS
+        let errorAlert = document.querySelector('#error-alert');
+        if (!errorAlert) {
+            errorAlert = document.createElement('div');
+            errorAlert.id = 'error-alert';
+            errorAlert.className = 'mb-6 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg relative';
+            errorAlert.innerHTML = `
+                <div class="flex items-center">
+                    <svg class="w-5 h-5 mr-2 text-red-600" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path>
+                    </svg>
+                    <span class="error-text font-medium"></span>
+                    <button type="button" class="ml-auto text-red-500 hover:text-red-700" onclick="this.parentElement.parentElement.style.display='none'">
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                        </svg>
+                    </button>
+                </div>
+            `;
+            const form = document.getElementById('ticketsend');
+            if (form) {
+                form.insertBefore(errorAlert, form.firstChild);
+            }
+        }
+        
+        const errorText = errorAlert.querySelector('.error-text');
+        if (errorText) {
+            errorText.textContent = message;
+        }
+        errorAlert.style.display = 'block';
+        errorAlert.scrollIntoView({ behavior: 'smooth' });
+    }
+</script>

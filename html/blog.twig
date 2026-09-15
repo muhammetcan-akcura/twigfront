@@ -1,0 +1,87 @@
+        <section class="page-header-ui">
+            <div class="container mx-auto px-4 text-center pb-8">
+                <h1 class="text-4xl md:text-5xl font-bold text-gray-800 tracking-tight">Our Blog</h1>
+                <p class="mt-4 text-lg text-gray-600 max-w-2xl mx-auto">Latest news, updates, and articles from our team.</p>
+            </div>
+        </section>
+
+        <main class="relative z-10 pb-16 md:pb-24 bg-white">
+            <div class="container mx-auto px-4 relative z-10 -mt-[15px]">
+                {% if blog %}
+                <div class="max-w-4xl mx-auto">
+                    <div class="bg-white rounded-[25px] shadow-md p-6 {% if site['rtl'] %} rtl-content {% endif %}">
+                        {{ blog }}
+                    </div>
+                </div>
+                {% endif %}
+                
+                {% if posts %}
+                <div class="max-w-4xl mx-auto">
+                    {% for post in posts %}
+                        <div class="bg-white rounded-[25px] shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300 mb-8" data-aos="fade-up">
+                            <div class="p-6">
+                                <h4 class="text-2xl font-bold text-gray-900 mb-4">{{ post['title'] }}</h4>
+                                {% if post['image'] %} 
+                                <div class="mb-4">
+                                    <img src="{{ post['image'] }}" alt="{{ post['title'] }}" class="w-full h-auto rounded-[15px] object-cover">
+                                </div> 
+                                {% endif %}
+                                <div class="text-gray-700 mb-6">{{ post['content'] }}</div>
+                                <a href="{{ page_url('blog') }}/{{ post['url'] }}" class="btn btn-primary inline-flex items-center justify-center rounded-[15px] text-sm px-6 py-3">{{ lang('blog.link') }}</a>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+                
+                <div class="max-w-4xl mx-auto mt-8">
+                    {% if pagination['count'] > 10 %}
+                        <nav class="flex justify-center">
+                            <ul class="flex items-center space-x-1 {% if site['rtl'] %} rtl-pagination flex-row-reverse {% endif %}">
+                                {% if pagination['current'] != 1 %}
+                                    <li>
+                                        <a href="{{ page['url'] }}{% if pagination['last'] %}?page={{ pagination['last'] }}{% endif %}" 
+                                           class="flex items-center justify-center w-8 h-8 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 hover:text-gray-700"
+                                           aria-label="Previous">
+                                            <span aria-hidden="true">&laquo;</span>
+                                        </a>
+                                    </li>
+                                {% endif %}
+                                
+                                {% set r, l = 3, 3 %}
+                                {% if pagination['current'] == 1 %}
+                                    {% set r = 6 %}
+                                {% endif %}
+                                {% if pagination['current'] == 2 %}
+                                    {% set r = 5 %}
+                                {% endif %}
+                                {% if pagination['current'] >= pagination['pages'] %}
+                                    {% set l = 5 %}
+                                {% endif %}
+                                
+                                {% for i in 1..ceil(pagination['pages']) %}
+                                    {% if i >= (pagination['current']-l) and i <= (pagination['current']+r) %}
+                                        <li>
+                                            <a href="{{ page['url'] }}{% if i != 1 %}?page={{ i }}{% endif %}" 
+                                               class="flex items-center justify-center w-8 h-8 text-sm font-medium border rounded-lg {% if i == pagination['current'] %}text-blue-600 border-blue-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700{% else %}text-gray-500 bg-white border-gray-300 hover:bg-gray-100 hover:text-gray-700{% endif %}">
+                                                {{i}}
+                                            </a>
+                                        </li>
+                                    {%endif%}
+                                {% endfor %}
+                                
+                                {% if pagination['current'] < pagination['pages'] %}
+                                    <li>
+                                        <a href="{{ page['url'] }}{% if pagination['next'] %}?page={{ pagination['next'] }}{% endif %}" 
+                                           class="flex items-center justify-center w-8 h-8 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 hover:text-gray-700"
+                                           aria-label="Next">
+                                            <span aria-hidden="true">&raquo;</span>
+                                        </a>
+                                    </li>
+                                {% endif %}
+                            </ul>
+                        </nav>
+                    {% endif %}
+                </div>
+                {% endif %}
+            </div>
+        </main>

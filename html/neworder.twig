@@ -1,0 +1,3137 @@
+<style>
+#order_check .dark-mode .bg-white:not(input, select, textarea) {
+background-color: #4a586f !important;
+}
+
+  #order_average_time{
+	 display:none !important;
+  }
+  .form-group{
+    --tw-space-y-reverse: 0;
+    margin-top: calc(1.5rem * calc(1 - var(--tw-space-y-reverse)));
+    margin-bottom: calc(1.5rem * var(--tw-space-y-reverse));
+  }
+.row {
+display: grid;
+grid-template-columns: 1fr; /* Mobil: tek sütun */
+gap: 10px;
+}
+
+/* md ve üzeri */
+@media (min-width: 768px) {
+.row { grid-template-columns: repeat(12, 1fr); }
+.col-md-6 { grid-column: span 6; }
+.col-md-4 { grid-column: span 4; }
+}
+
+
+.input-group {
+display: flex;
+align-items: stretch;
+width: 100%;
+}
+
+/* Tipik input (isteğe bağlı – elinde başka .form-control stili varsa bunu kaldır) */
+.input-group .form-control {
+flex: 1 1 auto;
+width: 1%;
+margin: 0;
+border: 1px solid #ccc;
+border-right: 0;
+border-radius: 4px 0 0 4px;
+padding: 6px 12px;
+font-size: 14px;
+line-height: 1.42857143;
+}
+.input-group .form-control:focus {
+border-color: #66afe9;
+outline: 0;
+box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102,175,233,.6);
+}
+
+/* input-group-btn ve içindeki buton */
+.input-group-btn {
+display: flex;
+white-space: nowrap;
+}
+.input-group-btn > .btn {
+    position: relative;
+    z-index: 2;
+    margin-left: 5px;
+    background-color: #ff00003b;
+    color: #ff0000;
+    padding: 10px 17px;
+}
+
+</style>
+
+<!-- Error and Success Messages -->
+
+<div class="relative pb-16 md:pb-15 bg-white pt-6">
+    <div class="mx-auto px-4 sm:px-6 lg:px-8">
+
+        <!-- Blank Card -->
+<div>
+
+        <div class="w-full overflow-x-auto scrollbar-hide mb-8">
+            <div class="inline-flex items-center gap-[2px] list-none p-[6px] m-0 rounded-full border border-gray-200 bg-white min-w-max">
+                <a href="/" class="flex items-center justify-center gap-[10px] py-[12px] px-[14px] rounded-full font-medium whitespace-nowrap text-[15px] leading-[160%] tracking-[-0.3px] !text-white border border-white/15 btn-custom-active shadow-[0px_0px_3px_0px_#0139ff,0px_0px_0px_1.182px_#0139ff]">
+                    <i class="ri-shopping-cart-line text-[22px]"></i>
+                    <span>New Order</span>
+                </a>     <a href="/massorder" class="flex items-center justify-center gap-[10px] py-[12px] px-[14px] rounded-full font-medium whitespace-nowrap text-[15px] leading-[160%] tracking-[-0.3px] text-gray-600 hover:bg-gray-200 hover:text-gray-800">
+                    <i class="ri-stack-line text-[22px]"></i>
+                    <span>Mass Order</span>
+                </a>
+                <a href="#" class="flex items-center justify-center gap-[10px] py-[12px] px-[14px] rounded-full font-medium whitespace-nowrap text-[15px] leading-[160%] tracking-[-0.3px] text-gray-600 hover:bg-gray-200 hover:text-gray-800" id="favorites-btn">
+                    <i class="ri-heart-line text-[22px]"></i>
+                    <span>Favorites</span>
+                </a>
+           
+     
+                <a href="#" class="flex items-center justify-center gap-[10px] py-[12px] px-[14px] rounded-full font-medium whitespace-nowrap text-[15px] leading-[160%] tracking-[-0.3px] text-gray-600 hover:bg-gray-200 hover:text-gray-800" id="search-services-btn">
+                    <i class="ri-search-line text-[22px]"></i>
+                    <span>Search Services</span>
+                </a>
+     
+            </div>
+        </div>
+
+               <!-- Social Media Platform Filters -->
+        <div class="mb-8">
+             <div class="flex flex-wrap items-center gap-2">
+                <button class="filter-btn filter-btn-active flex items-center gap-2 px-4 py-2 rounded-[25px] text-sm font-semibold" data-platform="all">
+                    <i class="ri-layout-grid-fill text-base font-normal"></i>
+                    <span>All</span>
+                </button>
+                <button class="filter-btn flex items-center gap-2 px-4 py-2 rounded-[25px] text-sm font-semibold text-gray-700 bg-white border border-gray-200 hover:bg-gray-50" data-platform="instagram">
+                    <img src="https://storage.perfectcdn.com/f3b92e/hhzsztp4pjw79lq6.svg" alt="Instagram" class="w-5 h-5">
+                    <span>Instagram</span>
+                </button>
+                <button class="filter-btn flex items-center gap-2 px-4 py-2 rounded-[25px] text-sm font-semibold text-gray-700 bg-white border border-gray-200 hover:bg-gray-50" data-platform="tiktok">
+                    <img src="https://i.hizliresim.com/cjkftds.png" alt="TikTok" class="w-5 h-5">
+                    <span>TikTok</span>
+                </button>
+                <button class="filter-btn flex items-center gap-2 px-4 py-2 rounded-[25px] text-sm font-semibold text-gray-700 bg-white border border-gray-200 hover:bg-gray-50" data-platform="youtube">
+                    <img src="https://storage.perfectcdn.com/f3b92e/613d1l69p0oz9rzr.svg" alt="YouTube" class="w-5 h-5">
+                    <span>YouTube</span>
+                </button>
+                <button class="filter-btn flex items-center gap-2 px-4 py-2 rounded-[25px] text-sm font-semibold text-gray-700 bg-white border border-gray-200 hover:bg-gray-50" data-platform="facebook">
+                    <img src="https://storage.perfectcdn.com/f3b92e/fcxdcr0rcj7yy89q.svg" alt="Facebook" class="w-5 h-5">
+                    <span>Facebook</span>
+                </button>
+                <button class="filter-btn flex items-center gap-2 px-4 py-2 rounded-[25px] text-sm font-semibold text-gray-700 bg-white border border-gray-200 hover:bg-gray-50" data-platform="twitter">
+                    <img src="https://storage.perfectcdn.com/f3b92e/oihba445llengou2.svg" alt="Twitter" class="w-5 h-5">
+                    <span>Twitter</span>
+                </button>
+                <button class="filter-btn flex items-center gap-2 px-4 py-2 rounded-[25px] text-sm font-semibold text-gray-700 bg-white border border-gray-200 hover:bg-gray-50" data-platform="telegram">
+                    <img src="https://storage.perfectcdn.com/f3b92e/yp1fm63ad8prc97k.svg" alt="Telegram" class="w-5 h-5">
+                    <span>Telegram</span>
+                </button>
+                
+                <!-- More Button with Dropdown -->
+                <div class="relative">
+                    <button id="more-platforms-btn" class="filter-btn flex items-center gap-2 px-4 py-2 rounded-[25px] text-sm font-semibold text-gray-700 bg-white border border-gray-200 hover:bg-gray-50">
+                        <span>More</span>
+                        <i class="ri-arrow-down-s-line text-base"></i>
+                    </button>
+                    <div id="more-platforms-dropdown" class="hidden absolute z-20 mt-1 bg-white shadow-lg border border-gray-200 rounded-lg min-w-[200px] left-1/2 transform -translate-x-1/2">
+                        <div class="p-2">
+                            <input type="text" id="platform-search" placeholder="Search platforms..." class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm">
+                        </div>
+
+                <ul class="max-h-60 overflow-y-auto">
+                         <li class="platform-option px-4 py-2 hover:bg-gray-100 cursor-pointer flex items-center gap-3" data-platform="linkedin">
+    <img src="https://cdn-icons-png.flaticon.com/512/174/174857.png" alt="LinkedIn" class="w-5 h-5">
+    <span class="font-medium">LinkedIn</span>
+  </li>
+  <li class="platform-option px-4 py-2 hover:bg-gray-100 cursor-pointer flex items-center gap-3" data-platform="spotify">
+    <img src="https://storage.perfectcdn.com/f3b92e/3xwmuk6fdihz3oec.svg" alt="Spotify" class="w-5 h-5">
+    <span class="font-medium">Spotify</span>
+  </li>
+    <li class="platform-option px-4 py-2 hover:bg-gray-100 cursor-pointer flex items-center gap-3" data-platform="threads">
+    <img src="https://storage.perfectcdn.com/ed17j7/fxm1jrdli8ajwbxw.jpeg" alt="Threads" class="w-5 h-5">
+    <span class="font-medium">Threads</span>
+  </li>
+    <li class="platform-option px-4 py-2 hover:bg-gray-100 cursor-pointer flex items-center gap-3" data-platform="kwai">
+    <img src="https://storage.perfectcdn.com/ed17j7/6w1735blhfq5ce4f.png" alt="Kwai" class="w-5 h-5">
+    <span class="font-medium">Kwai</span>
+  </li>
+  <li class="platform-option px-4 py-2 hover:bg-gray-100 cursor-pointer flex items-center gap-3" data-platform="twitch">
+    <img src="https://i.hizliresim.com/nhbvs75.png" alt="Twitch" class="w-5 h-5">
+    <span class="font-medium">Twitch</span>
+  </li>
+  <li class="platform-option px-4 py-2 hover:bg-gray-100 cursor-pointer flex items-center gap-3" data-platform="rumble">
+    <img src="https://storage.perfectcdn.com/ed17j7/qca62hwq1k70riht.png" alt="Rumble" class="w-5 h-5">
+    <span class="font-medium">Rumble</span>
+  </li>
+
+  <li class="platform-option px-4 py-2 hover:bg-gray-100 cursor-pointer flex items-center gap-3" data-platform="snackvideo">
+    <img src="https://storage.perfectcdn.com/ed17j7/rs4mesfy5mjlfilr.png" alt="SnackVideo" class="w-5 h-5">
+    <span class="font-medium">SnackVideo</span>
+  </li>
+
+  <li class="platform-option px-4 py-2 hover:bg-gray-100 cursor-pointer flex items-center gap-3" data-platform="rednote">
+    <img src="https://storage.perfectcdn.com/ed17j7/zzhlpxzlmzao00r6.png" alt="Rednote" class="w-5 h-5">
+    <span class="font-medium">Rednote</span>
+  </li>
+ 
+</ul>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+{% if error %}
+<div class="mx-auto mb-6">
+    <div class="alert alert-dismissible alert-danger {% if site['rtl'] %} rtl-alert {% endif %} bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg">
+        <button type="button" class="close float-right text-red-700 hover:text-red-900" data-dismiss="alert">&times;</button>
+        {{ errorMessage }}
+    </div>
+</div>
+{% endif %}
+
+{% if 1 == success %}
+<div class="mx-auto mb-6">
+    <div class="alert alert-success alert-dismissible bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-lg" role="alert">
+        <button type="button" class="close float-right text-green-700 hover:text-green-900" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="font-semibold mb-2">{{lang('neworder.message.success')}}</h4>
+        <div class="text-sm">
+            {{lang('neworder.id')}}: {{order['id']}}<br>
+            {{lang('neworder.service')}}: {{order['service']}}
+            <br>
+            {{lang('neworder.link')}}: {{order['link']}}<br>
+            {{lang('neworder.quantity')}}: {{order['quantity']}}<br>
+            {{ lang('neworder.charge') }}: {% if order.converted %} <span data-toggle="tooltip" data-placement="top" title="{{ order.original_charge }}">{{ order['charge'] }}</span> {% else %} {{ order['charge'] }} {% endif %}<br>
+            {{ lang('neworder.balance') }}: {% if order.converted %} <span data-toggle="tooltip" data-placement="top" title="{{ order.original_balance }}">{{ order['balance'] }}</span> {% else %} {{ order['balance'] }} {% endif %}<br>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+{% if 2 == success %}
+<div class="mx-auto mb-6">
+    <div class="alert alert-success alert-dismissible bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-lg" role="alert">
+        <button type="button" class="close float-right text-green-700 hover:text-green-900" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="font-semibold mb-2">{{lang('neworder.message.success')}}</h4>
+        <div class="text-sm">
+            {{lang('neworder.subscription_id')}}: {{order['id']}}<br>
+            {{lang('neworder.service')}}: {{order['service']}}
+            <br>
+            {{lang('neworder.username')}}: {{order['link']}}<br>
+            {{lang('neworder.quantity')}}:
+            {% if order['quantity_min'] == order['quantity_max'] %}
+                {{order['quantity_max']}}
+            {% else %}
+                {{order['quantity_min']}}-{{order['quantity_max']}}
+            {% endif %}
+            <br>
+            {{lang('neworder.new_posts')}}:
+            {{order['posts']}}
+            <br>
+            {{lang('neworder.old_posts')}}:
+            {{order['old_posts']}}
+            <br>
+            {{lang('neworder.delay')}}:
+            {{order['delay']}}
+            <br>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+
+        <form {% if site['rtl'] %} class="rtl-form"{% endif %} action="{{ page['url'] }}" method="post" id="order-form">
+            <!-- Hidden original selects for form functionality -->
+            {% if categories %}
+                {% if services_search %}
+                <div class="hidden">
+                    <div class="search-dropdown" id="new-order-search" style="position: relative;" data-lang-placeholder="{{ lang('general.search.placeholder') }}" {% if site['rtl'] %} data-dir="rtl" {% endif %}>
+                        <div class="input-wrapper" style="position: relative;">
+                            <button style="position: absolute;top: 50%;transform: translateY(-50%);padding: 0px 2px;background: none;border: none;{% if site['rtl'] %}right: 12px;left: auto;{% else %}left: 12px;{% endif %}" type="button">
+                                <span class="fas fa-search"></span>
+                            </button>
+                            <input type="text" class="form-control" id="template-input" value="" placeholder="{{ lang('general.search.placeholder') }}">
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+                   <div class="hidden">
+                <select
+                    class="form-control"
+                    id="orderform-category"
+                    name="OrderForm[category]"
+                    data-select="true"
+                    data-select-search="true"
+                    data-select-search-placeholder="{{ lang('general.search.placeholder') }}"
+                    {% if site['rtl'] %} data-select-dir="rtl" {% endif %}
+                >
+                    {% for category in extended_categories %}
+                    <option
+                        value="{{ category.id }}"
+                        {% if category.icon %}
+                            data-icon="
+                            {% if category.icon['icon_type'] == 'icon' %}
+                                <span class='{{ category.icon['icon'] }}'></span>
+                            {% elseif category.icon['icon_type'] == 'emoji' %}
+                                <span>{{ category.icon['icon'] }}</span>
+                            {% elseif category.icon['icon_type'] == 'image' %}
+                                <img src='{{ category.icon['url'] }}' alt='{{ category.name }}' class='img-responsive btn-group-vertical'>
+                            {% endif %}
+                            "
+                        {% endif %}
+                        {% if category.id == data['category'] %} selected {% endif %}
+                    >
+                        {{ category.name }}
+                    </option>
+                    {% endfor %}
+                </select>
+            {% endif %}
+               </div>
+            <div class="hidden">
+            <select
+                class="form-control hidden"
+                id="orderform-service"
+                name="OrderForm[service]"
+                data-select="true"
+                data-select-search="true"
+                data-select-search-placeholder="{{ lang('general.search.placeholder') }}"
+                {% if site['rtl'] %} data-select-dir="rtl" {% endif %}
+            ></select>
+
+            <div class="form-group hidden fields" id="service_description">
+                <label for="service_description" class="control-label">{{ lang('neworder.description') }}</label>
+                <div class="panel-body border-solid border-rounded">
+                    {{service['description']}}
+                </div>
+            </div>
+   </div>
+        <div class="grid grid-cols-1 lg:grid-cols-5 gap-8">
+            <div class="lg:col-span-3 bg-white border border-gray-200 rounded-[20px] p-4 relative" id="service-selection-container">
+                <!-- Loading Overlay -->
+                <div id="service-loading-overlay" class="absolute inset-0 bg-white bg-opacity-95 rounded-[20px] z-50 hidden flex items-center justify-center">
+                    <div class="text-center">
+                        <i class="ri-loader-2-fill spinner-icon text-blue-500 text-4xl mb-4"></i>
+                        <p class="text-gray-700 font-medium text-lg">Loading service...</p>
+                        <p class="text-gray-500 text-sm mt-2">Please wait while we load your selected service</p>
+                    </div>
+                </div>
+                
+                <div class="space-y-6">
+                    <!-- Search Services Input -->
+                    <div>
+                        <label for="service-search" class="block text-base font-semibold text-gray-700 mb-2.5">Search Services</label>
+                        <div class="relative" id="service-search-dropdown">
+                            <button type="button" class="relative w-full flex items-center border border-gray-300 rounded-[15px] p-3 bg-white text-left">
+                                <span class="absolute left-2 top-1/2 -translate-y-1/2 flex items-center justify-center w-[34px] h-[34px] bg-blue-100 rounded-[30px]">
+                                    <i class="ri-search-line text-[22px] text-blue-600"></i>
+                                </span>
+                                <input type="text" id="service-search-input" placeholder="Type to search services..." class="block truncate w-full font-medium pr-8 pl-10 bg-transparent border-0 focus:outline-none focus:ring-0">
+                            </button>
+                            <div id="service-search-menu" class="hidden absolute z-50 mt-1 w-full bg-white shadow-lg border rounded-[20px]">
+                                <div id="service-search-loading" class="text-center py-8 hidden">
+                                    <i class="ri-loader-2-fill spinner-icon text-blue-500 text-2xl mb-3"></i>
+                                    <p class="text-gray-500 text-sm">Searching...</p>
+                                </div>
+                                <div id="service-search-no-results" class="text-center py-8 hidden">
+                                    <div class="text-4xl mb-2">😔</div>
+                                    <h3 class="text-lg font-semibold text-gray-700 mb-1">No results found</h3>
+                                    <p class="text-gray-500 text-sm">Try different search terms</p>
+                                </div>
+                                <ul id="service-search-results" class="max-h-60 overflow-y-auto">
+                                    <!-- Search results will be populated here -->
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label for="category" class="block text-base font-semibold text-gray-700 mb-2.5">Category</label>
+                        <div class="relative" id="category-dropdown">
+                            <button type="button" class="relative w-full flex items-center border border-gray-300 rounded-[15px] p-3 bg-white text-left">
+                                <span id="category-icon-container" class="absolute left-2 top-1/2 -translate-y-1/2 flex items-center justify-center w-[34px] h-[34px] bg-blue-100 rounded-[30px]">
+                                   <img src="https://storage.perfectcdn.com/ed17j7/snoz2ubzdwbqghgs.png" alt="Category Icon" class="w-[22px] h-[22px] object-contain">
+                                </span>
+                                <span id="category-selected-text" class="block truncate w-full font-medium pr-8 pl-10">
+                                    Updated and Reliable: The Market's Most Stable Servers
+                                </span>
+                                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-gray-700">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                    </svg>
+                                </div>
+                            </button>
+                            <div id="category-menu" class="hidden absolute z-50 mt-1 w-full bg-white shadow-lg border rounded-[20px]">
+                                <div class="p-2">
+                                    <input type="text" id="category-search" placeholder="Search category..." class="w-full px-3 py-2 border rounded-[15px] focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                </div>
+                                <ul class="max-h-60 overflow-y-auto">
+                                    <!-- Categories will be populated here by JavaScript -->
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label for="service" class="block text-base font-semibold text-gray-700 mb-2.5">Service</label>
+                         <div class="relative" id="service-dropdown">
+                            <button type="button" class="relative w-full flex items-center border border-gray-300 rounded-[15px] p-3 bg-white text-left">
+                                <span id="service-icon-container" class="absolute left-2 top-1/2 -translate-y-1/2 flex items-center justify-center w-[34px] h-[34px] bg-blue-100 rounded-[30px]">
+                                   <img src="https://storage.perfectcdn.com/f3b92e/hhzsztp4pjw79lq6.svg" alt="Service Icon" class="w-[22px] h-[22px] object-contain">
+                                </span>
+                                <span id="service-selected-text" class="block truncate w-full font-medium pr-8 pl-10">
+                                     Select a service
+                                </span>
+                                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-gray-700">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                    </svg>
+                                </div>
+                            </button>
+                            <div id="service-menu" class="hidden absolute z-50 mt-1 w-full bg-white shadow-lg border rounded-[20px]">
+                                <div class="p-2">
+                                    <input type="text" id="service-search" placeholder="Search service..." class="w-full px-3 py-2 border rounded-[15px] focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                </div>
+                                <ul class="max-h-60 overflow-y-auto">
+                                    <!-- Services will be populated here by JavaScript -->
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Average Time Display -->
+                    <div id="service-average-time" class="flex items-center gap-2 opacity-75" style="margin-top: 8px !important;">
+                        <i class="ri-time-line text-gray-500 text-sm"></i>
+                        <span class="text-sm text-gray-500">Average Time: <span id="avg-time-value">-</span></span>
+                    </div>
+
+                              <div id="fields"></div>
+
+                </div>
+
+<!--
+                <div class="mt-8 flex flex-col md:flex-row gap-4">
+                    <div class="w-full md:w-1/2 flex items-center p-3 border border-gray-200 bg-white rounded-[15px] h-[56px]">
+                        <div class="w-10 h-10 flex items-center justify-center bg-blue-100 text-blue-500 rounded-xl mr-4">
+                             <i class="ri-money-dollar-circle-line text-2xl font-light"></i>
+                        </div>
+                        <span class="font-semibold text-gray-800">{{ lang('neworder.charge') }}</span>
+                        <span class="ml-auto font-bold text-gray-800" id="charge-display">{{ order['charge'] }}</span>
+                        <input type="hidden" name="OrderForm[charge]" id="charge" value="{{ order['charge'] }}">
+                    </div>
+                    {% if check_agreement %}
+                    <div class="w-full md:w-1/2 flex items-center p-3 border border-gray-200 bg-white rounded-[15px] h-[56px]">
+                        <label class="flex items-center cursor-pointer">
+                            <input type="checkbox" name="OrderForm[termsofservice]" class="terms-accept-checkbox mr-3" value="1" id="terms" {{data['termsofservice'] ? 'checked' : ''}}>
+                            <span class="text-sm">{{lang('signup.accept_terms_text')}} <a href="{{ page_url('terms') }}" target="_blank" class="text-blue-600 hover:text-blue-800">{{ lang('terms.signup_checkbox') }}</a></span>
+                        </label>
+                    </div>
+                    {% endif %}
+                </div>
+                
+                <div class="mt-4">
+                    <input type="hidden" name="_csrf" value="{{ csrftoken }}">
+                    <button type="submit" class="w-full flex items-center justify-center gap-2 bg-blue-600 text-white font-bold rounded-[15px] hover:bg-blue-700 transition-colors h-[56px]">
+                        <span>{{ lang('neworder.button') }}</span>
+                        <i class="ri-arrow-right-line text-xl font-light"></i>
+                    </button>
+                </div>
+                -->
+
+                <input type="hidden" name="_csrf" value="{{ csrftoken }}">
+                
+                <div class="mt-8 flex flex-col md:flex-row gap-4">
+                    <div class="w-full md:w-1/2 flex items-center p-3 border border-gray-200 bg-white rounded-[15px] h-[56px]">
+                        <div class="w-10 h-10 flex items-center justify-center bg-blue-100 text-blue-500 rounded-xl mr-4">
+                             <i class="ri-money-dollar-circle-line text-2xl font-light"></i>
+                        </div>
+                        <span class="font-semibold text-gray-800">{{ lang('neworder.charge') }}</span>
+                        <span class="ml-auto font-bold text-gray-800"><input type="text" readonly style="text-align: right;" name="OrderForm[charge]" id="charge" value="{{ order['charge'] }}"></span>
+                    </div>
+                    <button class="w-full md:w-1/2 flex items-center justify-center gap-2 bg-blue-600 text-white font-bold rounded-[15px] hover:bg-blue-700 transition-colors h-[56px]">
+                        <span>{{ lang('neworder.button') }}</span>
+                        <i class="ri-arrow-right-line text-xl font-light"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="lg:col-span-2">
+                 <div class="bg-white border border-gray-200 rounded-[20px] p-4 h-full flex flex-col">
+                    <div class="space-y-3 flex-1">
+                        <div class="btn-custom-active rounded-[15px] p-3 text-center">
+                            <p class="font-semibold text-sm text-white">1562 - Youtube Live Stream Views [15 Min] [%100 Real] [100% Concurrent] [Instant Start] - $0.27</p>
+                        </div>
+
+                        <div class="flex items-center gap-[15px] p-[10px] h-[56px] bg-gray-50 border border-gray-200 rounded-[15px]">
+                            <div class="w-9 h-9 flex items-center justify-center btn-custom-active text-white rounded-[10px]">
+                               <i class="ri-lightbulb-flash-line text-[24px]"></i>
+                            </div>
+                            <p class="text-gray-500 font-bold text-[14px] leading-[24px]">Example Link: <span class="text-gray-800 font-medium">-</span></p>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-3">
+                            <div class="flex items-center gap-[15px] p-[10px] h-[56px] bg-gray-50 border border-gray-200 rounded-[15px]">
+                                <div class="w-9 h-9 flex items-center justify-center btn-custom-active text-white rounded-[10px]">
+                                    <i class="ri-flashlight-line text-[24px]"></i>
+                                </div>
+                                <p class="text-gray-500 font-bold text-[14px]">Speed: <span class="text-gray-800 font-medium">-</span></p>
+                            </div>
+                            <div class="flex items-center gap-[15px] p-[10px] h-[56px] bg-gray-50 border border-gray-200 rounded-[15px]">
+                                <div class="w-9 h-9 flex items-center justify-center btn-custom-active text-white rounded-[10px]">
+                                     <i class="ri-flag-line text-[24px]"></i>
+                                </div>
+                                <p class="text-gray-500 font-bold text-[14px]">Start: <span class="text-gray-800 font-medium">-</span></p>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-3">
+                            <div class="flex items-center gap-[15px] p-[10px] h-[56px] bg-gray-50 border border-gray-200 rounded-[15px]">
+                                <div class="w-9 h-9 flex items-center justify-center btn-custom-active text-white rounded-[10px]">
+                                   <i class="ri-refresh-line text-[24px]"></i>
+                                </div>
+                                <p class="text-gray-500 font-bold text-[14px]">Refill: <span class="text-gray-800 font-medium">-</span></p>
+                            </div>
+                            <div class="flex items-center gap-[15px] p-[10px] h-[56px] bg-gray-50 border border-gray-200 rounded-[15px]">
+                                <div class="w-9 h-9 flex items-center justify-center btn-custom-active text-white rounded-[10px]">
+                                   <i class="ri-time-line text-[24px]"></i>
+                                </div>
+                                <p class="text-gray-500 font-bold text-[14px]">Avg Time: <span class="text-gray-800 font-medium">-</span></p>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="border-t border-gray-200"></div>
+                            <p class="text-gray-600 text-sm font-medium mt-3">
+                           - Location : Global 🌍<br>
+ - High Quality Profiles<br>
+ - Start Time : 0-5 minutes<br>
+- Speed : Day 100K 🚀<br>
+- Refill : 30 Days Refill<br>
+- Example Link : Profile link/@username<br>
+
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Favorite Section - Fixed at bottom -->
+                    <div class="mt-3">
+                        <div class="flex items-center justify-between p-3 bg-gray-50 border border-gray-200 rounded-[15px]">
+                            <div class="flex items-center gap-3">
+                                <i class="ri-star-fill text-yellow-500 text-lg"></i>
+                                <span class="font-medium text-gray-700">Favorite</span>
+                            </div>
+                            <div class="relative">
+                                <input type="checkbox" id="favorite-toggle" class="sr-only">
+                                <label for="favorite-toggle" class="flex items-center cursor-pointer">
+                                    <div class="relative">
+                                        <div class="w-10 h-6 bg-gray-300 rounded-full shadow-inner"></div>
+                                        <div class="dot absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition-transform duration-300 ease-in-out"></div>
+                                    </div>
+                                </label>
+                </div>
+            </div>
+        </div>
+        </form>
+    </div>
+</div>
+
+{% if newOrderText %}
+<div class="mx-auto px-4 sm:px-6 lg:px-8 mt-8">
+    <div class="bg-white border border-gray-200 rounded-[20px] p-6 {% if site['rtl'] %} rtl-content {% endif %}">
+        {{ newOrderText }}
+    </div>
+</div>
+{% endif %}
+        </div>
+    </div>
+</div>
+
+<!-- Search Services Modal -->
+<div id="search-services-modal" class="fixed inset-0 bg-black bg-opacity-70 backdrop-blur-sm z-[9999999] hidden flex items-center justify-center p-4 transition-opacity duration-300" style="z-index: 9999999;">
+    <style>
+        /* Override the hover lift effect for service items in modal */
+        #search-services-modal .service-item:hover {
+            transform: none !important;
+        }
+    </style>
+    <div class="bg-white rounded-[20px] shadow-xl max-w-4xl w-full max-h-[80vh] overflow-hidden">
+        <!-- Modal Header -->
+        <div class="flex items-center justify-between p-6 border-b border-gray-200">
+            <div class="relative flex-1 max-w-md">
+                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <i class="ri-search-line text-gray-400 text-lg"></i>
+                </div>
+                <input type="text" id="modal-service-search" placeholder="Search" class="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-[15px] focus:outline-none focus:ring-1 focus:ring-blue-300 focus:border-blue-400 text-gray-900">
+            </div>
+            <button id="close-search-modal" class="ml-4 w-10 h-10 bg-blue-600 text-white rounded-full flex items-center justify-center hover:bg-blue-700 transition-colors">
+                <i class="ri-close-line text-lg"></i>
+            </button>
+        </div>
+
+        <!-- Modal Body -->
+        <div class="overflow-y-auto max-h-[60vh]">
+            <div class="p-4 space-y-3">
+                <!-- Loading Message -->
+                <div id="loading-message" class="text-center py-12">
+                    <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
+                    <h3 class="text-xl font-semibold text-gray-700 mb-2">Loading services...</h3>
+                    <p class="text-gray-500">Please wait</p>
+                </div>
+
+                <!-- No Results Message -->
+                <div id="no-results-message" class="hidden text-center py-12">
+                    <div class="text-6xl mb-4">😔</div>
+                    <h3 class="text-xl font-semibold text-gray-700 mb-2">No results found</h3>
+                    <p class="text-gray-500">Try adjusting your search terms or browse all services</p>
+                </div>
+
+                <!-- Service Items Container -->
+                <div id="services-container" class="space-y-3">
+                    <!-- Services will be dynamically loaded here -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<style>
+/* Scrollbar gizleme - Webkit tarayıcılar için */
+.scrollbar-hide::-webkit-scrollbar {
+    display: none;
+}
+
+/* Scrollbar gizleme - Firefox için */
+.scrollbar-hide {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+/* Spinner animasyonu */
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.animate-spin {
+    animation: spin 1s linear infinite !important;
+}
+
+/* Remix icon spinner için özel class */
+.spinner-icon {
+    animation: spin 1s linear infinite !important;
+    display: inline-block !important;
+}
+
+/* Mobil için buton container iyileştirmeleri */
+@media (max-width: 768px) {
+    .inline-flex.scrollbar-hide {
+        padding-left: 0.5rem;
+        padding-right: 0.5rem;
+    }
+    
+    .inline-flex.scrollbar-hide a {
+        flex-shrink: 0;
+        min-width: max-content;
+    }
+    
+    /* Platform filter butonlarını mobilde küçült */
+    .filter-btn {
+        padding: 6px 10px !important; /* px-4 py-2 yerine daha küçük padding */
+        gap: 4px !important; /* gap-2 yerine daha küçük gap */
+        font-size: 12px !important; /* text-sm yerine daha küçük font */
+    }
+    
+    /* Platform filter butonlarının içindeki yazıları mobilde gizle (data-platform olan butonlar) */
+    .filter-btn[data-platform] span {
+        display: none !important;
+    }
+    
+    /* More butonundaki "More" yazısını mobilde gizle */
+    #more-platforms-btn span {
+        display: none !important;
+    }
+    
+    
+    /* Navigation butonları için mobil optimizasyonu */
+    .w-full.overflow-x-auto.scrollbar-hide.mb-8 .inline-flex.items-center a {
+        padding: 6px 8px !important; /* Daha da küçük padding */
+        gap: 4px !important; /* Daha küçük gap */
+        font-size: 12px !important; /* Daha küçük font */
+        border-radius: 20px !important; /* rounded-full yerine daha küçük radius */
+    }
+    
+    .w-full.overflow-x-auto.scrollbar-hide.mb-8 .inline-flex.items-center a i {
+        font-size: 16px !important; /* Daha küçük icon */
+    }
+    
+    /* Container padding'ini de azalt */
+    .w-full.overflow-x-auto.scrollbar-hide.mb-8 .inline-flex.items-center {
+        padding: 3px !important; /* Daha küçük container padding */
+        gap: 0px !important; /* Gap'i sıfır yap */
+    }
+}
+</style>
+
+<script>
+$(document).ready(function() {
+
+    // Cookie Helper Functions
+    function setCookie(name, value, minutes) {
+        const date = new Date();
+        date.setTime(date.getTime() + (minutes * 60 * 1000));
+        const expires = "expires=" + date.toUTCString();
+        document.cookie = name + "=" + value + ";" + expires + ";path=/";
+    }
+    
+    function getCookie(name) {
+        const nameEQ = name + "=";
+        const ca = document.cookie.split(';');
+        for(let i = 0; i < ca.length; i++) {
+            let c = ca[i];
+            while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+            if (c.indexOf(nameEQ) === 0) {
+                return c.substring(nameEQ.length, c.length);
+            }
+        }
+        return null;
+    }
+    
+    function deleteCookie(name) {
+        document.cookie = name + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/";
+    }
+
+    // Services data from JSON
+    let allServices = [];
+    let filteredServices = [];
+    let isSearching = false;
+    
+    // Flag to prevent multiple service auto-selection
+    let isFirstServiceSelected = false;
+    let isSelectionTriggeredBySearch = false;
+
+    // Helper function to escape problematic characters in description fields
+    function escapeServiceDataForJSON(serviceData) {
+        if (!serviceData) return serviceData;
+        
+        // Create a copy to avoid modifying the original object
+        const escapedData = JSON.parse(JSON.stringify(serviceData));
+        
+        // Escape problematic characters in description field
+        if (escapedData.description && typeof escapedData.description === 'string') {
+            escapedData.description = escapedData.description
+                .replace(/"/g, "'")           // Double quotes to single quotes
+                .replace(/\\/g, "\\\\")       // Escape backslashes
+                .replace(/\n/g, "\\n")        // Escape newlines
+                .replace(/\r/g, "\\r")        // Escape carriage returns
+                .replace(/\t/g, "\\t")        // Escape tabs
+                .replace(/&/g, "&amp;")       // Escape ampersands for HTML
+                .replace(/</g, "&lt;")        // Escape less than for HTML
+                .replace(/>/g, "&gt;");       // Escape greater than for HTML
+        }
+        
+        return escapedData;
+    }
+
+    // Category and Favorites Management
+    function manageCategoriesAndFavorites() {
+        const $categorySelect = $('#orderform-category');
+        const $favoritesBtn = $('#favorites-btn');
+        const categories = [];
+        
+        // Collect all categories
+        $categorySelect.find('option').each(function() {
+            const value = $(this).val();
+            const text = $(this).text();
+            if (value && text) {
+                categories.push({
+                    value: value,
+                    text: text,
+                    element: $(this)
+                });
+            }
+        });
+        
+        if (categories.length > 0) {
+            const firstCategory = categories[0];
+            
+            if (firstCategory.value === '-1') {
+                // İlk kategori -1 ise, bu kategoriyi gizle ve sonrakini seç
+                
+                // -1 kategorisini dropdown'dan gizle
+                const $favoriteCategoryLi = $('#category-menu li[data-value="-1"]');
+                if ($favoriteCategoryLi.length) {
+                    $favoriteCategoryLi.hide();
+                }
+                
+                // Sonraki kategoriyi seç
+                if (categories.length > 1) {
+                    const nextCategory = categories[1];
+                    selectCategoryByValue(nextCategory.value, nextCategory.text);
+                }
+                
+                // Favorites butonunu göster
+                $favoritesBtn.show();
+            } else {
+
+                selectCategoryByValue(firstCategory.value, firstCategory.text);
+
+                // İlk kategori -1 değilse favorites butonunu gizle
+                $favoritesBtn.hide();
+                
+                // -1 kategorisini gizle (varsa)
+                const $favoriteCategoryLi = $('#category-menu li[data-value="-1"]');
+                if ($favoriteCategoryLi.length) {
+                    $favoriteCategoryLi.hide();
+                }
+            }
+        }
+    }
+    
+    // Kategori seçme fonksiyonu
+    function selectCategoryByValue(categoryValue, categoryText) {
+        // Hidden select'i güncelle
+        $('#orderform-category').val(categoryValue);
+        
+        // UI'ı güncelle
+        $('#category-selected-text').text(categoryText || 'Select category');
+        const iconUrl = getIconForService(categoryText || '');
+        $('#category-icon-container img').attr('src', iconUrl);
+        
+        // Dropdown'da highlight yap
+        $('#category-menu li').removeClass('bg-gray-100');
+        $(`#category-menu li[data-value="${categoryValue}"]`).addClass('bg-gray-100');
+        
+        // Servisleri yükle
+        updateServiceDropdown(categoryValue);
+        $('#orderform-category').trigger('change');
+    }
+    
+    // Favorites butonu click handler
+    $('#favorites-btn').on('click', function(e) {
+        e.preventDefault();
+        
+        // Nav tabs'da aktif durumu güncelle
+        $('.inline-flex a').removeClass('btn-custom-active shadow-[0px_0px_3px_0px_#0139ff,0px_0px_0px_1.182px_#0139ff] !text-white border border-white/15').addClass('text-gray-600 hover:bg-gray-200 hover:text-gray-800');
+        $(this).removeClass('text-gray-600 hover:bg-gray-200 hover:text-gray-800').addClass('btn-custom-active shadow-[0px_0px_3px_0px_#0139ff,0px_0px_0px_1.182px_#0139ff] !text-white border border-white/15');
+        
+        // -1 kategorisini bul ve seç
+        const $categorySelect = $('#orderform-category');
+        const $favoriteOption = $categorySelect.find('option[value="-1"]');
+        
+        if ($favoriteOption.length) {
+            const categoryText = $favoriteOption.text();
+            
+            // -1 kategorisini dropdown'da göster
+            const $favoriteCategoryLi = $('#category-menu li[data-value="-1"]');
+            if ($favoriteCategoryLi.length) {
+                $favoriteCategoryLi.show();
+            }
+            
+            // Kategoriyi seç
+            selectCategoryByValue('-1', categoryText);
+        }
+    });
+    
+    // Other nav buttons click handler
+    $('.inline-flex a').not('#favorites-btn').on('click', function(e) {
+        // Normal navigation için varsayılan davranışı koru
+        if ($(this).attr('href') !== '#') {
+            return true;
+        }
+        
+        e.preventDefault();
+        
+        // Nav tabs'da aktif durumu güncelle
+        $('.inline-flex a').removeClass('btn-custom-active shadow-[0px_0px_3px_0px_#0139ff,0px_0px_0px_1.182px_#0139ff] !text-white border border-white/15').addClass('text-gray-600 hover:bg-gray-200 hover:text-gray-800');
+        $(this).removeClass('text-gray-600 hover:bg-gray-200 hover:text-gray-800').addClass('btn-custom-active shadow-[0px_0px_3px_0px_#0139ff,0px_0px_0px_1.182px_#0139ff] !text-white border border-white/15');
+        
+        // -1 kategorisini gizle
+        const $favoriteCategoryLi = $('#category-menu li[data-value="-1"]');
+        if ($favoriteCategoryLi.length) {
+            $favoriteCategoryLi.hide();
+        }
+        
+        // İlk normal kategoriyi seç
+        manageCategoriesAndFavorites();
+    });
+
+    // Services data - bu kısım window.modules.siteOrder.services'den gelecek
+    if (window.modules && window.modules.siteOrder && window.modules.siteOrder.services) {
+        const services = window.modules.siteOrder.services;
+        for (let serviceId in services) {
+            allServices.push(services[serviceId]);
+        }
+    }
+
+    // Returns an image URL based on the category/service name
+    function getIconForService(serviceName) {
+      if (!serviceName) return 'https://storage.perfectcdn.com/ed17j7/snoz2ubzdwbqghgs.png';
+      const name = serviceName.toLowerCase();
+    
+      if (name.includes('instagram')) {
+        return 'https://storage.perfectcdn.com/f3b92e/hhzsztp4pjw79lq6.svg';
+      } else if (name.includes('facebook')) {
+        return 'https://storage.perfectcdn.com/f3b92e/fcxdcr0rcj7yy89q.svg';
+      } else if (name.includes('twitter') || name.includes(' x ') || name === 'x') {
+        return 'https://storage.perfectcdn.com/f3b92e/oihba445llengou2.svg';
+      } else if (name.includes('tiktok')) {
+        return 'https://i.hizliresim.com/cjkftds.png';
+      } else if (name.includes('telegram')) {
+        return 'https://storage.perfectcdn.com/f3b92e/yp1fm63ad8prc97k.svg';
+      } else if (name.includes('youtube')) {
+        return 'https://storage.perfectcdn.com/f3b92e/613d1l69p0oz9rzr.svg';
+      } else if (name.includes('spotify')) {
+        return 'https://storage.perfectcdn.com/f3b92e/3xwmuk6fdihz3oec.svg';
+      } else if (name.includes('twitch')) {
+        return 'https://i.hizliresim.com/nhbvs75.png';
+      } else if (name.includes('discord')) {
+        return 'https://i.hizliresim.com/in44apl.png';
+      } else if (name.includes('threads')) {
+        return 'https://storage.perfectcdn.com/ed17j7/fxm1jrdli8ajwbxw.jpeg';
+      } else if (name.includes('rumble')) {
+        return 'https://storage.perfectcdn.com/ed17j7/qca62hwq1k70riht.png';
+      } else if (name.includes('kwai')) {
+        return 'https://storage.perfectcdn.com/ed17j7/6w1735blhfq5ce4f.png';
+      } else if (name.includes('snack') || name.includes('snackvideo')) {
+        return 'https://storage.perfectcdn.com/ed17j7/rs4mesfy5mjlfilr.png';
+      } else if (name.includes('rednote')) {
+        return 'https://storage.perfectcdn.com/ed17j7/zzhlpxzlmzao00r6.png';
+      } else if (name.includes('kick')) {
+        return 'https://storage.perfectcdn.com/ed17j7/05ep5op2cpx59fs9.svg';
+      } else {
+        return 'https://storage.perfectcdn.com/ed17j7/snoz2ubzdwbqghgs.png';
+      }
+    }
+
+    // Create service item HTML
+    function createServiceItem(service) {
+        const iconUrl = getIconForService(service.name || service.origin_name);
+        const serviceName = service.name || service.origin_name || 'Unknown Service';
+        const price = service.price || '0.00';
+        const min = service.min || '1';
+        const max = service.max || '1000';
+        const avgTime = service.average_time !== 'Not Enough Data' ? service.average_time : '1-3 dk';
+        const serviceLink = `${window.location.origin}${window.location.pathname}?service=${service.id}`;
+        
+        return `
+            <a href="${serviceLink}" class="block border border-gray-200 rounded-[15px] p-4 hover:bg-gray-50 transition-colors service-item" 
+               data-service="${serviceName}" 
+               data-price="${price}" 
+               data-min="${min}" 
+               data-max="${max}"
+               data-service-id="${service.id}">
+                <div class="flex items-center justify-between mb-2">
+                    <div class="flex items-center gap-3">
+                        <img src="${iconUrl}" alt="Service Icon" class="w-6 h-6" onerror="this.onerror=null;this.src='https://storage.perfectcdn.com/ed17j7/snoz2ubzdwbqghgs.png'">
+                        <span class="font-medium text-gray-900">${serviceName}</span>
+                    </div>
+                </div>
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-4">
+                        <div class="flex items-center gap-1">
+                            <i class="ri-arrow-down-line text-gray-500"></i>
+                            <span class="text-sm text-gray-600">Min: ${min}</span>
+                        </div>
+                        <div class="flex items-center gap-1">
+                            <i class="ri-arrow-up-line text-gray-500"></i>
+                            <span class="text-sm text-gray-600">Max: ${max}</span>
+                        </div>
+                        <div class="flex items-center gap-1">
+                            <i class="ri-time-line text-gray-500"></i>
+                            <span class="text-sm text-gray-600">${avgTime}</span>
+                        </div>
+                    </div>
+                    <span class="bg-green-500 text-white px-4 py-2 rounded-lg font-medium hover:bg-green-600 transition-colors">
+                        $${price}
+                    </span>
+                </div>
+            </a>
+        `;
+    }
+
+    // Load initial services (first 10)
+    function loadInitialServices() {
+        const servicesToShow = allServices.slice(0, 10);
+        const container = $('#services-container');
+        
+        if (servicesToShow.length === 0) {
+            container.html(`
+                <div class="text-center py-12">
+                    <div class="text-6xl mb-4">📦</div>
+                    <h3 class="text-xl font-semibold text-gray-700 mb-2">No services found</h3>
+                    <p class="text-gray-500">An error occurred while loading services</p>
+                </div>
+            `);
+            return;
+        }
+
+        let html = '';
+        servicesToShow.forEach(service => {
+            html += createServiceItem(service);
+        });
+        
+        container.html(html);
+        $('#loading-message').addClass('hidden');
+    }
+
+    // Search services
+    function searchServices(searchTerm) {
+        if (!searchTerm || searchTerm.trim() === '') {
+            filteredServices = allServices.slice(0, 10);
+            isSearching = false;
+        } else {
+            isSearching = true;
+            filteredServices = allServices.filter(service => {
+                const serviceName = (service.name || service.origin_name || '').toLowerCase();
+                return serviceName.includes(searchTerm.toLowerCase());
+            });
+        }
+
+        const container = $('#services-container');
+        
+        if (filteredServices.length === 0 && isSearching) {
+            $('#no-results-message').removeClass('hidden');
+            container.empty();
+        } else {
+            $('#no-results-message').addClass('hidden');
+            let html = '';
+            filteredServices.forEach(service => {
+                html += createServiceItem(service);
+            });
+            container.html(html);
+        }
+    }
+
+    // Generic dropdown handler
+    function setupDropdown(dropdownId, menuId, searchId, selectedTextId, iconContainerId) {
+        const $dropdown = $('#' + dropdownId);
+        if (!$dropdown.length) return;
+
+        const $button = $dropdown.find('button');
+        const $menu = $('#' + menuId);
+        const $searchInput = $('#' + searchId);
+        const $selectedText = $('#' + selectedTextId);
+        const $iconContainer = iconContainerId ? $('#' + iconContainerId) : null;
+        const activeClass = 'bg-gray-100'; // Class for selected item
+
+        function updateHighlight() {
+            const currentValue = $selectedText.text().trim();
+            $menu.find('li').removeClass(activeClass);
+            $menu.find('li').each(function() {
+                const $item = $(this);
+                if ($item.data('value').trim() === currentValue) {
+                    $item.addClass(activeClass);
+                }
+            });
+        }
+
+        $button.on('click', function(e) {
+            e.stopPropagation();
+            // Hide other dropdowns that might be open
+            $('.absolute.z-50').not($menu).addClass('hidden');
+            $menu.toggleClass('hidden');
+            if (!$menu.hasClass('hidden')) {
+                updateHighlight();
+            }
+        });
+
+        $menu.on('click', 'li', function() {
+            const $li = $(this);
+            const value = $li.data('value');
+            $selectedText.text(value);
+            
+            if ($iconContainer) {
+                const iconUrl = getIconForService(value);
+                $iconContainer.find('img').attr('src', iconUrl);
+            }
+
+            // Directly update class on click
+            $menu.find('li').removeClass(activeClass);
+            $li.addClass(activeClass);
+
+            $menu.addClass('hidden');
+        });
+
+        $searchInput.on('input', function() {
+            const searchTerm = $(this).val().toLowerCase();
+            $menu.find('li').each(function() {
+                const text = $(this).text().toLowerCase();
+                $(this).toggle(text.includes(searchTerm));
+            });
+        });
+    }
+    
+    // Load categories from hidden select into custom dropdown
+    function loadCategoriesFromSelect() {
+        const $hiddenSelect = $('#orderform-category');
+        const $categoryMenu = $('#category-menu ul');
+        
+        if ($hiddenSelect.length && $categoryMenu.length) {
+            $categoryMenu.empty();
+            
+            $hiddenSelect.find('option').each(function() {
+                const $option = $(this);
+                const value = $option.val();
+                const text = $option.text();
+                const isSelected = $option.is(':selected');
+                const iconData = $option.data('icon');
+                
+                // Get icon URL from the data-icon attribute or use default
+                let iconUrl = 'https://storage.perfectcdn.com/ed17j7/snoz2ubzdwbqghgs.png';
+                if (iconData) {
+                    // Try to extract image URL from data-icon HTML
+                    const imgMatch = iconData.match(/src='([^']+)'/);
+                    if (imgMatch) {
+                        iconUrl = imgMatch[1];
+                    }
+                } else {
+                    iconUrl = getIconForService(text);
+                }
+                
+                const $li = $(`
+                    <li class="px-4 py-2 hover:bg-gray-100 cursor-pointer flex items-center gap-3" data-value="${value}" data-text="${text}">
+                        <img src="${iconUrl}" alt="Category Icon" class="w-[22px] h-[22px] object-contain">
+                        <span class="font-medium">${text}</span>
+                    </li>
+                `);
+                
+                $categoryMenu.append($li);
+                
+                // Set initial selection
+                if (isSelected) {
+                    $('#category-selected-text').text(text);
+                    $('#category-icon-container img').attr('src', iconUrl);
+                }
+            });
+        }
+    }
+
+    // Update hidden category select when custom dropdown selection changes
+    function syncCategorySelection($li) {
+        const value = $li.data('value');
+        const text = $li.data('text');
+        
+        // Update hidden select
+        $('#orderform-category').val(value).trigger('change');
+        
+        // Update custom dropdown display
+        $('#category-selected-text').text(text);
+        const iconUrl = $li.find('img').attr('src');
+        $('#category-icon-container img').attr('src', iconUrl);
+    }
+
+    // Flag to prevent multiple service loading attempts
+    let isLoadingServices = false;
+
+    // Update service dropdown when category changes
+    function updateServiceDropdown(categoryId) {
+        const $serviceSelect = $('#orderform-service');
+        const $serviceMenu = $('#service-menu ul');
+        
+        // Prevent multiple simultaneous loading attempts
+        if (isLoadingServices) {
+            return;
+        }
+        
+        // Validate category ID
+        if (!categoryId || categoryId === '') {
+            return;
+        }
+        
+        isLoadingServices = true;
+        
+        // IMPORTANT: Reset flags to allow new service selection for this category
+        // AMA sadece manuel kategori değişikliğinde! Cookie/URL seçiminde değil!
+        if (!isSelectionTriggeredBySearch) {
+            isFirstServiceSelected = false;
+        }
+        
+        // Clear current services
+        $serviceSelect.empty();
+        $serviceMenu.empty();
+        
+        // Reset service dropdown display
+        $('#service-selected-text').text('Loading services...');
+        $('#service-icon-container img').attr('src', 'https://storage.perfectcdn.com/ed17j7/snoz2ubzdwbqghgs.png');
+        
+        if (!categoryId) {
+            $('#service-selected-text').text('Select a category first');
+            isLoadingServices = false;
+            return;
+        }
+        
+        // Make AJAX call to load services for the selected category
+        $.ajax({
+            url: window.location.href,
+            type: 'GET',
+            data: { 
+                category: categoryId,
+                ajax: 1
+            },
+            success: function(response) {
+                try {
+                    let services = [];
+                    
+                    // HTML response kontrolü (<!DOCTYPE ile başlıyorsa HTML'dir)
+                    if (typeof response === 'string' && response.trim().startsWith('<!DOCTYPE')) {
+                        triggerOriginalServiceLoad();
+                        return;
+                    }
+                    
+                    if (typeof response === 'string') {
+                        response = JSON.parse(response);
+                    }
+                    
+                    if (response.services) {
+                        services = response.services;
+                    } else if (window.modules && window.modules.siteOrder && window.modules.siteOrder.services) {
+                        // Fallback to existing services data filtered by category
+                        const allServices = window.modules.siteOrder.services;
+                        for (let serviceId in allServices) {
+                            if (allServices[serviceId].category_id == categoryId) {
+                                services.push(allServices[serviceId]);
+                            }
+                        }
+                    }
+                    
+                    populateServiceDropdown(services);
+                } catch (e) {
+                    // Fallback to trigger the original select change
+                    triggerOriginalServiceLoad();
+                } finally {
+                    isLoadingServices = false;
+                }
+            },
+            error: function(xhr, status, error) {
+                // Fallback to trigger the original select change
+                triggerOriginalServiceLoad();
+                
+                // Reset loading flag
+                isLoadingServices = false;
+            }
+        });
+    }
+
+    // Trigger original service loading mechanism
+    function triggerOriginalServiceLoad() {
+        const $serviceSelect = $('#orderform-service');
+        
+        // Check if there's an existing service loading mechanism
+        if (window.modules && window.modules.siteOrder) {
+            if (typeof window.modules.siteOrder.loadServices === 'function') {
+                const categoryId = $('#orderform-category').val();
+                window.modules.siteOrder.loadServices(categoryId, function(services) {
+                    populateServiceDropdown(services);
+                });
+            } else if (typeof window.modules.siteOrder.categoryChanged === 'function') {
+                window.modules.siteOrder.categoryChanged();
+                // Watch for changes in the hidden select
+                if (!isSelectionTriggeredBySearch) {
+                    setTimeout(function() {
+                        loadServicesFromHiddenSelect();
+                    }, 500);
+                }
+            }
+        }
+        
+        // Alternative: trigger any existing category change handlers
+        $('#orderform-category').trigger('change.select2');
+        
+        // Watch for changes in the hidden select after a delay
+        if (!isSelectionTriggeredBySearch) {
+            setTimeout(function() {
+                loadServicesFromHiddenSelect();
+            }, 1000);
+        }
+    }
+
+    // Load services from hidden select (when populated by original system)
+    function loadServicesFromHiddenSelect() {
+        const $serviceSelect = $('#orderform-service');
+        const $serviceMenu = $('#service-menu ul');
+        
+        console.log('loadServicesFromHiddenSelect called');
+        console.log('Hidden select options count:', $serviceSelect.find('option').length);
+        console.log('isFirstServiceSelected flag:', isFirstServiceSelected);
+        
+        if ($serviceSelect.find('option').length > 0) {
+            $serviceMenu.empty();
+            let firstService = null;
+            
+            $serviceSelect.find('option').each(function(index) {
+                const $option = $(this);
+                const value = $option.val();
+                const text = $option.text();
+                
+                if (value && text) {
+                    const iconUrl = getIconForService(text);
+                    const priceMatch = text.match(/\$([0-9.]+)/);
+                    const price = priceMatch ? priceMatch[1] : '0.00';
+                    
+                    // Try to get full service data from window.modules
+                    let fullServiceData = null;
+                    if (window.modules && window.modules.siteOrder && window.modules.siteOrder.services) {
+                        fullServiceData = window.modules.siteOrder.services[value];
+                    }
+                    
+                    const $li = $(`
+                        <li class="px-4 py-2 hover:bg-gray-100 cursor-pointer flex items-center gap-3"
+                            data-value="${value}"
+                            data-text="${text}"
+                            data-price="${price}"
+                            data-service-data='${JSON.stringify(escapeServiceDataForJSON(fullServiceData || {}))}'>
+                            <img src="${iconUrl}" alt="Service Icon" class="w-[22px] h-[22px] object-contain">
+                            <span class="font-medium">${text}</span>
+                        </li>
+                    `);
+                    $serviceMenu.append($li);
+                    
+                    // Store first service to auto-select
+                    if (index === 0) {
+                        firstService = fullServiceData || {
+                            id: value,
+                            name: text,
+                            price: price,
+                            min: '1',
+                            max: '1000'
+                        };
+                    }
+                }
+            });
+            
+            // Auto-select first service - always select when services are loaded
+            if (firstService && !isSelectionTriggeredBySearch && !isFirstServiceSelected) {
+                console.log('Auto-selecting first service from hidden select:', firstService.name || firstService.origin_name);
+                
+                // Mark first service as selected to prevent re-triggering
+                isFirstServiceSelected = true;
+
+                const serviceName = firstService.name || firstService.origin_name || 'Unknown Service';
+                const iconUrl = getIconForService(serviceName);
+                
+                // Update UI immediately
+                $('#service-selected-text').text(serviceName);
+                $('#service-icon-container img').attr('src', iconUrl);
+                
+                // Set value and trigger change
+                $serviceSelect.val(firstService.id || firstService.value);
+                
+                // Update service info with full data
+                updateServiceInfo(firstService);
+                updateServiceCard(firstService);
+                
+                // Trigger change event
+                setTimeout(function() {
+                    $serviceSelect.trigger('change');
+                    console.log('First service from hidden select triggered');
+                }, 50);
+            }
+        } else {
+            console.log('No options in hidden select to load');
+        }
+    }
+
+    // Populate service dropdown with services data
+    function populateServiceDropdown(services) {
+        const $serviceSelect = $('#orderform-service');
+        const $serviceMenu = $('#service-menu ul');
+        
+        console.log('populateServiceDropdown called with', services ? services.length : 0, 'services');
+        console.log('isFirstServiceSelected flag:', isFirstServiceSelected);
+        
+        if (services && services.length > 0) {
+            let firstService = null;
+            
+            // Clear existing options first
+            $serviceSelect.empty();
+            $serviceMenu.empty();
+            
+            services.forEach(function(service, index) {
+                const serviceName = service.name || service.origin_name || 'Unknown Service';
+                const price = service.price || '0.00';
+                const iconUrl = getIconForService(serviceName);
+                
+                // Add to hidden select
+                const $option = $(`<option value="${service.id}">${serviceName}</option>`);
+                $serviceSelect.append($option);
+                
+                // Add to custom dropdown
+                const $li = $(`
+                    <li class="px-4 py-2 hover:bg-gray-100 cursor-pointer flex items-center gap-3"
+                        data-value="${service.id}"
+                        data-text="${serviceName}"
+                        data-service-data='${JSON.stringify(escapeServiceDataForJSON(service))}'>
+                        <img src="${iconUrl}" alt="Service Icon" class="w-[22px] h-[22px] object-contain">
+                        <span class="font-medium">${serviceName} - $${price}</span>
+                    </li>
+                `);
+                $serviceMenu.append($li);
+                
+                // Store first service to auto-select
+                if (index === 0) {
+                    firstService = service;
+                }
+            });
+            
+            // Auto-select first service - always select first service when category changes
+            if (firstService && !isSelectionTriggeredBySearch) {
+                console.log('Auto-selecting first service:', firstService.name || firstService.origin_name);
+                
+                const serviceName = firstService.name || firstService.origin_name || 'Unknown Service';
+                const iconUrl = getIconForService(serviceName);
+                
+                // Update UI immediately
+                $('#service-selected-text').text(serviceName);
+                $('#service-icon-container img').attr('src', iconUrl);
+                
+                // Set hidden select value and trigger change
+                $serviceSelect.val(firstService.id);
+                
+                // Update service info and right panel
+                updateServiceInfo(firstService);
+                updateServiceCard(firstService);
+                
+                // Trigger change event to notify other parts of the system
+                setTimeout(function() {
+                    $serviceSelect.trigger('change');
+                    console.log('First service selection completed and triggered');
+                }, 50);
+                
+                // Mark first service as selected for this category
+                isFirstServiceSelected = true;
+            }
+        } else {
+            $('#service-selected-text').text('No services available');
+            console.log('No services to populate');
+        }
+    }
+
+    // Update hidden service select when custom dropdown selection changes
+    function syncServiceSelection($li) {
+        const value = $li.data('value');
+        const text = $li.data('text');
+        const serviceData = $li.data('service-data');
+        
+        // Update hidden select
+        $('#orderform-service').val(value).trigger('change');
+        
+        // Update custom dropdown display
+        $('#service-selected-text').text(text);
+        const iconUrl = $li.find('img').attr('src');
+        $('#service-icon-container img').attr('src', iconUrl);
+        
+        // Update service info in the right panel if serviceData is available
+        if (serviceData) {
+            updateServiceInfo(serviceData);
+        } else {
+            // Try to get service data from window.modules
+            if (window.modules && window.modules.siteOrder && window.modules.siteOrder.services) {
+                const service = window.modules.siteOrder.services[value];
+                if (service) {
+                    updateServiceInfo(service);
+                }
+            }
+        }
+    }
+
+    // Update service information display
+    function updateServiceInfo(service) {
+        const min = service.min || '1';
+        const max = service.max || '1000';
+        const price = service.price || '0.00';
+        const avgTime = service.average_time && service.average_time !== 'Not Enough Data' ? service.average_time : 'Instant';
+        
+        // Update quantity limits
+        $('#quantity').next('p').text(`Min: ${min} - Max: ${max.toLocaleString()}`);
+        
+        // Update charge calculation
+        updateChargeCalculation(price);
+        
+        // Update average time display
+        $('#avg-time-value').text(avgTime);
+        
+        // Update right panel service card
+        updateServiceCard(service);
+    }
+
+    // Update service card in right panel
+    function updateServiceCard(service) {
+        console.log('updateServiceCard called with service:', service);
+        const serviceName = service.name || service.origin_name || 'Unknown Service';
+        const serviceId = service.id || '';
+        const price = service.price || '0.00';
+        const description = service.description || '';
+        const isFavorite = service.favorite === true || service.favorite === 1 || service.favorite === '1';
+        
+        // Average Time from service data (not from description)
+        const avgTime = service.average_time && service.average_time !== 'Not Enough Data' ? service.average_time : 'Instant';
+        
+        // Parse information from service_description div
+        let exampleLink = '-';
+        let speed = '-';
+        let startTime = '-';
+        let refill = '-';
+        
+        // Get description text from the DOM element
+        const $descriptionDiv = $('#service_description .panel-body.border-solid.border-rounded');
+        let descriptionText = '';
+        
+        if ($descriptionDiv.length > 0) {
+            descriptionText = $descriptionDiv.text() || $descriptionDiv.html() || '';
+            
+            // Clean description from HTML tags
+            const cleanDesc = descriptionText.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
+            
+            console.log('Description from DOM:', cleanDesc);
+            
+            if (cleanDesc) {
+                // Parse Example Link
+const exampleMatch = cleanDesc.match(/example\s*link\s*:\s*([^\s]+)/i);
+if (exampleMatch) {
+    exampleLink = exampleMatch[1].trim();
+    console.log("exampleLink:", exampleLink);
+}
+
+// Parse Speed (allow hyphens in speed values like 4-5K/Hours)
+const speedMatch = cleanDesc.match(/speed\s*:\s*([^\s]+)/i);
+if (speedMatch) {
+    speed = speedMatch[1].trim();
+    console.log("speed:", speed);
+}
+                // Parse Start Time
+                const startMatch = cleanDesc.match(/start\s*time?\s*:?\s*([^\n\r]+?)(?:\s*(?:speed|refill|example|notes)[\s:]|$)/i);
+                if (startMatch) {
+                    startTime = startMatch[1].trim().replace(/-\s*$/, '');
+                }
+                
+                // Parse Refill (stop at Notes: or other keywords)
+                const refillMatch = cleanDesc.match(/refill\s*:?\s*([^:\n\r]+?)(?:\s*(?:notes|disclaimer|warning|important|example|speed|start)[\s:!]|$)/i);
+                if (refillMatch) {
+                    refill = refillMatch[1].trim().replace(/-\s*$/, '').replace(/\s*guarantee\s*$/i, '');
+                }
+            }
+        }
+        
+        // Update service title in top blue box - try multiple approaches
+        const $titleElement1 = $('.btn-custom-active p.font-semibold');
+        const $titleElement2 = $('div[class*="lg:col-span-2"] .btn-custom-active p');
+        const $titleElement3 = $('.btn-custom-active').find('p.font-semibold');
+        
+        if ($titleElement1.length > 0) {
+            $titleElement1.first().text(`${serviceName} - $${price}`);
+        } else if ($titleElement2.length > 0) {
+            $titleElement2.first().text(`${serviceName} - $${price}`);
+        } else if ($titleElement3.length > 0) {
+            $titleElement3.first().text(`${serviceName} - $${price}`);
+        }
+        
+        // Find and update each specific field by text content matching
+        console.log('Service data for UI update:', {
+            exampleLink, speed, startTime, refill, avgTime,
+            serviceData: service
+        });
+        
+        $('span.text-gray-800').each(function() {
+            const $span = $(this);
+            const $parent = $span.parent();
+            const parentText = $parent.text();
+            
+            if (parentText.includes('Example Link:')) {
+                console.log('Updating Example Link:', exampleLink);
+                $span.text(exampleLink);
+            } else if (parentText.includes('Speed:')) {
+                console.log('Updating Speed:', speed);
+                $span.text(speed);
+            } else if (parentText.includes('Start:')) {
+                console.log('Updating Start:', startTime);
+                $span.text(startTime);
+            } else if (parentText.includes('Refill:')) {
+                console.log('Updating Refill:', refill);
+                $span.text(refill);
+            } else if (parentText.includes('Avg Time:')) {
+                console.log('Updating Avg Time:', avgTime);
+                $span.text(avgTime);
+            }
+        });
+        
+        // Update description from the same DOM source
+        const $descElement = $('.text-gray-600.text-sm.font-medium.mt-3');
+        if ($descElement.length > 0) {
+            if (descriptionText && descriptionText.trim() !== '') {
+                // Clean and format the description
+                const cleanDesc = descriptionText.replace(/<[^>]*>/g, '').trim();
+                // Convert to HTML with line breaks
+                const formattedDesc = cleanDesc.replace(/\n/g, '<br>');
+                $descElement.html(formattedDesc);
+            } else {
+                // Default description when no description is available
+                const defaultDesc = `Notes:<br>
+🚨⚠ Your profile or your post must be public!<br>
+🚨⚠ When the service is overloaded, described start time and daily speed can change!<br>
+🚨⚠ Do not place multiple order to the same link before your order is completed on the system.`;
+                $descElement.html(defaultDesc);
+            }
+        }
+        
+        // Update favorite toggle based on service favorite status
+        updateFavoriteToggle(isFavorite);
+    }
+
+    // Calculate and update charge based on quantity and price
+    function updateChargeCalculation(pricePerThousand) {
+        const quantity = parseInt($('#quantity').val()) || 0;
+        const price = parseFloat(pricePerThousand) || 0;
+        const charge = (quantity * price / 1000).toFixed(4);
+        
+        $('#charge').val(charge);
+        $('#charge-display').text('$' + charge);
+    }
+
+    // Enhanced dropdown setup with sync functionality
+    function setupCustomDropdown(dropdownId, menuId, searchId, selectedTextId, iconContainerId, syncFunction) {
+        const $dropdown = $('#' + dropdownId);
+        if (!$dropdown.length) return;
+
+        const $button = $dropdown.find('button');
+        const $menu = $('#' + menuId);
+        const $searchInput = $('#' + searchId);
+        const $selectedText = $('#' + selectedTextId);
+        const $iconContainer = iconContainerId ? $('#' + iconContainerId) : null;
+        const activeClass = 'bg-gray-100';
+
+        function updateHighlight() {
+            const currentValue = $selectedText.text().trim();
+            $menu.find('li').removeClass(activeClass);
+            $menu.find('li').each(function() {
+                const $item = $(this);
+                if ($item.data('text') && $item.data('text').trim() === currentValue) {
+                    $item.addClass(activeClass);
+                }
+            });
+        }
+
+        $button.on('click', function(e) {
+            e.stopPropagation();
+            $('.absolute.z-50').not($menu).addClass('hidden');
+            $menu.toggleClass('hidden');
+            if (!$menu.hasClass('hidden')) {
+                updateHighlight();
+            }
+        });
+
+        $menu.on('click', 'li', function() {
+            const $li = $(this);
+            
+            // Sync with hidden select
+            if (syncFunction) {
+                syncFunction($li);
+            }
+
+            $menu.find('li').removeClass(activeClass);
+            $li.addClass(activeClass);
+            $menu.addClass('hidden');
+        });
+
+        $searchInput.on('input', function() {
+            const searchTerm = $(this).val().toLowerCase();
+            $menu.find('li').each(function() {
+                const text = $(this).text().toLowerCase();
+                $(this).toggle(text.includes(searchTerm));
+            });
+        });
+    }
+
+    // Check for service parameter in URL and auto-select with aggressive triggering
+    function checkURLServiceParameter() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const serviceId = urlParams.get('service');
+        
+        if (serviceId) {
+            console.log('URL service parameter detected:', serviceId);
+            
+            // Wait for window.modules to be available
+            let maxRetries = 20;
+            let retryCount = 0;
+            
+            function trySelectService() {
+                retryCount++;
+                
+                if (window.modules && window.modules.siteOrder && window.modules.siteOrder.services) {
+                    const services = window.modules.siteOrder.services;
+                    const targetService = services[serviceId];
+                    
+                    if (targetService) {
+                        console.log('Found target service:', targetService.name || targetService.origin_name);
+                        selectServiceFromURL(serviceId, targetService, null);  // No callback for URL
+                        return;
+                    } else {
+                        console.log('Service not found in services data:', serviceId);
+                    }
+                } else {
+                    console.log('window.modules not ready yet, retry:', retryCount);
+                }
+                
+                // Retry if not found and haven't exceeded max retries
+                if (retryCount < maxRetries) {
+                    setTimeout(trySelectService, 100);
+                } else {
+                    console.log('Failed to find service after max retries');
+                }
+            }
+            
+            // Start immediate attempt and also retry
+            trySelectService();
+        }
+    }
+    
+    // Aggressively select service from URL parameter
+    function selectServiceFromURL(serviceId, targetService, successCallback) {
+        console.log('[SELECT] selectServiceFromURL called for service:', serviceId);
+        isSelectionTriggeredBySearch = true;
+        
+        // Farklı category field'larını kontrol et
+        const categoryId = targetService.category_id ||
+                          targetService.categoryId ||
+                          targetService.category ||
+                          targetService.cat_id ||
+                          targetService.catId ||
+                          targetService.cid;
+        
+        if (!categoryId) {
+            // Alternatif: Tüm kategorilerden service'i bulmaya çalış
+            tryFindServiceInCategories(serviceId, targetService);
+            
+            // Flag'i reset et
+            setTimeout(() => {
+                isSelectionTriggeredBySearch = false;
+            }, 500);
+            
+            return;
+        }
+        
+        // CRITICAL: isFirstServiceSelected = TRUE yapmalıyız
+        // Böylece cookie'den servis seçildikten sonra loadServicesFromHiddenSelect tekrar çağrılırsa
+        // ilk servisi otomatik seçmeyecek
+        isFirstServiceSelected = true;
+        
+        // Step 1: Select and trigger category
+        selectCategoryFromURL(categoryId, function() {
+            let checkAttempts = 0;
+            const maxAttempts = 20;
+            
+            function checkAndSelectService() {
+                checkAttempts++;
+                
+                // Service dropdown'da hedef servis var mı kontrol et
+                const serviceExists = $(`#orderform-service option[value="${serviceId}"]`).length > 0 ||
+                                    $(`#service-menu li[data-value="${serviceId}"]`).length > 0;
+                
+                if (serviceExists) {
+                    console.log('[SELECT] Service exists in dropdown, selecting:', serviceId);
+                    // Hidden select'e direkt service ID'yi set et
+                    $('#orderform-service').val(serviceId);
+                    
+                    // UI'ı güncelle
+                    const serviceName = targetService.name || targetService.origin_name || `Service ${serviceId}`;
+                    $('#service-selected-text').text(serviceName);
+                    $('#service-icon-container img').attr('src', getIconForService(serviceName));
+                    
+                    // Service change event'ini trigger et
+                    $('#orderform-service').trigger('change');
+                    
+                    // Service bilgilerini güncelle
+                    updateServiceInfo(targetService);
+                    
+                    // Flag'i reset et ve success callback çağır
+                    setTimeout(() => {
+                        isSelectionTriggeredBySearch = false;
+                        console.log('[SELECT] Service selection complete');
+                        
+                        if (successCallback) {
+                            successCallback();
+                        }
+                    }, 500);
+
+                } else if (checkAttempts < maxAttempts) {
+                    setTimeout(checkAndSelectService, 100);
+                } else {
+                    // Son çare: Servisi manuel ekle
+                    forceAddAndSelectService(serviceId, targetService);
+                    
+                    // Flag'i reset et ve callback çağır
+                    setTimeout(() => {
+                        isSelectionTriggeredBySearch = false;
+                        
+                        if (successCallback) {
+                            successCallback();
+                        }
+                    }, 500);
+                }
+            }
+            
+            // İlk kontrol hemen yap
+            checkAndSelectService();
+        });
+    }
+    
+    // Select category from URL with callback
+    function selectCategoryFromURL(categoryId, callback) {
+        // Update hidden category select
+        $('#orderform-category').val(categoryId);
+        
+        // Update category UI
+        const categoryOption = $(`#orderform-category option[value="${categoryId}"]`);
+        if (categoryOption.length) {
+            const categoryText = categoryOption.text();
+            $('#category-selected-text').text(categoryText);
+            const categoryIconUrl = getIconForService(categoryText);
+            $('#category-icon-container img').attr('src', categoryIconUrl);
+            
+            // Update category dropdown highlight
+            $('#category-menu li').removeClass('bg-gray-100');
+            $(`#category-menu li[data-value="${categoryId}"]`).addClass('bg-gray-100');
+        }
+        
+        // Aggressively trigger category change using multiple methods
+        console.log('Triggering category change:', categoryId);
+        
+        // Method 1: Direct function call
+        updateServiceDropdown(categoryId);
+        
+        // Method 2: Trigger change event
+        $('#orderform-category').trigger('change');
+        
+        // Method 3: Use Select2 if available
+        if (typeof $.fn.select2 !== 'undefined') {
+            try {
+                $('#orderform-category').select2('trigger', 'change');
+                $('#orderform-category').trigger('change.select2');
+            } catch(e) {
+                console.log('Select2 trigger failed:', e);
+            }
+        }
+        
+        // Method 4: Fallback to original system
+        setTimeout(function() {
+            triggerOriginalServiceLoad();
+        }, 100);
+        
+        // Method 5: Force populate from window.modules if available
+        if (window.modules && window.modules.siteOrder && window.modules.siteOrder.services) {
+            setTimeout(function() {
+                const allServicesData = window.modules.siteOrder.services;
+                const categoryServices = [];
+                
+                for (let sId in allServicesData) {
+                    if (allServicesData[sId].category_id == categoryId) {
+                        categoryServices.push(allServicesData[sId]);
+                    }
+                }
+                
+                if (categoryServices.length > 0) {
+                    console.log('Force populating services from window.modules:', categoryServices.length);
+                    populateServiceDropdown(categoryServices);
+                }
+            }, 150);
+        }
+        
+        // Execute callback after 100ms to let category trigger settle
+        if (callback) {
+            setTimeout(callback, 100);
+        }
+    }
+    
+    // Alternatif fonksiyon: Service'i tüm kategorilerde ara
+    function tryFindServiceInCategories(serviceId, targetService) {
+        console.log('Trying to find service in all categories...');
+        
+        const $categorySelect = $('#orderform-category');
+        let foundInCategory = null;
+        
+        // Her kategoriyi kontrol et
+        $categorySelect.find('option').each(function() {
+            const categoryValue = $(this).val();
+            if (categoryValue && categoryValue !== '') {
+                // Bu kategorinin servislerini kontrol et
+                if (window.modules && window.modules.siteOrder && window.modules.siteOrder.services) {
+                    const allServices = window.modules.siteOrder.services;
+                    for (let sId in allServices) {
+                        const service = allServices[sId];
+                        const serviceCategoryId = service.category_id || service.cid;
+                        if (sId == serviceId && serviceCategoryId == categoryValue) {
+                            foundInCategory = categoryValue;
+                            console.log('Found service', serviceId, 'in category:', categoryValue);
+                            break;
+                        }
+                    }
+                }
+                if (foundInCategory) return false; // Break out of each loop
+            }
+        });
+        
+        if (foundInCategory) {
+            // Kategoriyi seç ve service'i bul
+            selectCategoryFromURL(foundInCategory, function() {
+                selectTargetServiceWithTrigger(serviceId, targetService);
+            });
+        } else {
+            console.log('Service not found in any category');
+            // Son çare: Direkt service'i ekle
+            forceAddAndSelectService(serviceId, targetService);
+        }
+    }
+    
+    // Select target service with aggressive triggering
+    function selectTargetServiceWithTrigger(serviceId, serviceData) {
+        console.log('Selecting target service:', serviceId);
+        
+        const serviceName = serviceData.name || serviceData.origin_name || 'Unknown Service';
+        const $serviceSelect = $('#orderform-service');
+        
+        // Ensure option exists in hidden select
+        if ($serviceSelect.find(`option[value="${serviceId}"]`).length === 0) {
+            const serviceOption = $(`<option value="${serviceId}">${serviceName}</option>`);
+            $serviceSelect.append(serviceOption);
+            console.log('Target service trigger: Hidden select\'e option eklendi:', serviceId);
+        }
+        
+        // Update hidden service select
+        $serviceSelect.val(serviceId);
+        console.log('Target service trigger: Hidden select value set edildi:', serviceId, 'Actual:', $serviceSelect.val());
+        
+        // Update service UI
+        $('#service-selected-text').text(serviceName);
+        const serviceIconUrl = getIconForService(serviceName);
+        $('#service-icon-container img').attr('src', serviceIconUrl);
+        
+        // Update service dropdown highlight
+        $('#service-menu li').removeClass('bg-gray-100');
+        $(`#service-menu li[data-value="${serviceId}"]`).addClass('bg-gray-100');
+        
+        // Trigger service change event aggressively
+        $serviceSelect.trigger('change');
+        
+        // Update service info immediately
+        updateServiceInfo(serviceData);
+        
+        // Ensure UI is fully updated
+        updateServiceCard(serviceData);
+
+        console.log('Service selection completed:', serviceName);
+    }
+    
+    // Force add service to dropdown and select it
+    function forceAddAndSelectService(serviceId, serviceData) {
+        console.log('Force adding service to dropdown:', serviceId);
+        
+        const serviceName = serviceData.name || serviceData.origin_name || 'Unknown Service';
+        const price = serviceData.price || '0.00';
+        const serviceIconUrl = getIconForService(serviceName);
+        
+        // Add to hidden select if not exists
+        const $serviceSelect = $('#orderform-service');
+        if ($serviceSelect.find(`option[value="${serviceId}"]`).length === 0) {
+            const serviceOption = $(`<option value="${serviceId}">${serviceName}</option>`);
+            $serviceSelect.append(serviceOption);
+            console.log('Force add: Hidden select\'e option eklendi:', serviceId);
+        }
+        
+        // Set value to hidden select
+        $serviceSelect.val(serviceId);
+        console.log('Force add: Hidden select value set edildi:', serviceId, 'Actual:', $serviceSelect.val());
+        
+        // Add to custom dropdown if not exists
+        if ($(`#service-menu li[data-value="${serviceId}"]`).length === 0) {
+            const serviceMenuItem = $(`
+                <li class="px-4 py-2 hover:bg-gray-100 cursor-pointer flex items-center gap-3 bg-gray-100"
+                    data-value="${serviceId}"
+                    data-text="${serviceName}"
+                    data-service-data='${JSON.stringify(escapeServiceDataForJSON(serviceData))}'>
+                    <img src="${serviceIconUrl}" alt="Service Icon" class="w-[22px] h-[22px] object-contain">
+                    <span class="font-medium">${serviceName} - $${price}</span>
+                </li>
+            `);
+            $('#service-menu ul').prepend(serviceMenuItem);
+        }
+        
+        // Select the service
+        selectTargetServiceWithTrigger(serviceId, serviceData);
+    }
+
+    // Function to select the target service after category is loaded
+    function selectTargetService(serviceId, serviceData) {
+        const serviceName = serviceData.name || serviceData.origin_name || 'Unknown Service';
+        const $serviceSelect = $('#orderform-service');
+        
+        // Check if service is available in dropdown
+        const serviceOption = $serviceSelect.find(`option[value="${serviceId}"]`);
+        const serviceMenuItem = $(`#service-menu li[data-value="${serviceId}"]`);
+        
+        if (serviceOption.length || serviceMenuItem.length) {
+            // Service is available, select it
+            $serviceSelect.val(serviceId);
+            console.log('Select target service: Service mevcut, seçildi:', serviceId, 'Actual:', $serviceSelect.val());
+            
+            // Update service UI
+            $('#service-selected-text').text(serviceName);
+            const serviceIconUrl = getIconForService(serviceName);
+            $('#service-icon-container img').attr('src', serviceIconUrl);
+            
+            // Trigger service change event
+            $serviceSelect.trigger('change');
+            
+            // Update service info
+            updateServiceInfo(serviceData);
+        } else {
+            // Service not found, try to populate manually
+            console.log('Select target service: Service bulunamadı, manuel ekleniyor:', serviceId);
+            
+            // Add service to hidden select
+            const newServiceOption = $(`<option value="${serviceId}">${serviceName}</option>`);
+            $serviceSelect.append(newServiceOption);
+            
+            // Set value
+            $serviceSelect.val(serviceId);
+            console.log('Select target service: Manuel eklendi ve seçildi:', serviceId, 'Actual:', $serviceSelect.val());
+            
+            // Add to custom dropdown
+            const serviceIconUrl = getIconForService(serviceName);
+            const price = serviceData.price || '0.00';
+            const serviceMenuItem = $(`
+                <li class="px-4 py-2 hover:bg-gray-100 cursor-pointer flex items-center gap-3 bg-gray-100" 
+                    data-value="${serviceId}" 
+                    data-text="${serviceName}"
+                    data-service-data='${JSON.stringify(escapeServiceDataForJSON(serviceData))}'>
+                    <img src="${serviceIconUrl}" alt="Service Icon" class="w-[22px] h-[22px] object-contain">
+                    <span class="font-medium">${serviceName} - $${price}</span>
+                </li>
+            `);
+            $('#service-menu ul').append(serviceMenuItem);
+            
+            // Update UI
+            $('#service-selected-text').text(serviceName);
+            $('#service-icon-container img').attr('src', serviceIconUrl);
+            
+            // Trigger service change event
+            $serviceSelect.trigger('change');
+            
+            // Update service info
+            updateServiceInfo(serviceData);
+        }
+    }
+
+    // Load initial data
+    loadCategoriesFromSelect();
+    
+    // Initialize category and favorites management after categories are loaded
+    setTimeout(function() {
+        manageCategoriesAndFavorites();
+    }, 100);
+
+    // Setup Category Dropdown with sync
+    setupCustomDropdown('category-dropdown', 'category-menu', 'category-search', 'category-selected-text', 'category-icon-container', syncCategorySelection);
+
+    // Setup Service Dropdown with sync
+    setupCustomDropdown('service-dropdown', 'service-menu', 'service-search', 'service-selected-text', 'service-icon-container', syncServiceSelection);
+
+
+    // Enhanced initial category detection with aggressive loading
+    function checkAndLoadInitialServices() {
+        const initialCategorySelected = $('#orderform-category').val();
+        
+        if (initialCategorySelected) {
+            // Only manual updateServiceDropdown call, no triggers
+            updateServiceDropdown(initialCategorySelected);
+            
+        } else {
+            // Check if any option is selected
+            const selectedOption = $('#orderform-category option:selected');
+            if (selectedOption.length && selectedOption.val()) {
+                const categoryId = selectedOption.val();
+                selectedOption.prop('selected', true);
+                $('#orderform-category').val(categoryId);
+                
+                updateServiceDropdown(categoryId);
+                
+            } else {
+                // Check if there's a first option and auto-select it
+                const firstOption = $('#orderform-category option:first');
+                if (firstOption.length && firstOption.val()) {
+                    const categoryId = firstOption.val();
+                    firstOption.prop('selected', true);
+                    $('#orderform-category').val(categoryId);
+                    
+                    updateServiceDropdown(categoryId);
+                    
+                    // Update UI to reflect the selection
+                    const firstCategoryText = firstOption.text();
+                    $('#category-selected-text').text(firstCategoryText);
+                    const iconUrl = getIconForService(firstCategoryText);
+                    $('#category-icon-container img').attr('src', iconUrl);
+                } else {
+                    $('#service-selected-text').text('Select a category first');
+                }
+            }
+        }
+    }
+
+    // Force immediate check - no delays
+    checkAndLoadInitialServices();
+
+    // Listen to hidden category select changes
+    $('#orderform-category').on('change', function() {
+        const categoryId = $(this).val();
+        updateServiceDropdown(categoryId);
+    });
+
+    // Modern DOM change detection using MutationObserver
+    if (window.MutationObserver) {
+        const serviceSelectObserver = new MutationObserver(function(mutations) {
+            mutations.forEach(function(mutation) {
+                if (mutation.type === 'childList' && mutation.target.id === 'orderform-service') {
+                    setTimeout(function() {
+                        loadServicesFromHiddenSelect();
+                    }, 100);
+                }
+            });
+        });
+        
+        const serviceSelect = document.getElementById('orderform-service');
+        if (serviceSelect) {
+            serviceSelectObserver.observe(serviceSelect, {
+                childList: true,
+                subtree: true,
+                attributes: true,
+                attributeFilter: ['value']
+            });
+        }
+    } else {
+        // Fallback for older browsers that don't support MutationObserver
+        // Use propertychange for IE8-10 support if needed
+        $('#orderform-service').on('propertychange', function() {
+            setTimeout(function() {
+                loadServicesFromHiddenSelect();
+            }, 100);
+        });
+    }
+
+    // Single check with fallback after initial load
+    setTimeout(function() {
+        const currentCategoryId = $('#orderform-category').val();
+        const serviceText = $('#service-selected-text').text();
+        
+        // Only trigger fallback if services haven't loaded
+        if (currentCategoryId && (serviceText === 'Loading services...' || serviceText === 'Select a service')) {
+            // Try to find services in window.modules as fallback
+            if (window.modules && window.modules.siteOrder && window.modules.siteOrder.services) {
+                const allServicesData = window.modules.siteOrder.services;
+                const categoryServices = [];
+                
+                for (let serviceId in allServicesData) {
+                    if (allServicesData[serviceId].category_id == currentCategoryId) {
+                        categoryServices.push(allServicesData[serviceId]);
+                    }
+                }
+                
+                if (categoryServices.length > 0) {
+                    populateServiceDropdown(categoryServices);
+                } else {
+                    triggerOriginalServiceLoad();
+                }
+            } else {
+                triggerOriginalServiceLoad();
+            }
+        }
+    }, 300);
+
+    // Listen to quantity changes for charge calculation
+    $('#quantity').on('input', function() {
+        const $serviceSelect = $('#orderform-service');
+        if ($serviceSelect.val()) {
+            // Get current service price and recalculate
+            const selectedServiceLi = $('#service-menu li[data-value="' + $serviceSelect.val() + '"]');
+            if (selectedServiceLi.length) {
+                const serviceData = selectedServiceLi.data('service-data');
+                if (serviceData && serviceData.price) {
+                    updateChargeCalculation(serviceData.price);
+                }
+            }
+        }
+    });
+
+    // Close dropdowns when clicking outside
+    $(document).on('click', function(e) {
+        // If the click is not on a dropdown or a child of a dropdown, hide them.
+        if ($(e.target).closest('.relative[id$="-dropdown"]').length === 0) {
+            $('#category-menu, #service-menu').addClass('hidden');
+        }
+        
+        // Close more platforms dropdown if clicking outside
+        if (!$(e.target).closest('#more-platforms-btn, #more-platforms-dropdown').length) {
+            $('#more-platforms-dropdown').addClass('hidden');
+        }
+    });
+
+    // Platform filter functionality
+    $('.filter-btn').off('click.platform-filter').on('click.platform-filter', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        const $btn = $(this);
+        
+        // Skip if this is the more platforms button
+        if ($btn.attr('id') === 'more-platforms-btn') {
+            return;
+        }
+        
+        // Prevent multiple rapid clicks
+        if ($btn.hasClass('processing')) {
+            return;
+        }
+        
+        const platform = $btn.data('platform');
+        
+        // Mark button as processing
+        $btn.addClass('processing');
+        
+        // Reset loading flags
+        isLoadingServices = false;
+        isFirstServiceSelected = false;
+        
+        // Remove active class from all filter buttons
+        $('.filter-btn').removeClass('filter-btn-active processing').addClass('text-gray-700 bg-white border border-gray-200 hover:bg-gray-50');
+        
+        // Add active class to clicked button
+        $btn.removeClass('text-gray-700 bg-white border border-gray-200 hover:bg-gray-50').addClass('filter-btn-active');
+        
+        // Handle platform filtering logic with delay to ensure state cleanup
+        setTimeout(function() {
+            filterCategoriesByPlatform(platform);
+            $btn.removeClass('processing');
+        }, 50);
+    });
+
+    // Function to filter categories by platform
+    function filterCategoriesByPlatform(platform) {
+        console.log('Filtering categories by platform:', platform);
+        
+        const $categoryMenu = $('#category-menu ul');
+        const $allCategories = $categoryMenu.find('li');
+        
+        // Clear any existing timeouts
+        if (window.platformFilterTimeout) {
+            clearTimeout(window.platformFilterTimeout);
+        }
+        
+        // Reset UI state immediately
+        $('#category-menu li').removeClass('bg-gray-100');
+        
+        if (platform === 'all') {
+            // Show all categories
+            $allCategories.show();
+            
+            // Reset to first category if available with slight delay
+            window.platformFilterTimeout = setTimeout(function() {
+                const $firstCategory = $allCategories.first();
+                if ($firstCategory.length) {
+                    selectCategoryAndTrigger($firstCategory);
+                }
+            }, 100);
+        } else {
+            // Hide all categories first
+            $allCategories.hide();
+            
+            // Show only categories that match the platform
+            let $matchingCategories = $allCategories.filter(function() {
+                const categoryText = $(this).text().toLowerCase();
+                return categoryText.includes(platform.toLowerCase());
+            });
+            
+            // If no exact match found, try broader matching
+            if ($matchingCategories.length === 0) {
+                $matchingCategories = $allCategories.filter(function() {
+                    const categoryText = $(this).text().toLowerCase();
+                    
+                    // Platform specific keyword matching
+                    switch(platform) {
+                        case 'instagram':
+                            return categoryText.includes('instagram') || categoryText.includes('ig ') || categoryText.includes('insta');
+                        case 'tiktok':
+                            return categoryText.includes('tiktok') || categoryText.includes('tik tok') || categoryText.includes('tt ');
+                        case 'youtube':
+                            return categoryText.includes('youtube') || categoryText.includes('yt ') || categoryText.includes('video');
+                        case 'facebook':
+                            return categoryText.includes('facebook') || categoryText.includes('fb ') || categoryText.includes('meta');
+                        case 'twitter':
+                            return categoryText.includes('twitter') || categoryText.includes('x ') || categoryText.includes('tweet');
+                        case 'telegram':
+                            return categoryText.includes('telegram') || categoryText.includes('tg ');
+                        case 'spotify':
+                            return categoryText.includes('spotify') || categoryText.includes('music');
+                        case 'twitch':
+                            return categoryText.includes('twitch') || categoryText.includes('stream');
+                        case 'discord':
+                            return categoryText.includes('discord');
+                        default:
+                            return false;
+                    }
+                });
+            }
+            
+            if ($matchingCategories.length > 0) {
+                // Show matching categories
+                $matchingCategories.show();
+                
+                // Auto-select first matching category with delay to ensure proper loading
+                window.platformFilterTimeout = setTimeout(function() {
+                    const $firstMatchingCategory = $matchingCategories.first();
+                    if ($firstMatchingCategory.length) {
+                        selectCategoryAndTrigger($firstMatchingCategory);
+                    }
+                }, 100);
+            } else {
+                // No matching categories found, show a message
+                $('#category-selected-text').text(`No ${platform} categories found`);
+                $('#service-selected-text').text('Select a category first');
+                
+                // Clear hidden selects
+                $('#orderform-category').val('');
+                $('#orderform-service').val('');
+                
+                // Clear service menu
+                $('#service-menu ul').empty();
+            }
+        }
+    }
+
+    // Function to select a category and trigger service loading
+    function selectCategoryAndTrigger($categoryItem) {
+        if (!$categoryItem.length) return;
+        
+        console.log('Selecting category:', $categoryItem.data('text'));
+        
+        const categoryValue = $categoryItem.data('value');
+        const categoryText = $categoryItem.data('text');
+        const categoryIcon = $categoryItem.find('img').attr('src');
+        
+        // Clear any existing service loading timeouts
+        if (window.serviceLoadTimeout) {
+            clearTimeout(window.serviceLoadTimeout);
+        }
+        
+        // CRITICAL: Reset flags to allow new service selection for this category
+        isFirstServiceSelected = false;
+        isLoadingServices = false;
+        console.log('selectCategoryAndTrigger: Reset flags for category:', categoryValue);
+        
+        // Update category dropdown display
+        $('#category-selected-text').text(categoryText);
+        if (categoryIcon) {
+            $('#category-icon-container img').attr('src', categoryIcon);
+        }
+        
+        // Update hidden category select
+        $('#orderform-category').val(categoryValue);
+        
+        // Highlight selected category in dropdown
+        $('#category-menu li').removeClass('bg-gray-100');
+        $categoryItem.addClass('bg-gray-100');
+        
+        // Clear service dropdown immediately to show loading state
+        $('#service-selected-text').text('Loading services...');
+        $('#service-menu ul').empty();
+        $('#orderform-service').empty();
+        
+        // Aggressively trigger service loading using multiple methods
+        
+        // Method 1: Direct function call
+        updateServiceDropdown(categoryValue);
+        
+        // Method 2: Trigger change event on hidden select
+        $('#orderform-category').trigger('change');
+        
+        // Method 3: Use original system fallback immediately
+        setTimeout(function() {
+            triggerOriginalServiceLoad();
+        }, 100);
+        
+        // Method 4: Direct manipulation if services exist in window.modules
+        if (window.modules && window.modules.siteOrder && window.modules.siteOrder.services) {
+            setTimeout(function() {
+                const allServicesData = window.modules.siteOrder.services;
+                const categoryServices = [];
+                
+                for (let serviceId in allServicesData) {
+                    if (allServicesData[serviceId].category_id == categoryValue) {
+                        categoryServices.push(allServicesData[serviceId]);
+                    }
+                }
+                
+                if (categoryServices.length > 0) {
+                    console.log('Platform filter: Found services in window.modules, populating:', categoryServices.length);
+                    populateServiceDropdown(categoryServices);
+                }
+            }, 200);
+        }
+        
+        // Method 5: Final fallback - check if service loading worked after a delay
+        setTimeout(function() {
+            const serviceText = $('#service-selected-text').text();
+            if (serviceText === 'Loading services...' || serviceText === 'Select a service') {
+                console.log('Platform filter: Services still not loaded, trying final fallback');
+                triggerOriginalServiceLoad();
+                
+                // If still nothing, try Select2 trigger
+                if (typeof $.fn.select2 !== 'undefined') {
+                    try {
+                        $('#orderform-category').select2('trigger', 'change');
+                        $('#orderform-category').trigger('change.select2');
+                    } catch(e) {
+                        console.log('Select2 trigger failed:', e);
+                    }
+                }
+            }
+        }, 500);
+    }
+
+    // More platforms dropdown functionality with dynamic positioning
+    $('#more-platforms-btn').on('click', function(e) {
+        e.stopPropagation();
+        const $dropdown = $('#more-platforms-dropdown');
+        const $button = $(this);
+        
+        // Toggle dropdown visibility
+        $dropdown.toggleClass('hidden');
+        
+        // Apply dynamic positioning only when dropdown is visible
+        if (!$dropdown.hasClass('hidden')) {
+            positionMorePlatformsDropdown($button, $dropdown);
+        }
+    });
+    
+    // Function to dynamically position the more platforms dropdown
+    function positionMorePlatformsDropdown($button, $dropdown) {
+        const windowWidth = $(window).width();
+        const buttonOffset = $button.offset();
+        const buttonWidth = $button.outerWidth();
+        const dropdownWidth = $dropdown.outerWidth();
+        
+        // Reset any previous positioning styles
+        $dropdown.css({
+            'left': '',
+            'right': '',
+            'transform': ''
+        });
+        
+        // Check if dropdown would overflow on the right side
+        const wouldOverflowRight = (buttonOffset.left + dropdownWidth) > windowWidth;
+        
+        // Check if dropdown would overflow on the left side (when positioned to the left)
+        const wouldOverflowLeft = (buttonOffset.left + buttonWidth - dropdownWidth) < 0;
+        
+        if (windowWidth <= 768) { // Mobile screens
+            if (wouldOverflowRight && !wouldOverflowLeft) {
+                // Position to the right edge of the button
+                $dropdown.css({
+                    'left': 'auto',
+                    'right': '0',
+                    'transform': 'none'
+                });
+            } else if (wouldOverflowLeft && !wouldOverflowRight) {
+                // Position to the left edge of the button
+                $dropdown.css({
+                    'left': '0',
+                    'right': 'auto',
+                    'transform': 'none'
+                });
+            } else if (wouldOverflowRight && wouldOverflowLeft) {
+                // Center but constrain to screen edges
+                const maxLeft = windowWidth - dropdownWidth - 10; // 10px margin
+                const minLeft = 10; // 10px margin
+                const centerLeft = buttonOffset.left + (buttonWidth / 2) - (dropdownWidth / 2);
+                const finalLeft = Math.max(minLeft, Math.min(maxLeft, centerLeft));
+                
+                $dropdown.css({
+                    'left': finalLeft - buttonOffset.left + 'px',
+                    'right': 'auto',
+                    'transform': 'none'
+                });
+            } else {
+                // Use default centered positioning
+                $dropdown.css({
+                    'left': '50%',
+                    'right': 'auto',
+                    'transform': 'translateX(-50%)'
+                });
+            }
+        } else { // Desktop screens
+            // Use default centered positioning for desktop
+            $dropdown.css({
+                'left': '50%',
+                'right': 'auto',
+                'transform': 'translateX(-50%)'
+            });
+        }
+    }
+    
+    // Reposition dropdown on window resize
+    $(window).on('resize', function() {
+        const $dropdown = $('#more-platforms-dropdown');
+        const $button = $('#more-platforms-btn');
+        
+        if (!$dropdown.hasClass('hidden')) {
+            positionMorePlatformsDropdown($button, $dropdown);
+        }
+    });
+
+    // Platform search functionality
+    $('#platform-search').on('input', function() {
+        const searchTerm = $(this).val().toLowerCase();
+        $('.platform-option').each(function() {
+            const text = $(this).text().toLowerCase();
+            $(this).toggle(text.includes(searchTerm));
+        });
+    });
+
+    // Platform option selection from dropdown
+    $('.platform-option').off('click.platform-option').on('click.platform-option', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        const $option = $(this);
+        const platform = $option.data('platform');
+        
+        // Prevent multiple rapid clicks
+        if ($option.hasClass('processing')) {
+            return;
+        }
+        
+        // Mark as processing
+        $option.addClass('processing');
+        
+        // Reset loading flags
+        isLoadingServices = false;
+        isFirstServiceSelected = false;
+        
+        // Remove active class from all filter buttons and platform options
+        $('.filter-btn').removeClass('filter-btn-active processing').addClass('text-gray-700 bg-white border border-gray-200 hover:bg-gray-50');
+        $('.platform-option').removeClass('bg-blue-100 text-blue-700 processing').addClass('hover:bg-gray-100');
+        
+        // Add active class to selected option
+        $option.removeClass('hover:bg-gray-100').addClass('bg-blue-100 text-blue-700');
+        
+        // Visually activate the "More" button to show something is selected from it
+        $('#more-platforms-btn').removeClass('text-gray-700 bg-white border border-gray-200 hover:bg-gray-50').addClass('filter-btn-active');
+        
+        // Close dropdown
+        $('#more-platforms-dropdown').addClass('hidden');
+        
+        // Apply platform filtering with delay
+        setTimeout(function() {
+            filterCategoriesByPlatform(platform);
+            $option.removeClass('processing');
+        }, 50);
+        
+        console.log('Selected platform from dropdown:', platform);
+    });
+
+    // Search Services Modal Functionality
+    $('#search-services-btn').on('click', function(e) {
+        e.preventDefault();
+        $('#search-services-modal').removeClass('hidden');
+        $('#modal-service-search').focus();
+        
+        // Load initial services when modal opens
+        setTimeout(() => {
+            loadInitialServices();
+        }, 100);
+    });
+
+    // Close modal when clicking close button
+    $('#close-search-modal').on('click', function() {
+        $('#search-services-modal').addClass('hidden');
+    });
+
+    // Close modal when clicking outside
+    $('#search-services-modal').on('click', function(e) {
+        if (e.target === this) {
+            $(this).addClass('hidden');
+        }
+    });
+
+    // Close modal with Escape key
+    $(document).on('keydown', function(e) {
+        if (e.key === 'Escape' && !$('#search-services-modal').hasClass('hidden')) {
+            $('#search-services-modal').addClass('hidden');
+        }
+    });
+
+    // Search functionality in modal with debounce for performance
+    let searchTimeout;
+    $('#modal-service-search').on('input', function() {
+        const searchTerm = $(this).val();
+        
+        // Clear previous timeout
+        clearTimeout(searchTimeout);
+        
+        // Show search spinner
+        if (searchTerm.trim() !== '') {
+            $('#services-container').html(`
+                <div class="text-center py-8">
+                    <i class="ri-loader-2-fill spinner-icon text-blue-500 text-2xl mb-3"></i>
+                    <p class="text-gray-500 text-sm">Searching...</p>
+                </div>
+            `);
+        }
+        
+        // Set new timeout for debounced search
+        searchTimeout = setTimeout(() => {
+            searchServices(searchTerm);
+        }, 300); // 300ms delay
+    });
+
+    // Service selection from modal - removed to allow direct link navigation
+    // Items will now redirect to their href URLs instead of selecting services via JavaScript
+
+    // Function to update favorite toggle state
+    function updateFavoriteToggle(isFavorite) {
+        const $toggle = $('#favorite-toggle');
+        const $dot = $toggle.siblings('label').find('.dot');
+        const $bg = $toggle.siblings('label').find('div:first div:first');
+        
+        if (isFavorite) {
+            $toggle.prop('checked', true);
+            $bg.removeClass('bg-gray-300').addClass('bg-blue-600');
+            $dot.removeClass('left-1').addClass('left-5');
+        } else {
+            $toggle.prop('checked', false);
+            $bg.removeClass('bg-blue-600').addClass('bg-gray-300');
+            $dot.removeClass('left-5').addClass('left-1');
+        }
+    }
+
+    // Favorite toggle functionality
+    $('#favorite-toggle').on('change', function() {
+        const isChecked = $(this).is(':checked');
+        const $dot = $(this).siblings('label').find('.dot');
+        const $bg = $(this).siblings('label').find('div:first div:first');
+        const $toggle = $(this);
+        
+        // Get current service ID
+        const currentServiceId = $('#orderform-service').val();
+        
+        if (!currentServiceId) {
+            console.log('No service selected, reverting toggle state');
+            // Revert toggle state if no service is selected
+            $toggle.prop('checked', !isChecked);
+            return;
+        }
+        
+        // Disable toggle during request
+        $toggle.prop('disabled', true);
+        
+        // CSRF token
+        var csrfToken = "{{ csrftoken }}";
+        
+        // Determine active state
+        const activeState = isChecked ? 1 : 0;
+        
+        // AJAX request to update favorite status
+        $.ajax({
+            url: `/services/switch-favorite-service?active=${activeState}&service_id=${currentServiceId}`,
+            type: 'POST',
+            data: {
+                _csrf: csrfToken
+            },
+            success: function(response) {
+                // Update UI on success
+                if (isChecked) {
+                    $bg.removeClass('bg-gray-300').addClass('bg-blue-600');
+                    $dot.removeClass('left-1').addClass('left-5');
+                    console.log('Service added to favorites');
+                } else {
+                    $bg.removeClass('bg-blue-600').addClass('bg-gray-300');
+                    $dot.removeClass('left-5').addClass('left-1');
+                    console.log('Service removed from favorites');
+                }
+                
+                // Update service data in window.modules if available
+                if (window.modules && window.modules.siteOrder && window.modules.siteOrder.services) {
+                    const service = window.modules.siteOrder.services[currentServiceId];
+                    if (service) {
+                        service.favorite = isChecked;
+                        console.log('Updated service favorite status in cache');
+                    }
+                }
+            },
+            error: function(xhr, status, error) {
+                // Revert toggle state on error
+                $toggle.prop('checked', !isChecked);
+                
+                // Show error message (optional)
+                if (xhr.responseJSON && xhr.responseJSON.message) {
+                    alert('Error: ' + xhr.responseJSON.message);
+                } else {
+                    alert('An error occurred while updating favorite status');
+                }
+            },
+            complete: function() {
+                // Re-enable toggle
+                $toggle.prop('disabled', false);
+            }
+        });
+    });
+
+    // Global function to manually select a service by ID
+    window.selectServiceById = function(serviceId) {
+        console.log('Manually selecting service:', serviceId);
+        
+        if (window.modules && window.modules.siteOrder && window.modules.siteOrder.services) {
+            const targetService = window.modules.siteOrder.services[serviceId];
+            if (targetService) {
+                console.log('Found service data:', targetService.name || targetService.origin_name);
+                selectServiceFromURL(serviceId, targetService);
+                return true;
+            } else {
+                console.log('Service not found:', serviceId);
+                return false;
+            }
+        } else {
+            console.log('Services data not available');
+            return false;
+        }
+    };
+
+    // Show loading overlay
+    function showLoadingOverlay() {
+        $('#service-loading-overlay').removeClass('hidden');
+        console.log('Loading overlay gösterildi');
+    }
+    
+    // Hide loading overlay
+    function hideLoadingOverlay() {
+        $('#service-loading-overlay').addClass('hidden');
+        console.log('Loading overlay gizlendi');
+    }
+
+    // Direct service selection without category change (for search results)
+    function selectServiceDirectly(serviceId, serviceData) {
+        isSelectionTriggeredBySearch = true;
+        console.log('Direkt servis seçiliyor:', serviceData.name);
+        console.log('Service data:', serviceData);
+        
+        // Show loading overlay at the start
+        showLoadingOverlay();
+        
+        // Service data'sından category bilgisini bul
+        const serviceCategoryId = serviceData.category_id ||
+                                serviceData.categoryId ||
+                                serviceData.cid ||
+                                serviceData.cat_id ||
+                                serviceData.category ||
+                                serviceData.catId ||
+                                findCategoryIdForService(serviceId);
+        
+        const currentCategoryId = $('#orderform-category').val();
+        
+        console.log('Mevcut kategori:', currentCategoryId, 'Servis kategorisi:', serviceCategoryId);
+        
+        if (serviceCategoryId && currentCategoryId == serviceCategoryId) {
+            // Aynı kategoride, direkt seç
+            console.log('Aynı kategoride, direkt seçiliyor');
+            performDirectServiceSelection(serviceId, serviceData);
+        } else if (serviceCategoryId) {
+            // Farklı kategori, önce kategoriyi triggerla
+            console.log('Farklı kategori, kategori triggerlaniyor:', serviceCategoryId);
+            
+            // Kategoriyi seç ve triggerla
+            triggerCategorySelection(serviceCategoryId, getCategoryNameById(serviceCategoryId), function() {
+                console.log('Kategori trigger başarılı, şimdi servis triggerlaniyor');
+                // Kategori trigger başarılı, şimdi servisi triggerla
+                performDirectServiceSelection(serviceId, serviceData);
+            });
+        } else {
+            console.log('Kategori ID bulunamadı, mevcut kategoride deneniyor');
+            // Kategori ID bulunamadı, mevcut kategoride dene
+            performDirectServiceSelection(serviceId, serviceData);
+        }
+    }
+    
+    // Find category ID for service by searching all services
+    function findCategoryIdForService(serviceId) {
+        if (window.modules && window.modules.siteOrder && window.modules.siteOrder.services) {
+            const allServices = window.modules.siteOrder.services;
+            for (let sId in allServices) {
+                if (sId == serviceId) {
+                    const service = allServices[sId];
+                    return service.category_id || service.categoryId || service.cid || service.cat_id || service.category || service.catId;
+                }
+            }
+        }
+        return null;
+    }
+    
+    // Perform direct service selection
+    function performDirectServiceSelection(serviceId, serviceData) {
+        const serviceName = serviceData.name || serviceData.origin_name || `Service ${serviceId}`;
+        
+        // Hidden select'e set et - ÖNCE OPTION EKLE SONRA VALUE SET ET
+        const $serviceSelect = $('#orderform-service');
+        
+        // Eğer option yoksa ekle
+        if ($serviceSelect.find(`option[value="${serviceId}"]`).length === 0) {
+            const $option = $(`<option value="${serviceId}">${serviceName}</option>`);
+            $serviceSelect.append($option);
+            console.log('Hidden select\'e yeni option eklendi:', serviceId, serviceName);
+        }
+        
+        // Şimdi value'yu set et
+        $serviceSelect.val(serviceId);
+        console.log('Hidden select value set edildi:', serviceId, 'Actual value:', $serviceSelect.val());
+        
+        // UI'ı güncelle
+        $('#service-selected-text').text(serviceName);
+        $('#service-icon-container img').attr('src', getIconForService(serviceName));
+        
+        // Service dropdown'da highlight yap
+        $('#service-menu li').removeClass('bg-gray-100');
+        $(`#service-menu li[data-value="${serviceId}"]`).addClass('bg-gray-100');
+        
+        // Service change event'ini trigger et (sistem algılaması için)
+        $serviceSelect.trigger('change');
+        
+        // Select2 trigger (varsa)
+        if (typeof $.fn.select2 !== 'undefined') {
+            try {
+                $serviceSelect.select2('trigger', 'change');
+                $serviceSelect.trigger('change.select2');
+            } catch(e) {
+                console.log('Select2 trigger failed:', e);
+            }
+        }
+        
+        // Service bilgilerini güncelle
+        updateServiceInfo(serviceData);
+        
+        // Service card'ı güncelle
+        updateServiceCard(serviceData);
+        
+        // Hide loading overlay after everything is complete
+        hideLoadingOverlay();
+        
+        console.log('Direkt servis seçimi tamamlandı (tüm trigger\'lar çalıştırıldı):', serviceName);
+        console.log('Final hidden select value:', $serviceSelect.val());
+        setTimeout(() => {
+            isSelectionTriggeredBySearch = false;
+            console.log('isSelectionTriggeredBySearch flag reset to false after delay.');
+        }, 500);
+    }
+    
+    // Get category name by ID
+    function getCategoryNameById(categoryId) {
+        const categoryOption = $(`#orderform-category option[value="${categoryId}"]`);
+        return categoryOption.length ? categoryOption.text() : 'Unknown Category';
+    }
+    
+    // Trigger category selection and wait for success
+    function triggerCategorySelection(categoryId, categoryName, successCallback) {
+        console.log('Kategori triggerlaniyor:', categoryId, categoryName);
+        
+        // UI'ı güncelle
+        $('#category-selected-text').text(categoryName);
+        const iconUrl = getIconForService(categoryName);
+        $('#category-icon-container img').attr('src', iconUrl);
+        
+        // Hidden select'i güncelle
+        $('#orderform-category').val(categoryId);
+        
+        // Kategori dropdown'da highlight
+        $('#category-menu li').removeClass('bg-gray-100');
+        $(`#category-menu li[data-value="${categoryId}"]`).addClass('bg-gray-100');
+        
+        // Reset service selection flag - sadece manuel değişiklikte
+        if (!isSelectionTriggeredBySearch) {
+            isFirstServiceSelected = false;
+        }
+        
+        // Kategori change event'ini triggerla
+        $('#orderform-category').trigger('change');
+        
+        // Select2 trigger (varsa)
+        if (typeof $.fn.select2 !== 'undefined') {
+            try {
+                $('#orderform-category').select2('trigger', 'change');
+                $('#orderform-category').trigger('change.select2');
+            } catch(e) {
+                console.log('Category Select2 trigger failed:', e);
+            }
+        }
+        
+        // Kategori triggerladıktan sonra kısa bir süre bekle - sayaçla
+        console.log('Kategori triggerladı, bekleme başlıyor...');
+        
+        let waitCounter = 0;
+        const maxWaitTime = 150; // 150ms
+        const intervalTime = 50; // Her 50ms'de sayaç güncelle
+        
+        const countInterval = setInterval(function() {
+            waitCounter += intervalTime;
+            console.log(`Bekleme süresi: ${waitCounter}ms / ${maxWaitTime}ms`);
+            
+            if (waitCounter >= maxWaitTime) {
+                clearInterval(countInterval);
+                console.log('Bekleme tamamlandı, service seçiliyor');
+                if (successCallback) {
+                    successCallback();
+                }
+            }
+        }, intervalTime);
+    }
+
+    // Form Submit Handler - Seçilen servis ID'sini cookie'ye kaydet
+    $('#order-form').on('submit', function(e) {
+        const selectedServiceId = $('#orderform-service').val();
+        console.log('[SUBMIT] Form submitting, selected service ID:', selectedServiceId);
+        
+        if (selectedServiceId && selectedServiceId !== '') {
+            // ÖNCE eski cookie'yi sil, SONRA yeni cookie'yi yaz
+            deleteCookie('selected_service_id');
+            console.log('[SUBMIT] Old cookie deleted');
+            // 1 dakikalık cookie olarak kaydet
+            setCookie('selected_service_id', selectedServiceId, 1);
+            console.log('[SUBMIT] New cookie saved:', selectedServiceId);
+        } else {
+            console.log('[SUBMIT] No service selected, clearing cookie');
+            // Servis seçilmemişse cookie'yi temizle
+            deleteCookie('selected_service_id');
+        }
+        
+        // Form submit'i normal şekilde devam etsin
+        return true;
+    });
+
+    // Cookie-based Service Auto-Selection Function
+    function checkAndApplyCookieService() {
+        const cookieServiceId = getCookie('selected_service_id');
+        console.log('[COOKIE] Checking cookie, found ID:', cookieServiceId);
+        
+        if (cookieServiceId) {
+            // Servis data'sını bul
+            if (window.modules && window.modules.siteOrder && window.modules.siteOrder.services) {
+                const targetService = window.modules.siteOrder.services[cookieServiceId];
+                
+                if (targetService) {
+                    console.log('[COOKIE] Service found, selecting:', cookieServiceId);
+                    // Cookie'yi servis seçimi BAŞARILI olduktan SONRA sil
+                    selectServiceFromURL(cookieServiceId, targetService, function() {
+                        console.log('[COOKIE] Selection successful, deleting cookie');
+                        deleteCookie('selected_service_id');
+                    });
+                    return true;
+                } else {
+                    console.log('[COOKIE] Service not found in data, deleting cookie');
+                    deleteCookie('selected_service_id');
+                }
+            } else {
+                console.log('[COOKIE] Services data not ready, starting retry');
+                // Retry mekanizması
+                let retryCount = 0;
+                const maxRetries = 10;
+                
+                function retryServiceSelection() {
+                    retryCount++;
+                    console.log('[COOKIE] Retry attempt:', retryCount);
+                    
+                    if (window.modules && window.modules.siteOrder && window.modules.siteOrder.services) {
+                        const targetService = window.modules.siteOrder.services[cookieServiceId];
+                        
+                        if (targetService) {
+                            console.log('[COOKIE] Retry successful, selecting:', cookieServiceId);
+                            selectServiceFromURL(cookieServiceId, targetService, function() {
+                                console.log('[COOKIE] Retry selection successful, deleting cookie');
+                                deleteCookie('selected_service_id');
+                            });
+                        } else {
+                            console.log('[COOKIE] Retry failed - service not found');
+                            deleteCookie('selected_service_id');
+                        }
+                    } else if (retryCount < maxRetries) {
+                        setTimeout(retryServiceSelection, 500);
+                    } else {
+                        console.log('[COOKIE] Max retries reached, giving up');
+                        deleteCookie('selected_service_id');
+                    }
+                }
+                
+                setTimeout(retryServiceSelection, 500);
+                return true;
+            }
+        }
+        
+        return false;
+    }
+
+    // Enhanced Service Parameter Check - Cookie önce, URL sonra
+    function checkServiceSelection() {
+        console.log('[INIT] checkServiceSelection called');
+        // Önce cookie kontrolü yap
+        const cookieServiceSelected = checkAndApplyCookieService();
+        
+        if (!cookieServiceSelected) {
+            console.log('[INIT] No cookie, checking URL parameter');
+            // Cookie'den servis seçilmediyse URL parametresini kontrol et
+            checkURLServiceParameter();
+        } else {
+            console.log('[INIT] Cookie found, skipping URL check');
+        }
+    }
+
+    // Ana kontrol - sayfa yüklendikten sonra çalıştır
+    // Daha uzun bekleme süresi - services data'nın yüklenmesini garantilemek için
+    setTimeout(function() {
+        console.log('[INIT] Starting service selection after 500ms delay');
+        checkServiceSelection();
+    }, 500);
+
+    // Service Search Input Functionality
+    let serviceSearchTimeout;
+    let serviceSearchDropdownOpen = false;
+    
+    $('#service-search-input').on('input', function() {
+        const searchTerm = $(this).val().trim();
+        const $menu = $('#service-search-menu');
+        const $loading = $('#service-search-loading');
+        const $noResults = $('#service-search-no-results');
+        const $results = $('#service-search-results');
+        
+        // Clear previous timeout
+        clearTimeout(serviceSearchTimeout);
+        
+        if (searchTerm.length < 2) {
+            $menu.addClass('hidden');
+            serviceSearchDropdownOpen = false;
+            return;
+        }
+        
+        // Show dropdown and loading state
+        $menu.removeClass('hidden');
+        $loading.removeClass('hidden');
+        $noResults.addClass('hidden');
+        $results.empty();
+        serviceSearchDropdownOpen = true;
+        
+        // Debounce search
+        serviceSearchTimeout = setTimeout(() => {
+            performServiceSearch(searchTerm);
+        }, 300);
+    });
+    
+    // Perform service search
+    function performServiceSearch(searchTerm) {
+        const $loading = $('#service-search-loading');
+        const $noResults = $('#service-search-no-results');
+        const $results = $('#service-search-results');
+        
+        let foundServices = [];
+        
+        // Search in window.modules.siteOrder.services if available
+        if (window.modules && window.modules.siteOrder && window.modules.siteOrder.services) {
+            const allServices = window.modules.siteOrder.services;
+            
+            for (let serviceId in allServices) {
+                const service = allServices[serviceId];
+                const serviceName = (service.name || service.origin_name || '').toLowerCase();
+                
+                if (serviceName.includes(searchTerm.toLowerCase())) {
+                    // Full service data with category_id
+                    foundServices.push({
+                        id: serviceId,
+                        name: service.name || service.origin_name,
+                        price: service.price || '0.00',
+                        min: service.min || '1',
+                        max: service.max || '1000',
+                        avgTime: service.average_time !== 'Not Enough Data' ? service.average_time : 'Instant',
+                        category_id: service.category_id || service.categoryId || service.cid || service.cat_id || service.category || service.catId,
+                        // Include original service data for full compatibility
+                        originalData: service
+                    });
+                }
+            }
+        }
+        
+        $loading.addClass('hidden');
+        
+        if (foundServices.length === 0) {
+            $noResults.removeClass('hidden');
+        } else {
+            $noResults.addClass('hidden');
+            
+            // Limit to first 10 results for performance
+            const servicesToShow = foundServices.slice(0, 10);
+            
+            servicesToShow.forEach(service => {
+                const iconUrl = getIconForService(service.name);
+                const serviceName = `${service.name} - $${service.price}`;
+                
+                const $serviceItem = $(`
+                    <li class="px-4 py-2 hover:bg-gray-100 cursor-pointer flex items-center gap-3" data-service-id="${service.id}">
+                        <img src="${iconUrl}" alt="Service Icon" class="w-[22px] h-[22px] object-contain">
+                        <span class="font-medium">${serviceName}</span>
+                    </li>
+                `);
+                
+                // Click handler for direct service selection
+                $serviceItem.on('click', function() {
+                    const serviceId = $(this).data('service-id');
+                    
+                    // Close search dropdown
+                    $('#service-search-menu').addClass('hidden');
+                    serviceSearchDropdownOpen = false;
+                    
+                    // Clear search input
+                    $('#service-search-input').val('');
+                    
+                    console.log('Search\'ten servis seçildi:', service.name, 'ID:', serviceId);
+                    console.log('Service full data:', service);
+                    
+                    // Tam service data'sını (originalData veya kendisi) kullan
+                    const fullServiceData = service.originalData || service;
+                    
+                    // Direkt servis seçimi
+                    selectServiceDirectly(serviceId, fullServiceData);
+                });
+                
+                $results.append($serviceItem);
+            });
+        }
+    }
+    
+    // Close search dropdown when clicking outside
+    $(document).on('click', function(e) {
+        if (!$(e.target).closest('#service-search-dropdown').length && serviceSearchDropdownOpen) {
+            $('#service-search-menu').addClass('hidden');
+            serviceSearchDropdownOpen = false;
+        }
+    });
+    
+    // Focus behavior for search input
+    $('#service-search-input').on('focus', function() {
+        const searchTerm = $(this).val().trim();
+        if (searchTerm.length >= 2) {
+            $('#service-search-menu').removeClass('hidden');
+            serviceSearchDropdownOpen = true;
+        }
+    });
+    
+    // Prevent dropdown close when clicking inside the search input area
+    $('#service-search-dropdown').on('click', function(e) {
+        e.stopPropagation();
+    });
+
+});
+</script>

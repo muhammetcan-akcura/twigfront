@@ -1,0 +1,823 @@
+<div class="relative z-10 pb-16 md:pb-15 bg-white pt-6">
+    <div class="mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Top bar -->
+        <div class="space-y-6 mb-8">
+            <!-- Filters and Search Row -->
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                <!-- Filters -->
+                <div class="flex flex-wrap items-center gap-3 {% if site['rtl'] %} rtl-nav {% endif %}">
+                    <a href="{{ page['url'] }}" class="{% if 'all' == status %}filter-btn-active{% else %}flex items-center gap-2 px-4 py-2 text-gray-700 bg-white border border-gray-200 rounded-[25px] hover:bg-gray-50 font-medium{% endif %} flex items-center gap-2 px-4 py-2 font-medium">
+                        <i class="ri-layout-grid-fill"></i>
+                        <span>{{ lang('orders.all') }}</span>
+                    </a>
+                    <a href="{{ page['url'] }}/pending" class="{% if 'pending' == status %}filter-btn-active{% else %}flex items-center gap-2 px-4 py-2 text-gray-700 bg-white border border-gray-200 rounded-[25px] hover:bg-gray-50 font-medium{% endif %} flex items-center gap-2 px-4 py-2 font-medium">
+                        <i class="ri-time-line"></i>
+                        <span>{{ lang('orders.status.pending') }}</span>
+                    </a>
+                    <a href="{{ page['url'] }}/inprogress" class="{% if 'inprogress' == status %}filter-btn-active{% else %}flex items-center gap-2 px-4 py-2 text-gray-700 bg-white border border-gray-200 rounded-[25px] hover:bg-gray-50 font-medium{% endif %} flex items-center gap-2 px-4 py-2 font-medium">
+                        <i class="ri-loader-4-line"></i>
+                        <span>{{ lang('orders.status.inprogress') }}</span>
+                    </a>
+                    <a href="{{ page['url'] }}/completed" class="{% if 'completed' == status %}filter-btn-active{% else %}flex items-center gap-2 px-4 py-2 text-gray-700 bg-white border border-gray-200 rounded-[25px] hover:bg-gray-50 font-medium{% endif %} flex items-center gap-2 px-4 py-2 font-medium">
+                        <i class="ri-check-double-line"></i>
+                        <span>{{ lang('orders.status.completed') }}</span>
+                    </a>
+                    <a href="{{ page['url'] }}/partial" class="{% if 'partial' == status %}filter-btn-active{% else %}flex items-center gap-2 px-4 py-2 text-gray-700 bg-white border border-gray-200 rounded-[25px] hover:bg-gray-50 font-medium{% endif %} flex items-center gap-2 px-4 py-2 font-medium">
+                        <i class="ri-percent-line"></i>
+                        <span>{{ lang('orders.status.partial') }}</span>
+                    </a>
+                    <a href="{{ page['url'] }}/processing" class="{% if 'processing' == status %}filter-btn-active{% else %}flex items-center gap-2 px-4 py-2 text-gray-700 bg-white border border-gray-200 rounded-[25px] hover:bg-gray-50 font-medium{% endif %} flex items-center gap-2 px-4 py-2 font-medium">
+                        <i class="ri-settings-3-line"></i>
+                        <span>{{ lang('orders.status.processing') }}</span>
+                    </a>
+                    <a href="{{ page['url'] }}/canceled" class="{% if 'canceled' == status %}filter-btn-active{% else %}flex items-center gap-2 px-4 py-2 text-gray-700 bg-white border border-gray-200 rounded-[25px] hover:bg-gray-50 font-medium{% endif %} flex items-center gap-2 px-4 py-2 font-medium">
+                        <i class="ri-close-circle-line"></i>
+                        <span>{{ lang('orders.status.canceled') }}</span>
+                    </a>
+                </div>
+                
+                <!-- Search -->
+                <div class="relative w-full sm:w-80">
+                    <form action="{{ page['url'] }}" method="get" id="history-search" class="w-full">
+                        <div class="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none">
+                            <i class="ri-search-line text-gray-400"></i>
+                        </div>
+                        <input type="text" name="search" value="{{ search }}" placeholder="{{ lang('general.search.placeholder') }}" class="w-full bg-white border border-gray-200 rounded-[20px] pl-10 pr-4 py-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 transition">
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Orders Table -->
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+            <!-- Desktop Table -->
+            <div class="hidden md:block overflow-x-auto">
+                <table class="w-full {% if site['rtl'] %} rtl-table {% endif %}">
+                    <thead class="bg-gray-50 border-b border-gray-200">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ lang('orders.id') }}</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-[25%]">{{ lang('orders.link') }}</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ lang('orders.charge') }}</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">{{ lang('orders.startcount') }}</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ lang('orders.quantity') }}</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-[30%]">{{ lang('orders.service') }}</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ lang('orders.status') }}</th>
+                            {% if task == 1 %}<th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">&nbsp;</th>{% endif %}
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Details</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200 font-medium">
+                        {% for order in orderList %}
+                        <tr class="hover:bg-gray-50">
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-bold text-blue-600">
+                                <div class="flex items-center gap-2 group cursor-pointer" onclick="copyToClipboard('{{ order['id'] }}')">
+                                    <span>{{ order['id'] }}</span>
+                                    <i class="ri-clipboard-line text-sm opacity-0 group-hover:opacity-100 transition-opacity duration-200 text-gray-400 group-hover:text-blue-600"></i>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 text-sm text-blue-600 w-[25%]">
+                                <div class="flex items-center gap-2 group">
+                                    <a href="{{ order['link'] }}" target="_blank" class="break-all hover:text-blue-800 transition-colors">
+                                        {{ order['link'] }}
+                                    </a>
+                                    <i class="ri-external-link-line text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0"></i>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-900">{{ order['charge'] }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ order['start_count'] }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ order['quantity'] }}</td>
+                            <td class="px-6 py-4 text-base font-medium text-gray-900 w-[30%]" data-service-name="{{ order['service'] }}">
+                                <div class="flex items-center gap-3">
+                                    <i class="ri-star-fill text-2xl text-yellow-500 flex-shrink-0"></i>
+                                    <div class="flex-1">
+                                        <span  class="inline-block px-2 py-0.5 text-xs font-semibold text-gray-700 bg-white border border-gray-300 rounded" title="{{ order['service'] }}">
+                                         {{ order['service_id'] }}
+                                        </span>
+                                         <span class="ml-2 break-words" title="{{ order['service'] }}">
+                                          {{ order['service'] }}
+                                         </span>
+                                        <div class="text-xs text-gray-500 mt-1 font-normal">{{ order['date'] }}</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-center">
+                                {% if order['status'] == 'Pending' %}
+                                <div class="inline-flex items-center px-3 py-1 bg-yellow-100 border border-yellow-400 rounded-full">
+                                    <i class="ri-time-line text-yellow-700 mr-2"></i>
+                                    <span class="text-yellow-800 text-xs font-semibold">{{ order['status'] }}</span>
+                                </div>
+                                {% elseif order['status'] == 'Completed' %}
+                                <div class="inline-flex items-center px-3 py-1 bg-green-100 border border-green-500 rounded-full">
+                                    <i class="ri-check-line text-green-700 mr-2"></i>
+                                    <span class="text-green-800 text-xs font-semibold">{{ order['status'] }}</span>
+                                </div>
+                                {% elseif order['status'] == 'In Progress' %}
+                                <div class="flex flex-col items-center">
+                                    <span class="text-blue-700 text-xs font-semibold mb-1">{{ order['status'] }}</span>
+                                    <div class="w-20 bg-gray-200 rounded-full h-2">
+                                        <div class="bg-blue-600 h-2 rounded-full" style="width: 60%"></div>
+                                    </div>
+                                    <span class="text-blue-700 text-xs font-semibold mt-1">60%</span>
+                                </div>
+                                {% elseif order['status'] == 'Processing' %}
+                                <div class="inline-flex items-center px-3 py-1 bg-blue-100 border border-blue-500 rounded-full">
+                                    <i class="ri-loader-4-line text-blue-700 mr-2"></i>
+                                    <span class="text-blue-800 text-xs font-semibold">{{ order['status'] }}</span>
+                                </div>
+                                {% elseif order['status'] == 'Partial' %}
+                                <div class="inline-flex items-center px-3 py-1 bg-orange-100 border border-orange-500 rounded-full">
+                                    <i class="ri-pie-chart-line text-orange-700 mr-2"></i>
+                                    <div class="flex flex-col items-center">
+                                        <span class="text-orange-800 text-xs font-semibold">{{ order['status'] }}</span>
+                                        <span class="text-orange-800 text-xs font-bold">{{ order['remains'] }}</span>
+                                    </div>
+                                </div>
+                                {% elseif order['status'] == 'Canceled' %}
+                                <div class="inline-flex items-center px-3 py-1 bg-red-100 border border-red-500 rounded-full">
+                                    <i class="ri-close-circle-line text-red-700 mr-2"></i>
+                                    <span class="text-red-800 text-xs font-semibold">{{ order['status'] }}</span>
+                                </div>
+                                {% else %}
+                                <span class="text-gray-900 text-xs font-semibold">{{ order['status'] }}</span>
+                                {% endif %}
+                                {% if order['cancelReason'] %}<i class="fas fa-comment-alt-lines ml-2" data-toggle="tooltip" data-placement="top" title="{{ order['cancelReason'] }}"></i>{% endif %}
+                            </td>
+                            {% if task == 1 %}
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                <div class="order-actions flex gap-2">
+                                    {% if order['refilling'] == 1 %}
+                                        <span class="text-blue-600 text-xs">{{ lang('orders.refilling') }}</span>
+                                    {% else %}
+                                        {% if order['refill'] == 1 %}
+                                            <a href="{{ page['url'] }}/{{ order['id'] }}/refill" class="inline-flex items-center px-3 py-1.5 bg-green-600 text-white text-xs font-medium rounded-md hover:bg-green-700 transition-all duration-300 shadow-sm">
+                                                <i class="ri-refresh-line mr-1"></i>
+                                                {{ lang('orders.button.refill') }}
+                                            </a>
+                                        {% endif %}
+                                        {% if order['refillAvailableTime'] %}
+                                            <button class="inline-flex items-center px-3 py-1.5 bg-gray-300 text-gray-600 text-xs font-medium rounded-md cursor-not-allowed" data-toggle="tooltip" data-placement="top" title="{{ order['refillAvailableTime'] }}">
+                                                <i class="ri-refresh-line mr-1"></i>
+                                                {{ lang('orders.button.refill') }}
+                                            </button>
+                                        {% endif %}
+                                        {% if order['cancel'] == 1 %}
+                                            <a href="{{ page['url'] }}/{{ order['id'] }}/cancel" class="inline-flex items-center px-3 py-1.5 bg-red-600 text-white text-xs font-medium rounded-md hover:bg-red-700 transition-all duration-300 shadow-sm">
+                                                <i class="ri-close-line mr-1"></i>
+                                                {{ lang('orders.button.cancel') }}
+                                            </a>
+                                        {% endif %}
+                                        {% if order['hasCancelTask'] == 1 %}
+                                            <span class="text-red-600 text-xs">{{ lang('orders.cancel_requested') }}</span>
+                                        {% endif %}
+                                    {% endif %}
+                                </div>
+                            </td>
+                            {% endif %}
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                {% if order['orderDetails'] %}
+                                    {% for orderDetails in order['orderDetails'] %}
+                                        <button onclick="openModal('order-details-{{ order['id'] }}-{{ loop.index }}')" class="inline-flex items-center px-3 py-1.5 bg-blue-600 text-white text-xs font-medium rounded-md hover:bg-blue-700 transition-all duration-300 shadow-sm mr-2">
+                                            <i class="ri-file-text-line mr-1"></i>
+                                            {{ orderDetails.label }}
+                                        </button>
+                                    {% endfor %}
+                                {% else %}
+                                    <button onclick="openModal('order-details-{{ order['id'] }}')" class="inline-flex items-center px-3 py-1.5 bg-blue-600 text-white text-xs font-medium rounded-md hover:bg-blue-700 transition-all duration-300 shadow-sm">
+                                        <i class="ri-file-text-line mr-1"></i>
+                                        Details
+                                    </button>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Mobile Cards -->
+            <div class="md:hidden">
+                {% for order in orderList %}
+                <div class="bg-white border border-gray-200 rounded-xl p-4 m-2 shadow-sm">
+                    <!-- ID -->
+                    <div class="flex justify-center mb-4">
+                        <div class="bg-blue-600 text-white text-sm font-bold px-4 py-2 rounded-full">
+                            ID: {{ order['id'] }}
+                        </div>
+                    </div>
+
+                    <!-- Service Name -->
+                    <div class="text-center mb-4">
+                        <h3 class="text-gray-800 font-bold text-lg break-words"> <span   class="inline-block px-2 py-0.5 text-xs font-semibold text-gray-700 bg-white border border-gray-300 rounded">
+                         {{ order['service_id'] }}
+                       
+                     </span> &nbsp;{{ order['service'] }}</h3>
+                    </div>
+
+                    <!-- Charge and Status -->
+                    <div class="flex justify-center mb-4">
+                        <div class="flex items-center border border-gray-300 px-4 py-2 text-sm rounded-l-[25px]">
+                            <i class="ri-money-dollar-circle-line text-green-600 mr-2 text-base"></i>
+                            <span class="text-gray-600 font-medium">Charge:</span>
+                            <span class="text-gray-900 font-bold ml-1">{{ order['charge'] }}</span>
+                        </div>
+                        {% if order['status'] == 'Pending' %}
+                        <div class="inline-flex items-center px-3 py-2 bg-yellow-100 border border-yellow-400 text-yellow-800 rounded-r-[25px] text-sm font-semibold">
+                            <i class="ri-time-line mr-2"></i>
+                            <span>{{ order['status'] }}</span>
+                        </div>
+                        {% elseif order['status'] == 'Completed' %}
+                        <div class="inline-flex items-center px-3 py-2 bg-green-100 border border-green-500 text-green-800 rounded-r-[25px] text-sm font-semibold">
+                            <i class="ri-check-line mr-2"></i>
+                            <span>{{ order['status'] }}</span>
+                        </div>
+                        {% elseif order['status'] == 'In Progress' %}
+                        <div class="inline-flex items-center px-3 py-2 bg-blue-100 border border-blue-500 text-blue-800 rounded-r-[25px] text-sm font-semibold">
+                            <i class="ri-loader-4-line mr-2"></i>
+                            <span>{{ order['status'] }}</span>
+                        </div>
+                        {% elseif order['status'] == 'Processing' %}
+                        <div class="inline-flex items-center px-3 py-2 bg-indigo-100 border border-indigo-500 text-indigo-800 rounded-r-[25px] text-sm font-semibold">
+                            <i class="ri-settings-3-line mr-2"></i>
+                            <span>{{ order['status'] }}</span>
+                        </div>
+                        {% elseif order['status'] == 'Partial' %}
+                        <div class="inline-flex items-center px-3 py-2 bg-orange-100 border border-orange-500 text-orange-800 rounded-r-[25px] text-sm font-semibold">
+                            <i class="ri-pie-chart-line mr-2"></i>
+                            <span>{{ order['status'] }}</span>
+                        </div>
+                        {% elseif order['status'] == 'Canceled' %}
+                        <div class="inline-flex items-center px-3 py-2 bg-red-100 border border-red-500 text-red-800 rounded-r-[25px] text-sm font-semibold">
+                            <i class="ri-close-circle-line mr-2"></i>
+                            <span>{{ order['status'] }}</span>
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Details Grid: Start, Remains, Date, Quantity -->
+                    <div class="border-t border-gray-200 pt-4 space-y-4">
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="flex items-center gap-3 text-gray-700">
+                                <i class="ri-play-line text-lg text-gray-500"></i>
+                                <div>
+                                    <div class="text-sm text-gray-600 font-medium">Start</div>
+                                    <div class="font-bold text-gray-900 text-base">{{ order['start_count'] }}</div>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-3 text-gray-700">
+                                <i class="ri-pie-chart-line text-lg text-gray-500"></i>
+                                <div>
+                                    <div class="text-sm text-gray-600 font-medium">Remains</div>
+                                    <div class="font-bold text-gray-900 text-base">{{ order['remains'] }}</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="flex items-center gap-3 text-gray-700">
+                                <i class="ri-calendar-2-line text-lg text-gray-500"></i>
+                                <div>
+                                    <div class="text-sm text-gray-600 font-medium">Date</div>
+                                    <div class="font-bold text-gray-900 text-base">{{ order['date'] }}</div>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-3 text-gray-700">
+                                <i class="ri-hashtag text-lg text-gray-500"></i>
+                                <div>
+                                    <div class="text-sm text-gray-600 font-medium">Quantity</div>
+                                    <div class="font-bold text-gray-900 text-base">{{ order['quantity'] }}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Link -->
+                    <div class="border-t border-gray-200 pt-4 mt-4">
+                         <div class="flex items-start gap-3 text-gray-700">
+                            <i class="ri-link text-lg text-gray-500 mt-1"></i>
+                            <div>
+                                <div class="text-sm text-gray-600 font-medium">Link</div>
+                                <a href="{{ order['link'] }}" target="_blank" class="text-blue-600 break-all font-medium hover:underline">{{ order['link'] }}</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="border-t border-gray-200 pt-3 mt-3 flex gap-2">
+                        {% if order['orderDetails'] %}
+                            {% for orderDetails in order['orderDetails'] %}
+                                <button onclick="openModal('order-details-{{ order['id'] }}-{{ loop.index }}')" class="flex-1 text-center bg-white border border-gray-300 text-gray-800 px-4 py-2 rounded-lg font-semibold hover:bg-gray-50 text-sm transition">
+                                    {{ orderDetails.label }}
+                                </button>
+                            {% endfor %}
+                        {% else %}
+                            <button onclick="openModal('order-details-{{ order['id'] }}')" class="flex-1 text-center bg-blue-600 border border-blue-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-blue-700 text-sm transition">
+                                <i class="ri-file-text-line mr-1"></i>
+                                Details
+                            </button>
+                        {% endif %}
+
+                        {% if task == 1 %}
+                            {% if order['refilling'] == 1 %}
+                                <span class="flex-1 text-center bg-blue-100 text-blue-800 px-4 py-2 rounded-lg font-semibold text-sm">{{ lang('orders.refilling') }}</span>
+                            {% else %}
+                                {% if order['refill'] == 1 %}
+                                    <a href="{{ page['url'] }}/{{ order['id'] }}/refill" class="flex-1 text-center bg-green-600 border border-green-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-green-700 text-sm transition">
+                                        {{ lang('orders.button.refill') }}
+                                    </a>
+                                {% endif %}
+                                {% if order['cancel'] == 1 %}
+                                    <a href="{{ page['url'] }}/{{ order['id'] }}/cancel" class="flex-1 text-center bg-red-600 border border-red-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-red-700 text-sm transition">
+                                        {{ lang('orders.button.cancel') }}
+                                    </a>
+                                {% endif %}
+                            {% endif %}
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Pagination -->
+        {% if pagination['count'] > 100 %}
+            {% if searchList %}
+                {% set params = {} %}
+                {% for search in searchList %}
+                    {% set params = params | merge([search['name'] ~ '=' ~ search['value']]) %}
+                {% endfor %}
+                {% set params = '?' ~ params|join('&') %}
+            {% endif %}
+            <div class="flex justify-center mt-8">
+                <ul class="inline-flex items-center space-x-1 {% if site['rtl'] %} rtl-pagination {% endif %}">
+                    {% if pagination['current'] != 1 %}
+                        <li>
+                            <a href="{{ page['url'] }}/{{ status }}/{{ pagination['last'] }}{{ params }}" class="inline-flex items-center px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+                    {% endif %}
+
+                    {% set r, l = 3, 3 %}
+                    {% if pagination['current'] == 1 %}
+                        {% set r = 6 %}
+                    {% endif %}
+                    {% if pagination['current'] == 2 %}
+                        {% set r = 5 %}
+                    {% endif %}
+                    {% if pagination['current'] >= pagination['pages'] %}
+                        {% set l = 5 %}
+                    {% endif %}
+
+                    {% for i in 1..ceil(pagination['pages']) %}
+                        {% if i >= (pagination['current']-l) and i <= (pagination['current']+r) %}
+                            <li>
+                                <a href="{{ page['url'] }}/{{ status }}/{{ i }}{{ params }}" class="inline-flex items-center px-3 py-2 text-sm font-medium {% if i == pagination['current'] %}text-blue-600 bg-blue-50 border border-blue-300{% else %}text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700{% endif %}">
+                                    {{ i }}
+                                </a>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if pagination['current'] < pagination['pages'] %}
+                        <li>
+                            <a href="{{ page['url'] }}/{{ status }}/{{ pagination['next'] }}{{ params }}" class="inline-flex items-center px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Modals -->
+{% for order in orderList %}
+    {% if order['orderDetails'] %}
+        {% for orderDetails in order['orderDetails'] %}
+            <div id="order-details-{{ order['id'] }}-{{ loop.index }}" class="fixed inset-0 bg-black bg-opacity-60 backdrop-blur-sm z-[99999] hidden items-center justify-center p-4 transition-opacity duration-300 {% if site.rtl %}modal-rtl{% endif %}" style="z-index: 99999;">
+                <div class="modal-content bg-white rounded-xl shadow-2xl w-full max-w-lg mx-auto transform transition-all duration-300 opacity-0 -translate-y-4">
+                    <!-- Modal Header -->
+                    <div class="p-6 border-b border-gray-200 flex justify-between items-center">
+                        <h2 class="text-xl font-bold text-gray-800 flex items-center gap-3">
+                            <div class="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
+                                <i class="ri-file-text-line text-blue-600 text-lg"></i>
+                            </div>
+                            {{ orderDetails.label }}
+                        </h2>
+                        <button onclick="closeModal('order-details-{{ order['id'] }}-{{ loop.index }}')" class="text-gray-400 hover:text-gray-600 transition-colors">
+                            <i class="ri-close-line text-2xl"></i>
+                        </button>
+                    </div>
+
+                    <!-- Modal Body -->
+                    <div class="p-6">
+                        {% for orderDetail in orderDetails['details'] %}
+                            <div class="mb-4">
+                                <label class="block text-sm font-medium text-gray-500 mb-2">{{ orderDetail.label }}</label>
+                                {% if orderDetail.type == 'textarea' %}
+                                    <textarea class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-50" rows="7" disabled>{{ orderDetail.value }}</textarea>
+                                {% elseif orderDetail.type == 'input' %}
+                                    <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-50" value="{{ orderDetail.value }}" disabled />
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+
+                        <!-- Order Info -->
+                        <div class="border-t border-gray-200 pt-6 mt-6">
+                            <div class="grid grid-cols-2 gap-6 mb-6">
+                                <div class="border-r border-gray-200 pr-6">
+                                    <label class="block text-sm font-normal text-gray-500 mb-2 flex items-center gap-2">
+                                        <i class="ri-calendar-line text-gray-400"></i>
+                                        Date
+                                    </label>
+                                    <div class="text-base font-medium text-gray-900">{{ order['date'] }}</div>
+                                </div>
+                                <div class="pl-6">
+                                    <label class="block text-sm font-normal text-gray-500 mb-2 flex items-center gap-2">
+                                        <i class="ri-information-line text-gray-400"></i>
+                                        Service
+                                    </label>
+                                    <div class="text-base font-medium text-gray-900">{{ order['service'] }}</div>
+                                </div>
+                            </div>
+
+                            <div class="border-t border-gray-200 mb-6"></div>
+
+                            <div class="grid grid-cols-2 gap-6 mb-6">
+                                <div class="border-r border-gray-200 pr-6">
+                                    <label class="block text-sm font-normal text-gray-500 mb-2">Charge</label>
+                                    <div class="text-lg font-bold text-green-600">{{ order['charge'] }}</div>
+                                </div>
+                                <div class="pl-6">
+                                    <label class="block text-sm font-normal text-gray-500 mb-2">Quantity</label>
+                                    <div class="text-lg font-bold text-blue-600">{{ order['quantity'] }}</div>
+                                </div>
+                            </div>
+
+                            <div class="border-t border-gray-200 mb-6"></div>
+
+                            <div class="grid grid-cols-2 gap-6 mb-6">
+                                <div class="border-r border-gray-200 pr-6">
+                                    <label class="block text-sm font-normal text-gray-500 mb-2">Start Count</label>
+                                    <div class="text-base font-medium text-gray-900">{{ order['start_count'] }}</div>
+                                </div>
+                                <div class="pl-6">
+                                    <label class="block text-sm font-normal text-gray-500 mb-2">Remains</label>
+                                    <div class="text-base font-medium text-gray-900">{{ order['remains'] }}</div>
+                                </div>
+                            </div>
+
+                            <div class="border-t border-gray-200 mb-6"></div>
+
+                            <div class="mb-6">
+                                <div class="flex items-center justify-between">
+                                    <label class="block text-sm font-normal text-gray-500">Status</label>
+                                    {% if order['status'] == 'Pending' %}
+                                    <div class="inline-flex items-center px-3 py-1 bg-yellow-100 border border-yellow-400 rounded-full">
+                                        <i class="ri-time-line text-yellow-700 mr-2"></i>
+                                        <span class="text-yellow-800 text-xs font-semibold">{{ order['status'] }}</span>
+                                    </div>
+                                    {% elseif order['status'] == 'Completed' %}
+                                    <div class="inline-flex items-center px-3 py-1 bg-green-100 border border-green-500 rounded-full">
+                                        <i class="ri-check-line text-green-700 mr-2"></i>
+                                        <span class="text-green-800 text-xs font-semibold">{{ order['status'] }}</span>
+                                    </div>
+                                    {% elseif order['status'] == 'In Progress' %}
+                                    <div class="flex flex-col items-center">
+                                        <span class="text-blue-700 text-xs font-semibold mb-1">{{ order['status'] }}</span>
+                                        <div class="w-20 bg-gray-200 rounded-full h-2">
+                                            <div class="bg-blue-600 h-2 rounded-full" style="width: 60%"></div>
+                                        </div>
+                                        <span class="text-blue-700 text-xs font-semibold mt-1">60%</span>
+                                    </div>
+                                    {% elseif order['status'] == 'Processing' %}
+                                    <div class="inline-flex items-center px-3 py-1 bg-blue-100 border border-blue-500 rounded-full">
+                                        <i class="ri-loader-4-line text-blue-700 mr-2"></i>
+                                        <span class="text-blue-800 text-xs font-semibold">{{ order['status'] }}</span>
+                                    </div>
+                                    {% elseif order['status'] == 'Partial' %}
+                                    <div class="inline-flex items-center px-3 py-1 bg-orange-100 border border-orange-500 rounded-full">
+                                        <i class="ri-pie-chart-line text-orange-700 mr-2"></i>
+                                        <div class="flex flex-col items-center">
+                                            <span class="text-orange-800 text-xs font-semibold">{{ order['status'] }}</span>
+                                            <span class="text-orange-800 text-xs font-bold">{{ order['remains'] }}</span>
+                                        </div>
+                                    </div>
+                                    {% elseif order['status'] == 'Canceled' %}
+                                    <div class="inline-flex items-center px-3 py-1 bg-red-100 border border-red-500 rounded-full">
+                                        <i class="ri-close-circle-line text-red-700 mr-2"></i>
+                                        <span class="text-red-800 text-xs font-semibold">{{ order['status'] }}</span>
+                                    </div>
+                                    {% else %}
+                                    <span class="text-gray-900 text-xs font-semibold">{{ order['status'] }}</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            {% if task == 1 %}
+                            <div class="border-t border-gray-200 mb-6"></div>
+                            <div class="space-y-3">
+                                <div class="flex gap-3">
+                                    {% if order['refill'] == 1 %}
+                                        <a href="{{ page['url'] }}/{{ order['id'] }}/refill" class="flex-1 bg-green-600 hover:bg-green-700 text-white font-medium py-2.5 px-4 rounded-lg transition-all duration-300 flex items-center justify-center gap-2">
+                                            <i class="ri-refresh-line"></i>
+                                            {{ lang('orders.button.refill') }}
+                                        </a>
+                                    {% endif %}
+                                    <a href="/?service={{ order['service_id'] }}" class="flex-1 bg-blue-100 hover:bg-blue-200 text-blue-700 font-medium py-2.5 px-4 rounded-lg transition-all duration-300 flex items-center justify-center gap-2">
+                                        <i class="ri-refresh-line"></i>
+                                        Re-order
+                                    </a>
+                                </div>
+                                {% if order['cancel'] == 1 %}
+                                    <a href="{{ page['url'] }}/{{ order['id'] }}/cancel" class="w-full bg-red-600 hover:bg-red-700 text-white font-medium py-2.5 px-4 rounded-lg transition-all duration-300 flex items-center justify-center gap-2">
+                                        <i class="ri-close-line"></i>
+                                        {{ lang('orders.button.cancel') }}
+                                    </a>
+                                {% endif %}
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <!-- Default Modal for orders without orderDetails -->
+        <div id="order-details-{{ order['id'] }}" class="fixed inset-0 bg-black bg-opacity-60 backdrop-blur-sm z-[99999] hidden items-center justify-center p-4 transition-opacity duration-300" style="z-index: 99999;">
+            <div class="modal-content bg-white rounded-xl shadow-2xl w-full max-w-lg mx-auto transform transition-all duration-300 opacity-0 -translate-y-4">
+                <!-- Modal Header -->
+                <div class="p-6 border-b border-gray-200 flex justify-between items-center">
+                    <h2 class="text-xl font-bold text-gray-800 flex items-center gap-3">
+                        <div class="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
+                            <i class="ri-file-text-line text-blue-600 text-lg"></i>
+                        </div>
+                        Order Details
+                    </h2>
+                    <button onclick="closeModal('order-details-{{ order['id'] }}')" class="text-gray-400 hover:text-gray-600 transition-colors">
+                        <i class="ri-close-line text-2xl"></i>
+                    </button>
+                </div>
+
+                <!-- Modal Body -->
+                <div class="p-6">
+                    <!-- Top Row: Date and Service -->
+                    <div class="grid grid-cols-2 gap-6 mb-6">
+                        <div class="border-r border-gray-200 pr-6">
+                            <label class="block text-sm font-normal text-gray-500 mb-2 flex items-center gap-2">
+                                <i class="ri-calendar-line text-gray-400"></i>
+                                Date
+                            </label>
+                            <div class="text-base font-medium text-gray-900">{{ order['date'] }}</div>
+                        </div>
+                        <div class="pl-6">
+                            <label class="block text-sm font-normal text-gray-500 mb-2 flex items-center gap-2">
+                                <i class="ri-information-line text-gray-400"></i>
+                                Service
+                            </label>
+                            <div class="text-base font-medium text-gray-900">{{ order['service'] }}</div>
+                        </div>
+                    </div>
+
+                    <div class="border-t border-gray-200 mb-6"></div>
+
+                    <!-- Middle Row: Charge and Quantity -->
+                    <div class="grid grid-cols-2 gap-6 mb-6">
+                        <div class="border-r border-gray-200 pr-6">
+                            <label class="block text-sm font-normal text-gray-500 mb-2">Charge</label>
+                            <div class="text-lg font-bold text-green-600">{{ order['charge'] }}</div>
+                        </div>
+                        <div class="pl-6">
+                            <label class="block text-sm font-normal text-gray-500 mb-2">Quantity</label>
+                            <div class="text-lg font-bold text-blue-600">{{ order['quantity'] }}</div>
+                        </div>
+                    </div>
+
+                    <div class="border-t border-gray-200 mb-6"></div>
+
+                    <!-- Bottom Section: Start Count and Remains -->
+                    <div class="grid grid-cols-2 gap-6 mb-6">
+                        <div class="border-r border-gray-200 pr-6">
+                            <label class="block text-sm font-normal text-gray-500 mb-2">Start Count</label>
+                            <div class="text-base font-medium text-gray-900">{{ order['start_count'] }}</div>
+                        </div>
+                        <div class="pl-6">
+                            <label class="block text-sm font-normal text-gray-500 mb-2">Remains</label>
+                            <div class="text-base font-medium text-gray-900">{{ order['remains'] }}</div>
+                        </div>
+                    </div>
+
+                    <div class="border-t border-gray-200 mb-6"></div>
+
+                    <!-- Status Section - Full Width -->
+                    <div class="mb-6">
+                        <div class="flex items-center justify-between">
+                            <label class="block text-sm font-normal text-gray-500">Status</label>
+                            {% if order['status'] == 'Pending' %}
+                            <div class="inline-flex items-center px-3 py-1 bg-yellow-100 border border-yellow-400 rounded-full">
+                                <i class="ri-time-line text-yellow-700 mr-2"></i>
+                                <span class="text-yellow-800 text-xs font-semibold">{{ order['status'] }}</span>
+                            </div>
+                            {% elseif order['status'] == 'Completed' %}
+                            <div class="inline-flex items-center px-3 py-1 bg-green-100 border border-green-500 rounded-full">
+                                <i class="ri-check-line text-green-700 mr-2"></i>
+                                <span class="text-green-800 text-xs font-semibold">{{ order['status'] }}</span>
+                            </div>
+                            {% elseif order['status'] == 'In Progress' %}
+                            <div class="flex flex-col items-center">
+                                <span class="text-blue-700 text-xs font-semibold mb-1">{{ order['status'] }}</span>
+                                <div class="w-20 bg-gray-200 rounded-full h-2">
+                                    <div class="bg-blue-600 h-2 rounded-full" style="width: 60%"></div>
+                                </div>
+                                <span class="text-blue-700 text-xs font-semibold mt-1">60%</span>
+                            </div>
+                            {% elseif order['status'] == 'Processing' %}
+                            <div class="inline-flex items-center px-3 py-1 bg-blue-100 border border-blue-500 rounded-full">
+                                <i class="ri-loader-4-line text-blue-700 mr-2"></i>
+                                <span class="text-blue-800 text-xs font-semibold">{{ order['status'] }}</span>
+                            </div>
+                            {% elseif order['status'] == 'Partial' %}
+                            <div class="inline-flex items-center px-3 py-1 bg-orange-100 border border-orange-500 rounded-full">
+                                <i class="ri-pie-chart-line text-orange-700 mr-2"></i>
+                                <div class="flex flex-col items-center">
+                                    <span class="text-orange-800 text-xs font-semibold">{{ order['status'] }}</span>
+                                    <span class="text-orange-800 text-xs font-bold">{{ order['remains'] }}</span>
+                                </div>
+                            </div>
+                            {% elseif order['status'] == 'Canceled' %}
+                            <div class="inline-flex items-center px-3 py-1 bg-red-100 border border-red-500 rounded-full">
+                                <i class="ri-close-circle-line text-red-700 mr-2"></i>
+                                <span class="text-red-800 text-xs font-semibold">{{ order['status'] }}</span>
+                            </div>
+                            {% else %}
+                            <span class="text-gray-900 text-xs font-semibold">{{ order['status'] }}</span>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    {% if task == 1 %}
+                    <div class="border-t border-gray-200 mb-6"></div>
+
+                    <!-- Action Buttons -->
+                    <div class="space-y-3">
+                        <div class="flex gap-3">
+                            {% if order['refill'] == 1 %}
+                                <a href="{{ page['url'] }}/{{ order['id'] }}/refill" class="flex-1 bg-green-600 hover:bg-green-700 text-white font-medium py-2.5 px-4 rounded-lg transition-all duration-300 flex items-center justify-center gap-2">
+                                    <i class="ri-refresh-line"></i>
+                                    {{ lang('orders.button.refill') }}
+                                </a>
+                            {% endif %}
+                            <a href="/?service={{ order['service_id'] }}"class="flex-1 bg-blue-100 hover:bg-blue-200 text-blue-700 font-medium py-2.5 px-4 rounded-lg transition-all duration-300 flex items-center justify-center gap-2">
+                                <i class="ri-refresh-line"></i>
+                                Re-order
+                            </a>
+                        </div>
+                        {% if order['cancel'] == 1 %}
+                            <a href="{{ page['url'] }}/{{ order['id'] }}/cancel" class="w-full bg-red-600 hover:bg-red-700 text-white font-medium py-2.5 px-4 rounded-lg transition-all duration-300 flex items-center justify-center gap-2">
+                                <i class="ri-close-line"></i>
+                                {{ lang('orders.button.cancel') }}
+                            </a>
+                        {% endif %}
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    {% endif %}
+{% endfor %}
+
+<script>
+    // Copy to clipboard function
+    function copyToClipboard(text) {
+        navigator.clipboard.writeText(text).then(function() {
+            showNotification('ID copied: ' + text, 'success');
+        }).catch(function(err) {
+            showNotification('Copy failed', 'error');
+        });
+    }
+
+    // Show notification function
+    function showNotification(message, type = 'success') {
+        // Remove existing notifications
+        const existingNotifications = document.querySelectorAll('.notification');
+        existingNotifications.forEach(notification => notification.remove());
+
+        // Create notification element
+        const notification = document.createElement('div');
+        notification.className = `notification fixed top-4 right-4 z-[99999] px-4 py-3 rounded-lg shadow-lg transform transition-all duration-300 translate-x-full ${
+            type === 'success' ? 'bg-green-500 text-white' : 'bg-red-500 text-white'
+        }`;
+        notification.innerHTML = `
+            <div class="flex items-center gap-2">
+                <i class="ri-${type === 'success' ? 'check-line' : 'close-line'}"></i>
+                <span>${message}</span>
+            </div>
+        `;
+
+        // Add to page
+        document.body.appendChild(notification);
+
+        // Animate in
+        setTimeout(() => {
+            notification.classList.remove('translate-x-full');
+        }, 10);
+
+        // Remove after 3 seconds
+        setTimeout(() => {
+            notification.classList.add('translate-x-full');
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.parentNode.removeChild(notification);
+                }
+            }, 300);
+        }, 3000);
+    }
+
+    function getRemixIconForCategory(categoryName) {
+        categoryName = categoryName.toLowerCase();
+        if (categoryName.includes('instagram')) {
+            return { icon: 'ri-instagram-line', color: 'text-pink-500' };
+        } else if (categoryName.includes('facebook')) {
+            return { icon: 'ri-facebook-box-fill', color: 'text-blue-600' };
+        } else if (categoryName.includes('twitter') || categoryName.includes(' x ')) {
+            return { icon: 'ri-twitter-x-line', color: 'text-black' };
+        } else if (categoryName.includes('tiktok')) {
+            return { icon: 'ri-tiktok-fill', color: 'text-black' };
+        } else if (categoryName.includes('telegram')) {
+            return { icon: 'ri-telegram-fill', color: 'text-sky-500' };
+        } else if (categoryName.includes('youtube')) {
+            return { icon: 'ri-youtube-fill', color: 'text-red-600' };
+        } else if (categoryName.includes('spotify')) {
+            return { icon: 'ri-spotify-fill', color: 'text-green-500' };
+        } else if (categoryName.includes('linkedin')) {
+            return { icon: 'ri-linkedin-box-fill', color: 'text-blue-700' };
+        } else if (categoryName.includes('twitch')) {
+            return { icon: 'ri-twitch-fill', color: 'text-purple-600' };
+        } else if (categoryName.includes('discord')) {
+            return { icon: 'ri-discord-fill', color: 'text-indigo-500' };
+        }
+        // Add more mappings as needed
+        return { icon: 'ri-star-fill', color: 'text-yellow-500' }; // Default icon
+    }
+
+    function openModal(modalId) {
+        const modal = document.getElementById(modalId);
+        const modalContent = modal.querySelector('.modal-content');
+        
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+        
+        // Trigger animation
+        setTimeout(() => {
+            modalContent.style.opacity = '1';
+            modalContent.style.transform = 'translateY(0)';
+        }, 10);
+    }
+    
+    function closeModal(modalId) {
+        const modal = document.getElementById(modalId);
+        const modalContent = modal.querySelector('.modal-content');
+        
+        // Immediately start fading out the modal background
+        modal.style.opacity = '0';
+        modalContent.style.opacity = '0';
+        modalContent.style.transform = 'translateY(-1rem)';
+        
+        setTimeout(() => {
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+            modal.style.opacity = ''; // Reset opacity
+        }, 200);
+    }
+    
+    // Close modal when clicking outside
+    document.addEventListener('click', function(event) {
+        if (event.target.classList.contains('fixed')) {
+            const modalId = event.target.id;
+            closeModal(modalId);
+        }
+    });
+
+    // Set icons based on service names when page loads
+    document.addEventListener('DOMContentLoaded', function() {
+        const serviceCells = document.querySelectorAll('[data-service-name]');
+        serviceCells.forEach(cell => {
+            const serviceName = cell.getAttribute('data-service-name');
+            const iconElement = cell.querySelector('i');
+            if (iconElement && serviceName) {
+                const iconData = getRemixIconForCategory(serviceName);
+                iconElement.className = `${iconData.icon} text-2xl ${iconData.color}`;
+            }
+        });
+    });
+</script>
+
+<style>
+.filter-btn-active {
+    @apply bg-gradient-to-r from-blue-500 to-blue-600 text-white border-blue-600 shadow-md;
+}
+
+.status-badge {
+    @apply inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold;
+}
+</style>

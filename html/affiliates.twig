@@ -1,0 +1,207 @@
+<div class="relative z-10 pb-16 md:pb-15 bg-white pt-6">
+    <div class="container mx-auto px-4 relative z-10">
+        <div class="max-w-6xl mx-auto">
+            {% if affiliates %}
+                <div class="bg-blue-50 border border-blue-200 rounded-xl p-4 mb-8 {% if site['rtl'] %} text-right {% endif %}">
+                    {{ affiliates }}
+                </div>
+            {% endif %}
+
+            <!-- Referral Link Info Card -->
+            <div class="bg-white border border-gray-200 rounded-xl w-full mx-auto mb-8 overflow-hidden">
+                <div class="p-6 md:p-8">
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200 {% if site['rtl'] %} text-right {% else %} text-left {% endif %}">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th scope="col" class="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        {{ lang('affiliates.referral_link') }}
+                                    </th>
+                                    <th scope="col" class="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        {{ lang('affiliates.commission_rate') }}
+                                    </th>
+                                    <th scope="col" class="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        {{ lang('affiliates.minimum_payout') }}
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200">
+                                <tr>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                        {{ referral_link }}
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        {{ commission_rate }}
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        {{ minimum_payout }}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Statistics Card -->
+            <div class="bg-white border border-gray-200 rounded-xl w-full mx-auto mb-8 overflow-hidden">
+                <div class="p-6 md:p-8">
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200 {% if site['rtl'] %} text-right {% else %} text-left {% endif %}">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th scope="col" class="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        {{ lang('affiliates.visits') }}
+                                    </th>
+                                    <th scope="col" class="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        {{ lang('affiliates.registrations') }}
+                                    </th>
+                                    <th scope="col" class="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        {{ lang('affiliates.referrals') }}
+                                    </th>
+                                    <th scope="col" class="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        {{ lang('affiliates.conversion_rate') }}
+                                    </th>
+                                    <th scope="col" class="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        {{ lang('affiliates.total_earnings') }}
+                                    </th>
+                                    <th scope="col" class="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        {{ lang('affiliates.available_earnings') }}
+                                    </th>
+                                    {% if statistics['request_payout'] %}
+                                        <th scope="col" class="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        </th>
+                                    {% endif %}
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200">
+                                <tr>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                        {{ statistics['total_visits'] }}
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        {{ statistics['referral_registrations'] }}
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        {{ statistics['paid_referrals'] }}
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        {{ statistics['conversion_rate'] }}
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        {{ statistics['total_earnings'] }}
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        {{ statistics['unpaid_earnings'] }}
+                                    </td>
+                                    {% if statistics['request_payout'] %}
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                            <a href="{{ page['url'] }}/request-payout" class="inline-flex items-center px-3 py-1 text-xs font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-md border border-gray-300 transition-colors duration-200">
+                                                {{ lang('affiliates.request_payout') }}
+                                            </a>
+                                        </td>
+                                    {% endif %}
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Payout History Table -->
+            {% if payments|length %}
+                <div class="bg-white border border-gray-200 rounded-xl w-full mx-auto mb-8 overflow-hidden">
+                    <div class="px-6 md:px-8 py-4 border-b border-gray-200">
+                        <h2 class="text-lg font-semibold text-gray-800 {% if site['rtl'] %} text-right {% endif %}">{{ lang('affiliates.payout_history') }}</h2>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200 {% if site['rtl'] %} text-right {% else %} text-left {% endif %}">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th scope="col" class="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        {{ lang('affiliates.payout_date') }}
+                                    </th>
+                                    <th scope="col" class="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        {{ lang('affiliates.payout_amount') }}
+                                    </th>
+                                    <th scope="col" class="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        {{ lang('affiliates.payout_status') }}
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200">
+                                {% for payment in payments %}
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                            {{ payment['date'] }}
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                            {{ payment['amount'] }}
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                            {{ payment['status'] }}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            {% endif %}
+
+            <!-- Pagination -->
+            {% if pagination['count'] > 100 %}
+                <div class="flex justify-center mt-8">
+                    <nav class="{% if site['rtl'] %} flex-row-reverse {% endif %}">
+                        <ul class="flex space-x-1 {% if site['rtl'] %} space-x-reverse {% endif %}">
+                            {% if pagination['current'] != 1 %}
+                                <li>
+                                    <a href="{{ page['url'] }}/{{ status }}/{{ pagination['last'] }}" 
+                                       class="inline-flex items-center px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-l-md hover:bg-gray-50 hover:text-gray-700 transition-colors duration-200"
+                                       aria-label="Previous">
+                                        <span aria-hidden="true">&laquo;</span>
+                                    </a>
+                                </li>
+                            {% endif %}
+
+                            {% set r, l = 3, 3 %}
+
+                            {% if pagination['current'] == 1 %}
+                                {% set r = 6 %}
+                            {% endif %}
+
+                            {% if pagination['current'] == 2 %}
+                                {% set r = 5 %}
+                            {% endif %}
+
+                            {% if pagination['current'] >= pagination['pages'] %}
+                                {% set l = 5 %}
+                            {% endif %}
+
+                            {% for i in 1..ceil(pagination['pages']) %}
+                                {% if i >= (pagination['current']-l) and i <= (pagination['current']+r) %}
+                                    <li>
+                                        <a href="{{ page['url'] }}/{{i}}" 
+                                           class="inline-flex items-center px-3 py-2 text-sm font-medium {% if i == pagination['current'] %}text-white bg-blue-600 border border-blue-600{% else %}text-gray-500 bg-white border border-gray-300 hover:bg-gray-50 hover:text-gray-700{% endif %} transition-colors duration-200">
+                                            {{i}}
+                                        </a>
+                                    </li>
+                                {% endif %}
+                            {% endfor %}
+
+                            {% if pagination['current'] < pagination['pages'] %}
+                                <li>
+                                    <a href="{{ page['url'] }}/{{ status }}/{{ pagination['next'] }}" 
+                                       class="inline-flex items-center px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-r-md hover:bg-gray-50 hover:text-gray-700 transition-colors duration-200"
+                                       aria-label="Next">
+                                        <span aria-hidden="true">&raquo;</span>
+                                    </a>
+                                </li>
+                            {% endif %}
+                        </ul>
+                    </nav>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>

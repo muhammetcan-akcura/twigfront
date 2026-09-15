@@ -1,0 +1,260 @@
+<style>
+.files-label{
+    display:none;
+}
+#uploader-button{
+    padding: 12px !important;
+    margin-bottom: 4px !important;
+}
+.auto-resize-textarea {
+    min-height: 44px;
+    resize: none;
+    overflow: hidden;
+    line-height: 1.5;
+}
+
+/* Mobile optimizations */
+@media (min-width: 640px) {
+    .auto-resize-textarea {
+        min-height: 48px;
+    }
+}
+
+/* File uploader mobile styles */
+.tickets-uploader {
+    transition: all 0.2s ease;
+}
+
+.tickets-uploader:hover {
+    border-color: #60a5fa;
+    background-color: #f8fafc;
+}
+
+.tickets-uploader:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5);
+}
+
+/* Mobile button improvements */
+@media (max-width: 639px) {
+    .tickets-uploader {
+        min-width: 0;
+        flex: 1;
+    }
+    
+    /* Ensure buttons have consistent touch targets on mobile */
+    button[type="submit"], .tickets-uploader {
+        min-height: 44px;
+        touch-action: manipulation;
+    }
+}
+
+/* RTL support improvements */
+.rtl-form .tickets-uploader span {
+    margin-left: 0;
+    margin-right: 0.5rem;
+}
+</style>
+
+<div class="relative z-10 pb-16 md:pb-15 bg-white pt-6">
+    <div class="container mx-auto px-4 relative z-10">
+        
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
+        <!-- Tab Navigation -->
+        <div class="overflow-x-auto scrollbar-hide">
+            <div class="inline-flex items-center gap-[2px] list-none p-[6px] m-0 rounded-full border border-gray-200 bg-white min-w-max">
+                <a href="/tickets" id="create-tab" class="tab-btn flex items-center justify-center gap-[10px] py-[12px] px-[14px] rounded-full font-medium whitespace-nowrap text-[15px] leading-[160%] tracking-[-0.3px] text-gray-600 hover:bg-gray-200 hover:text-gray-800 cursor-pointer">
+                    <i class="ri-add-line text-[22px]"></i>
+                    <span>Create Ticket</span>
+                </a>
+                <a href="/tickets" id="list-tab" class="tab-btn flex items-center justify-center gap-[10px] py-[12px] px-[14px] rounded-full font-medium whitespace-nowrap text-[15px] leading-[160%] tracking-[-0.3px] text-gray-600 hover:bg-gray-200 hover:text-gray-800 cursor-pointer">
+                    <i class="ri-list-check text-[22px]"></i>
+                    <span>Ticket List</span>
+                </a>
+                <a href="#" id="view-tab" class="tab-btn active flex items-center justify-center gap-[10px] py-[12px] px-[14px] rounded-full font-medium whitespace-nowrap text-[15px] leading-[160%] tracking-[-0.3px] !text-white border border-white/15 btn-custom-active shadow-[0px_0px_3px_0px_#0139ff,0px_0px_0px_1.182px_#0139ff] cursor-pointer">
+                    <i class="ri-eye-line text-[22px]"></i>
+                    <span>View Ticket</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Search Bar -->
+        <div class="w-full md:w-auto flex items-center justify-center md:justify-end">
+            <form action="/tickets" method="get" id="history-search" class="relative w-full md:w-auto">
+                <div class="relative">
+                    <input type="text" 
+                           class="w-full md:w-[250px] h-[48px] pl-10 pr-4 py-3 border border-gray-300 rounded-full focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors text-base bg-white" 
+                           name="search" 
+                           placeholder="Search tickets...">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <i class="ri-search-line text-gray-400 text-lg"></i>
+                    </div>
+                </div>
+            </form>
+        </div>
+        </div>
+        
+        <!-- Ticket Chat Card -->
+        <div class="bg-white rounded-[15px] border border-gray-200 mt-8 {% if site['rtl'] %}rtl-content{% endif %}">
+            <!-- Card Header -->
+            <div class="px-6 py-4 border-b border-gray-200 bg-white rounded-t-[15px]">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center space-x-3 {% if site['rtl'] %}flex-row-reverse space-x-reverse{% endif %}">
+                        <div class="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center">
+                            <i class="ri-customer-service-2-line text-white text-lg"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-semibold text-gray-800">{{ ticket['thema'] }}</h3>
+                            <p class="text-sm text-gray-600">Status: <span class="text-green-600 font-medium">Open</span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chat Container -->
+            <div class="h-96 overflow-y-auto p-6 bg-white">
+                <!-- Chat Messages -->
+                <div class="space-y-4">
+                    {% if messageList %}
+                        {% for message in messageList %}
+                            {% if message['support'] == 0 %}
+                                <!-- User Message -->
+                                <div class="flex justify-end {% if site['rtl'] %}justify-start{% endif %}">
+                                    <div class="max-w-xs lg:max-w-md bg-blue-500 text-white rounded-lg px-4 py-2 shadow-sm">
+                                        <div class="flex items-center justify-between mb-1">
+                                            <span class="text-sm font-medium">{{ message['author'] }}</span>
+                                            <span class="text-xs opacity-75">{{ message['time'] }}</span>
+                                        </div>
+                                        <p class="text-sm">{{ message['message'] }}</p>
+                                        {% if message['files'] %}
+                                            <div class="mt-4 space-y-1">
+                                                {% for file in message['files'] %}
+                                                    <div>
+                                                        <a href="{{ file['url'] }}" title="{{ file['name'] }}" target="_blank" rel="noopener noreferrer nofollow" class="text-blue-200 hover:text-white transition-colors text-sm inline-flex items-center">
+                                                            <i class="ri-file-text-line mr-1"></i>
+                                                            {{ sliceUrl(file['name']) }}
+                                                        </a>
+                                                    </div>
+                                                {% endfor %}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            {% else %}
+                                <!-- Support Message -->
+                                <div class="flex justify-start {% if site['rtl'] %}justify-end{% endif %}">
+                                    <div class="max-w-xs lg:max-w-md bg-white text-gray-800 rounded-lg px-4 py-2 shadow-sm border border-gray-200">
+                                        <div class="flex items-center justify-between mb-1">
+                                            <span class="text-sm font-medium text-blue-600">{{ message['author'] }}</span>
+                                            <span class="text-xs text-gray-500">{{ message['time'] }}</span>
+                                        </div>
+                                        <p class="text-sm">{{ message['message'] }}</p>
+                                        {% if message['files'] %}
+                                            <div class="mt-4 space-y-1">
+                                                {% for file in message['files'] %}
+                                                    <div>
+                                                        <a href="{{ file['url'] }}" title="{{ file['name'] }}" target="_blank" rel="noopener noreferrer nofollow" class="text-blue-600 hover:text-blue-800 transition-colors text-sm inline-flex items-center">
+                                                            <i class="ri-file-text-line mr-1"></i>
+                                                            {{ sliceUrl(file['name']) }}
+                                                        </a>
+                                                    </div>
+                                                {% endfor %}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            </div>
+
+            {% if canAddMessage %}
+                <!-- Message Input -->
+                <div class="px-6 py-4 border-t border-gray-200 bg-white rounded-b-[15px]">
+                    <form {% if site['rtl'] %}class="rtl-form"{% endif %} method="post" action="" class="space-y-4">
+                        {% if error %}
+                            <div class="flex items-center p-4 mb-4 text-sm text-red-800 border border-red-300 rounded-lg bg-red-50 {% if site['rtl'] %}rtl-alert{% endif %}">
+                                <svg class="flex-shrink-0 inline w-4 h-4 mr-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
+                                </svg>
+                                <span>{{ errorMessage }}</span>
+                                <button type="button" class="ml-auto -mx-1.5 -my-1.5 bg-red-50 text-red-500 rounded-lg focus:ring-2 focus:ring-red-400 p-1.5 hover:bg-red-200 inline-flex h-8 w-8" aria-label="Close">
+                                    <span class="sr-only">Close</span>
+                                    <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                                    </svg>
+                                </button>
+                            </div>
+                        {% endif %}
+                        
+                        <div class="space-y-4">
+                            <label for="message" class="block text-sm font-medium text-gray-700">{{ lang('tickets.message') }}</label>
+                            
+                            <!-- Mobile and Desktop Layout -->
+                            <div class="flex flex-col sm:flex-row sm:items-end gap-3 {% if site['rtl'] %}sm:flex-row-reverse{% endif %}">
+                                <!-- Textarea Container -->
+                                <div class="flex-1 relative min-w-0">
+                                    <textarea
+                                        id="message"
+                                        name="TicketMessageForm[message]"
+                                        rows="1"
+                                        class="auto-resize-textarea w-full px-3 sm:px-4 py-2.5 sm:py-3 border border-gray-300 rounded-[12px] focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:outline-none bg-white transition-all duration-200 text-sm sm:text-base min-h-[44px] sm:min-h-[48px]"
+                                        placeholder="Type your message here..."></textarea>
+                                </div>
+                                
+                                <!-- Action Buttons Container -->
+                                <div class="flex gap-2 sm:gap-3 sm:flex-shrink-0">
+                                    <!-- File Upload Button -->
+                                    <div class="flex-1 sm:flex-initial">
+                                        <div
+                                            class="tickets-uploader border border-gray-300 rounded-[12px] flex items-center justify-center hover:border-blue-400 focus:ring-2 focus:ring-blue-500 transition-colors cursor-pointer bg-white h-[44px] sm:h-[48px] w-full sm:w-[48px] text-center"
+                                            data-rtl="{% if site['rtl'] %}true{% else %}false{% endif %}"
+                                            data-lang-button-attach="{{ lang('tickets.button.attach') }}"
+                                            data-lang-file-format-incorrect="{{ lang('tickets.error.file_format.incorrect') }}"
+                                            data-lang-file-size-incorrect="{{ lang('tickets.error.file_size.incorrect') }}"
+                                            title="{{ lang('tickets.button.attach') }}"
+                                            tabindex="0">
+                                            <i class="ri-attachment-2 text-lg sm:text-xl text-gray-400"></i>
+                                            <span class="ml-2 text-sm text-gray-600 sm:hidden">Attach</span>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Send Button -->
+                                    <div class="flex-1 sm:flex-initial">
+                                        <button type="submit" class="w-full sm:w-auto px-4 sm:px-6 py-2.5 sm:py-3 bg-blue-500 text-white rounded-[12px] hover:bg-blue-600 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-200 flex items-center justify-center gap-2 shadow-sm hover:shadow-md font-medium text-sm h-[44px] sm:h-[48px]">
+                                            <i class="ri-send-plane-fill text-base"></i>
+                                            <span>{{ lang('tickets.button.reply') }}</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <input type="hidden" name="_csrf" value="{{csrftoken}}">
+                    </form>
+                </div>
+            {% endif %}
+        </div>
+
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const textarea = document.getElementById('message');
+    
+    function autoResize() {
+        textarea.style.height = 'auto';
+        textarea.style.height = (textarea.scrollHeight) + 'px';
+    }
+    
+    textarea.addEventListener('input', autoResize);
+    textarea.addEventListener('keydown', function(e) {
+        setTimeout(autoResize, 0);
+    });
+    
+    // Başlangıç yüksekliğini ayarla
+    autoResize();
+});
+</script>
