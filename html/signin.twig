@@ -1,215 +1,357 @@
 <style>
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&display=swap');
+
+        body {
+            background-color: #F8FBFF;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(59, 130, 246, 0.1) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(6, 182, 212, 0.1) 0%, transparent 40%),
+                radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.8) 0%, transparent 60%);
+            color: #1E293B;
+            overflow-x: hidden;
+        }
+
+        .font-outfit { font-family: 'Outfit', sans-serif; }
+
+        /* Floating Animation */
+        @keyframes float-slow {
+            0% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(5deg); }
+            100% { transform: translateY(0px) rotate(0deg); }
+        }
+        @keyframes float-medium {
+            0% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-15px) rotate(-3deg); }
+            100% { transform: translateY(0px) rotate(0deg); }
+        }
+        @keyframes float-fast {
+            0% { transform: translateY(0px) scale(1); }
+            50% { transform: translateY(-10px) scale(1.05); }
+            100% { transform: translateY(0px) scale(1); }
+        }
+        
+        .anim-float-slow { animation: float-slow 8s ease-in-out infinite; }
+        .anim-float-medium { animation: float-medium 6s ease-in-out infinite; }
+        .anim-float-fast { animation: float-fast 4s ease-in-out infinite; }
+
+        /* Custom Button Gradients */
+        .btn-gradient-blue {
+            background: linear-gradient(90deg, #2563eb 0%, #3b82f6 100%);
+            box-shadow: 0 10px 25px -5px rgba(59, 130, 246, 0.4);
+        }
+        
+        /* Abstract Background Lines SVG */
+        .bg-lines {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+            opacity: 0.6;
+        }
+
         /* Mobile responsive shadow hiding */
         @media (max-width: 768px) {
             .shadow-2xl {
                 box-shadow: none !important;
             }
         }
-        </style>
-        <main class="relative z-10 overflow-hidden">
-            <div id="particles-background" class="absolute inset-0 z-0"></div>
+
+        /* Reduce gap to fit screen perfectly */
+        .hero {
+            padding-top: 2rem !important;
+            padding-bottom: 3rem !important;
+            min-height: calc(100vh - 100px);
+            display: flex;
+            align-items: center;
+        }
+</style>
+        <main class="relative z-10">
+            
+            <!-- Abstract Background Curves (SVG) -->
+            <svg class="bg-lines hidden lg:block" width="100%" height="100%" viewBox="0 0 1440 800" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M-100 600 C 300 800, 600 200, 1500 500" stroke="url(#paint0_linear)" stroke-width="2" opacity="0.4"/>
+                <path d="M-100 500 C 400 400, 800 900, 1500 300" stroke="url(#paint1_linear)" stroke-width="1.5" opacity="0.3"/>
+                <path d="M 600 800 C 800 600, 900 100, 1200 0" stroke="url(#paint2_linear)" stroke-width="80" opacity="0.05" filter="blur(20px)"/>
+                <!-- Glow Dots -->
+                <circle cx="200" cy="700" r="6" fill="#3B82F6" opacity="0.6"/>
+                <circle cx="900" cy="150" r="4" fill="#06B6D4" opacity="0.5"/>
+                <circle cx="1300" cy="650" r="8" fill="#3B82F6" opacity="0.8"/>
+                <defs>
+                    <linearGradient id="paint0_linear" x1="0" y1="0" x2="1440" y2="800" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#3B82F6" stop-opacity="0.8"/>
+                        <stop offset="1" stop-color="#06B6D4" stop-opacity="0.1"/>
+                    </linearGradient>
+                    <linearGradient id="paint1_linear" x1="1440" y1="0" x2="0" y2="800" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#06B6D4" stop-opacity="0.6"/>
+                        <stop offset="1" stop-color="#3B82F6" stop-opacity="0.1"/>
+                    </linearGradient>
+                    <linearGradient id="paint2_linear" x1="600" y1="800" x2="1200" y2="0" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#E0E7FF" stop-opacity="1"/>
+                        <stop offset="1" stop-color="#FFFFFF" stop-opacity="0"/>
+                    </linearGradient>
+                </defs>
+            </svg>
+
+            <!-- Floating 3D Spheres & Blurred Elements -->
+            
+            <!-- Left Side Spheres with Icons -->
+            <div class="absolute top-[15%] left-[1%] w-16 h-16 rounded-full bg-white/80 backdrop-blur-md shadow-[0_10px_20px_rgba(0,0,0,0.1)] border border-white/50 anim-float-slow z-0 hidden lg:flex items-center justify-center opacity-70 blur-[1px]">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/b/b8/2021_Facebook_icon.svg" alt="Facebook" class="w-8 h-8 object-contain">
+            </div>
+            {# <div class="absolute bottom-[10%] left-[25%] w-12 h-12 rounded-full bg-white/80 backdrop-blur-md shadow-[0_10px_20px_rgba(0,0,0,0.1)] border border-white/50 anim-float-fast z-0 hidden lg:flex items-center justify-center opacity-80 blur-[2px]">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/c/ce/X_logo_2023.svg" alt="X" class="w-6 h-6 object-contain">
+            </div> #}
+            <div class="absolute top-[60%] left-[45%] w-12 h-12 rounded-full bg-white/80 backdrop-blur-md shadow-[0_10px_20px_rgba(0,0,0,0.1)] border border-white/50 anim-float-medium z-0 hidden lg:flex items-center justify-center opacity-50 blur-[3px]">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/1/19/Spotify_logo_without_text.svg" alt="Spotify" class="w-6 h-6 object-contain">
+            </div>
+            <div class="absolute bottom-[20%] left-[10%] w-20 h-20 rounded-full bg-white/80 backdrop-blur-md shadow-[0_10px_20px_rgba(0,0,0,0.1)] border border-white/50 anim-float-slow z-0 hidden lg:flex items-center justify-center opacity-60 blur-[2px]">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg" alt="Telegram" class="w-10 h-10 object-contain ml-[-2px] mt-[2px]">
+            </div>
+            <!-- Center-Bottom Sphere (Requested by user) -->
+            <div class="absolute bottom-[32%] left-[52%] w-16 h-16 rounded-full bg-white/80 backdrop-blur-md shadow-[0_10px_20px_rgba(0,0,0,0.1)] border border-white/50 anim-float-medium z-0 hidden lg:flex items-center justify-center opacity-80 blur-[1px] transform rotate-6">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/e/e7/Instagram_logo_2016.svg" alt="Instagram" class="w-8 h-8 object-contain">
+            </div>
+            <div class="absolute bottom-[85%] left-[48%] w-14 h-14 rounded-full bg-white/80 backdrop-blur-md shadow-[0_10px_20px_rgba(0,0,0,0.1)] border border-white/50 anim-float-slow z-0 hidden lg:flex items-center justify-center opacity-65 blur-[2px] transform -rotate-6">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/0/09/YouTube_full-color_icon_%282017%29.svg" alt="YouTube" class="w-7 h-7 object-contain">
+            </div>
+            
+            <!-- Right Side Spheres with Icons -->
+            <div class="absolute top-[12%] right-[28%] w-16 h-16 rounded-full bg-white/80 backdrop-blur-md shadow-[0_10px_20px_rgba(0,0,0,0.1)] border border-white/50 anim-float-slow z-0 hidden lg:flex items-center justify-center opacity-70 blur-[1px] transform -rotate-12">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" class="w-9 h-9 object-contain">
+            </div>
+            
+            <div class="absolute top-[25%] right-[18%] w-20 h-20 rounded-full bg-white/80 backdrop-blur-md shadow-[0_10px_20px_rgba(0,0,0,0.1)] border border-white/50 anim-float-medium z-0 hidden lg:flex items-center justify-center opacity-60 blur-[2px] transform rotate-12">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/d/d3/Twitch_Glitch_Logo_Purple.svg" alt="Twitch" class="w-10 h-10 object-contain">
+            </div>
+            
+            <div class="absolute top-[15%] right-[8%] w-14 h-14 rounded-full bg-white/80 backdrop-blur-md shadow-[0_10px_20px_rgba(0,0,0,0.1)] border border-white/50 anim-float-fast z-0 hidden lg:flex items-center justify-center opacity-80 blur-[1px] transform rotate-6">
+                <i class="ri-tiktok-fill text-3xl text-slate-900 drop-shadow-sm"></i>
+            </div>
+
             <section class="hero relative z-10">
-                <div class="container relative z-10">
-                    <div class="grid lg:grid-cols-2 gap-1 items-start">
-                        <!-- Left column - Login -->
-                        <div class="text-center lg:text-left" style="margin: 0; padding: 0;" data-aos="fade-right">
-                            <div class="login-container" style="margin: 0; padding: 0;">
-                                <div class="bg-white/60 backdrop-blur-xl p-7 rounded-3xl shadow-2xl max-w-md mx-auto lg:mx-0 login-box-border {% if site['rtl'] %} rtl-content {% endif %}">
+                <div class="container relative z-10 w-full">
+                    <div class="grid lg:grid-cols-2 gap-8 lg:gap-16 items-stretch">
+                        <!-- Login Form (Now on Right visually on Desktop) -->
+                        <div class="lg:order-2 flex flex-col justify-center" style="margin: 0; padding: 0;" data-aos="fade-left">
+                            <div class="login-container max-w-md mx-auto lg:ml-auto lg:mr-0 w-full relative z-20">
+                                
+                                <!-- Parallax elements removed per user request -->
+
+                                <div class="bg-white/95 backdrop-blur-2xl p-6 md:p-8 rounded-3xl shadow-[0_20px_50px_rgba(0,0,0,0.05)] border border-slate-100 w-full relative z-30 {% if site['rtl'] %} rtl-content {% endif %}">
+                                    
+                                    <!-- Header Inside Login Box -->
+                                    <div class="mb-5 text-center">
+                                        <h2 class="text-2xl md:text-[1.75rem] font-bold text-slate-900 font-outfit tracking-tight mb-3">
+                                            Login
+                                        </h2>
+                                        
+                                        <!-- Sleek Tab Switcher (Perfectly fills the 42px gap!) -->
+                                        <div class="h-[42px] w-full flex items-center p-1 bg-slate-50/80 border border-slate-100 rounded-xl">
+                                            <div class="w-1/2 h-full flex items-center justify-center bg-white rounded-lg shadow-[0_2px_8px_rgba(0,0,0,0.04)] text-[13px] font-bold text-slate-800 cursor-default">
+                                                Sign In
+                                            </div>
+                                            <a href="{{ page_url('signup') }}" class="w-1/2 h-full flex items-center justify-center text-[13px] font-medium text-slate-500 hover:text-slate-800 hover:bg-slate-200/30 rounded-lg transition-all">
+                                                Sign Up
+                                            </a>
+                                        </div>
+                                    </div>
+
 
                                     {% if error %}
-                                        <div class="alert alert-dismissible alert-danger {% if site['rtl'] %} rtl-alert {% endif %} mb-4 p-4 bg-red-100 border border-red-300 text-red-700 rounded-lg">
+                                        <div class="alert alert-dismissible alert-danger {% if site['rtl'] %} rtl-alert {% endif %} mb-3 p-3 bg-red-100 border border-red-300 text-red-700 rounded-lg text-sm">
                                             <button type="button" class="close float-right" data-dismiss="alert" onclick="this.parentElement.style.display='none'">&times;</button>
                                             {{ errorMessage }}
                                         </div>
                                     {% endif %}
 
                                     {% if success %}
-                                        <div class="alert alert-success alert-dismissible mb-4 p-4 bg-green-100 border border-green-300 text-green-700 rounded-lg" role="alert">
+                                        <div class="alert alert-success alert-dismissible mb-3 p-3 bg-green-100 border border-green-300 text-green-700 rounded-lg text-sm" role="alert">
                                             <button type="button" class="close float-right" data-dismiss="alert" aria-label="Close" onclick="this.parentElement.style.display='none'"><span aria-hidden="true">&times;</span></button>
                                             {{successMessage}}
                                         </div>
                                     {% endif %}
-                                
-                                    <h2 class="text-3xl font-bold text-gray-900 mb-4">{{ lang('signin.title') ? lang('signin.title') : 'Login' }}</h2>
-                                    
-                                    {% if googleSignIn %}
-                                        <div class="w-full mb-4">
-                                            <div id="g_id_onload"
-                                               data-client_id="{{ googleClientId }}"
-                                               data-login_uri="{{ googleSignInRedirectUrl }}"
-                                               data-auto_prompt="false"
-                                               data-_csrf="{{csrftoken}}">
-                                            </div>
-                                            <div class="g_id_signin w-full flex items-center justify-center gap-3 transition-colors"
-                                               data-type="standard"
-                                               data-size="large"
-                                               data-theme="outline"
-                                               data-text="sign_in_with"
-                                               data-shape="rectangular"
-                                               data-logo_alignment="left">
-                                            </div>
-                                        </div>
-                                    {% endif %}
-            
-                                    <div class="flex items-center my-5">
-                                        <hr class="w-full border-gray-300/80">
-                                        <span class="px-3 text-xs text-gray-500 bg-transparent whitespace-nowrap">{{ lang('Sign in') ? lang('Sign in') : 'or sign in with username' }}</span>
-                                        <hr class="w-full border-gray-300/80">
-                                    </div>
 
-                                    <form {% if site['rtl'] %}class="rtl-form"{% endif %} method="post" action="{{ page['url'] }}" class="space-y-4">
-                                        <div>
-                                            <label for="username" class="block text-sm font-medium text-gray-700 mb-1.5">{{ lang('signup.username') ? lang('signup.username') : 'Username' }}</label>
-                                            <div class="input-with-icon">
-                                                <div class="input-icon-left">
-                                                    <i class="ri-user-line"></i>
+                                    <form {% if site['rtl'] %}class="rtl-form"{% endif %} method="post" action="{{ page['url'] }}" class="space-y-3 text-left">
+                                        <div class="group">
+                                            <label for="username" class="block text-xs font-semibold text-gray-700 mb-1.5">{{ lang('signup.username') ? lang('signup.username') : 'Username' }}</label>
+                                            <div class="relative">
+                                                <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-gray-400 group-focus-within:text-blue-500 transition-colors">
+                                                    <i class="ri-user-line text-base"></i>
                                                 </div>
-                                                <input type="text" id="username" name="LoginForm[username]" placeholder="{{ lang('signup.username') ? lang('signup.username') : 'Username' }}" required class="icon-input">
+                                                <input type="text" id="username" name="LoginForm[username]" placeholder="{{ lang('signup.username') ? lang('signup.username') : 'Username' }}" required 
+                                                       class="w-full pl-10 pr-3 py-2.5 bg-gray-50/50 border border-gray-200 text-gray-900 text-sm rounded-xl focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-300 outline-none">
                                             </div>
                                         </div>
-                                        <div>
-                                            <label for="password" class="block text-sm font-medium text-gray-700 mb-1.5">{{ lang('signup.password') ? lang('signup.password') : 'Password' }}</label>
-                                            <div class="input-with-icon">
-                                                <div class="input-icon-left">
-                                                    <i class="ri-lock-line"></i>
+                                        <div class="group">
+                                            <label for="password" class="block text-xs font-semibold text-gray-700 mb-1.5">{{ lang('signup.password') ? lang('signup.password') : 'Password' }}</label>
+                                            <div class="relative">
+                                                <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-gray-400 group-focus-within:text-blue-500 transition-colors">
+                                                    <i class="ri-lock-line text-base"></i>
                                                 </div>
-                                                <input type="password" name="LoginForm[password]" id="password" placeholder="{{ lang('signup.password') ? lang('signup.password') : 'Password' }}" required class="icon-input">
-                                                <button type="button" id="toggle-password" class="input-icon-right">
-                                                    <i class="ri-eye-line"></i>
+                                                <input type="password" id="password" name="LoginForm[password]" placeholder="{{ lang('signup.password') ? lang('signup.password') : 'Password' }}" required 
+                                                       class="w-full pl-10 pr-10 py-2.5 bg-gray-50/50 border border-gray-200 text-gray-900 text-sm rounded-xl focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-300 outline-none">
+                                                <button type="button" id="toggle-password" class="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 hover:text-blue-500 transition-colors focus:outline-none">
+                                                    <i class="ri-eye-line text-base"></i>
                                                 </button>
                                             </div>
                                         </div>
                                         
                                         {% if captcha %}
-                                            <div class="mb-4">
+                                            <div class="mb-3">
                                                 {{ captchaCode }}
                                             </div>
                                         {% endif %}
 
-                                        <div class="flex items-center justify-between !mt-5">
+                                        <div class="flex items-center justify-between !mt-4">
                                             <div class="flex items-center">
-                                                <label class="custom-checkbox flex items-center cursor-pointer">
+                                                <label class="custom-checkbox flex items-center cursor-pointer group">
                                                     <input type="checkbox" name="LoginForm[remember]" value="1" id="remember">
-                                                    <span class="checkmark"></span>
-                                                    <span class="ml-6 text-sm text-gray-800">{{ lang('signin.remember_me') ? lang('signin.remember_me') : 'Remember me' }}</span>
+                                                    <span class="checkmark border-gray-300 group-hover:border-blue-500 transition-colors" style="width:16px;height:16px;"></span>
+                                                    <span class="ml-5 text-xs font-medium text-gray-600 group-hover:text-gray-900 transition-colors">{{ lang('signin.remember_me') ? lang('signin.remember_me') : 'Remember me' }}</span>
                                                 </label>
                                             </div>
                                             {% if site['resetPassword'] %}
-                                                <a href="{{ page_url('resetpassword') }}" class="text-sm font-medium text-blue-600 hover:text-blue-700">{{ lang('signin.reset_password') ? lang('signin.reset_password') : 'Forgot password?' }}</a>
+                                                <a href="{{ page_url('resetpassword') }}" class="text-xs font-semibold text-blue-600 hover:text-blue-700 transition-colors">{{ lang('signin.reset_password') ? lang('signin.reset_password') : 'Forgot password?' }}</a>
                                             {% endif %}
                                         </div>
 
                                         <input type="hidden" name="_csrf" value="{{csrftoken}}">
                                         
-                                        <button type="submit" class="w-full flex items-center justify-center gap-2 text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-base px-5 py-3 text-center !mt-6 transition-all duration-300 shadow-lg hover:shadow-xl">
-                                            <span>{{ lang('signin.button') ? lang('signin.button') : 'Login' }}</span>
-                                            <i data-feather="log-in"></i>
+                                        <button type="submit" class="w-full flex items-center justify-center gap-2 text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 font-semibold rounded-xl text-sm px-4 py-2.5 text-center !mt-5 shadow-md shadow-blue-500/30 hover:shadow-blue-500/50 transform hover:-translate-y-0.5 transition-all duration-300 outline-none focus:ring-4 focus:ring-blue-500/20">
+                                            <span>{{ lang('signin.button') ? lang('signin.button') : 'Sign in' }}</span>
+                                            <i data-feather="arrow-right" class="w-4 h-4"></i>
                                         </button>
-                                        <p class="text-sm text-center text-gray-600 !mt-5">
-                                            {{ lang('signin.text') ? lang('signin.text') : "Don't have an account?" }} <a href="{{ page_url('signup') }}" class="font-medium text-blue-600 hover:text-blue-700">{{ lang('signup.title') ? lang('signup.title') : 'Sign up' }}</a>
+
+                                        {% if googleSignIn %}
+                                            <div class="flex items-center my-4">
+                                                <hr class="flex-grow border-gray-200">
+                                                <span class="px-3 text-[10px] font-semibold text-gray-400 uppercase tracking-wider">OR</span>
+                                                <hr class="flex-grow border-gray-200">
+                                            </div>
+
+                                            <div class="w-full mb-1">
+                                                <div id="g_id_onload"
+                                                   data-client_id="{{ googleClientId }}"
+                                                   data-login_uri="{{ googleSignInRedirectUrl }}"
+                                                   data-auto_prompt="false"
+                                                   data-_csrf="{{csrftoken}}">
+                                                </div>
+                                                <div class="g_id_signin w-full flex items-center justify-center transition-colors"
+                                                   data-type="standard"
+                                                   data-size="large"
+                                                   data-theme="outline"
+                                                   data-text="sign_in_with"
+                                                   data-shape="rectangular"
+                                                   data-logo_alignment="left">
+                                                </div>
+                                            </div>
+                                        {% endif %}
+
+                                        <p class="text-xs text-center text-gray-500 font-medium !mt-4">
+                                            {{ lang('signin.text') ? lang('signin.text') : "Don't have an account?" }} <a href="{{ page_url('signup') }}" class="font-bold text-blue-600 hover:text-blue-700 transition-colors">{{ lang('signup.title') ? lang('signup.title') : 'Sign up now' }}</a>
                                         </p>
                                     </form>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Right column - Title and World Map -->
-                        <div class="hero-image-container relative hidden lg:block" data-aos="fade-left">
-                            <div class="world-map-container relative" style="margin-top: 120px;">
-                                <!-- Dotted World Map Image -->
-                                <img src="https://upload.wikimedia.org/wikipedia/commons/e/ec/World_map_%28blue_dots%29.svg" alt="World Map" class="world-map-image"/>
+                        <!-- Typography & Features (Left Side on Desktop) -->
+                        <div class="relative hidden lg:flex flex-col lg:order-1 pr-4 xl:pr-12 text-left h-full" data-aos="fade-right">
+                            
+                            <!-- Topline Badge (Absolute Top aligned with Login Form) -->
+                            <div class="absolute top-0 left-0 w-full z-30 pt-2 lg:pt-0">
+                                <span class="text-xs font-bold tracking-wider text-blue-600 uppercase font-outfit">{{ site['name'] }}</span>
+                                <span class="text-xs font-medium text-slate-500 ml-1.5">— #1 Premium SMM Panel For Everyone</span>
+                            </div>
+
+                            <div class="relative z-10 w-full max-w-xl mt-12 lg:mt-[44px]">
                                 
-                                <!-- Background overlay for better visibility -->
-                                <div class="map-overlay"></div>
+                                <!-- Headline -->
+                                <h1 class="text-[2.4rem] lg:text-[2.8rem] xl:text-[3.2rem] leading-tight tracking-tight mb-6 text-left font-outfit text-slate-800 font-bold flex flex-nowrap items-center gap-x-2 whitespace-nowrap">
+                                    <span>Stand Out, Stay</span>
+                                    <div class="flex items-center">
+                                        <img src="https://storage.perfectcdn.com/ed17j7/pbbaj5xaof1yfx3d.png" alt="E" class="h-11 lg:h-[3.2rem] xl:h-[3.8rem] object-contain relative top-0.5">
+                                        <span class="text-[#2b79b8] -ml-1">xclusive</span>
+                                    </div>
+                                </h1>
                                 
-                                <!-- Title overlaid on top of map -->
-                                <div class="absolute top-0 left-0 right-0 z-20 text-center" style="padding-top: 0; margin-top: -120px;">
-                                    
-                                    <!-- Badge -->
-                                    <div class="inline-flex items-center gap-3 bg-transparent backdrop-blur-sm text-white px-4 py-2 rounded-full text-sm font-medium mb-3 neon-badge" data-aos="fade-down">
-                                        <div class="w-6 h-6 rounded-full flex items-center justify-center neon-icon-container">
-                                            <i class="ri-flashlight-line text-white text-xs"></i>
+                                <!-- Paragraph -->
+                                <p class="text-sm lg:text-base text-slate-500 mb-6 max-w-[450px] leading-relaxed font-medium font-outfit text-left">
+                                    The most trusted and cheapest SMM Panel for resellers. High-quality services, fully automated API, and instant delivery 24/7.
+                                </p>
+                                <!-- Trust Signals (Colorless / Monochrome) -->
+                                <div class="flex flex-col gap-3.5 mb-2 max-w-[450px]">
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-8 h-8 rounded-full bg-white/80 flex items-center justify-center text-slate-500 text-sm shadow-sm border border-slate-200/60">
+                                            <i class="ri-flashlight-fill"></i>
                                         </div>
-                                        <span class="text-gray-900">{{ site['name'] }} The Best SMMPanel</span>
+                                        <span class="text-[13px] lg:text-[14px] font-semibold text-slate-600 font-outfit">Lightning Fast Automated Delivery</span>
                                     </div>
-
-                                    <h1 class="text-4xl md:text-5xl lg:text-[3.8rem] font-bold text-gray-900 mb-4 hero-title" data-aos="fade-up">
-                                     🔥#1 SMM PANEL<br>
-                                         <span class="gradient-text">IN THE WORLD!</span>
-                                    </h1>
-                                    
-
-                                    
-
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-8 h-8 rounded-full bg-white/80 flex items-center justify-center text-slate-500 text-sm shadow-sm border border-slate-200/60">
+                                            <i class="ri-shield-star-fill"></i>
+                                        </div>
+                                        <span class="text-[13px] lg:text-[14px] font-semibold text-slate-600 font-outfit">Exclusive Premium Quality Services</span>
+                                    </div>
                                 </div>
                                 
-                                <!-- Gradient fade overlay under text -->
-                                <div class="absolute left-0 right-0 bg-gradient-to-b from-white/90 via-white/50 to-transparent gradient-fade-overlay"></div>
+                                <!-- Action Buttons -->
+                                <div class="flex flex-wrap items-center gap-3 mb-6 mt-6 lg:mt-[24px] xl:mt-[40px]">
+                                    <a href="https://smmexclusive.com/signup" class="btn-gradient-blue text-white text-sm font-semibold font-outfit rounded-full px-6 py-2.5 flex items-center gap-2 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-0.5">
+                                        <i class="ri-rocket-line"></i>
+                                        Get Started
+                                        <i class="ri-arrow-right-line ml-1"></i>
+                                    </a>
+                                    <a href="https://smmexclusive.com/services" class="bg-white border border-slate-200 text-slate-700 text-sm font-semibold font-outfit rounded-full px-6 py-2.5 flex items-center gap-2 hover:bg-slate-50 hover:shadow-md transition-all duration-300">
+                                        <i class="ri-list-check-2"></i>
+                                        View Services
+                                    </a>
+                                </div>
+                            </div>
 
-                                <!-- Animated Social Media Bubbles - Well distributed -->
-                                <!-- North America - USA -->
-                                <div class="social-bubble bubble-1" data-platform="instagram" data-aos="zoom-in-up">
-                                    <div class="bubble-icon">
-                                        <i class="ri-instagram-line"></i>
+                                <!-- Stats Row (API Driven) -->
+                                <div class="absolute bottom-0 left-0 flex flex-nowrap items-center justify-between gap-5 lg:gap-10 bg-white/90 backdrop-blur-sm border border-slate-100 rounded-[1.25rem] p-4 lg:py-5 lg:pl-8 lg:pr-12 shadow-[0_10px_40px_rgba(0,0,0,0.04)] w-max max-w-[130%] z-20">
+                                    <div class="flex items-center gap-3 lg:gap-3.5">
+                                        <div class="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center text-blue-600 text-base border border-blue-100">
+                                            <i class="ri-history-line"></i>
+                                        </div>
+                                        <div>
+                                            <div class="font-outfit font-bold text-slate-800 text-[15px] lg:text-[17px] leading-tight count-up">{{ totals['ordersAll'] }}<span class="text-xs lg:text-[14px]">+</span></div>
+                                            <div class="text-[11px] lg:text-[12px] text-slate-500 font-medium mt-0.5">Completed Order</div>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center gap-3 lg:gap-3.5">
+                                        <div class="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center text-blue-600 text-base border border-blue-100">
+                                            <i class="ri-group-line"></i>
+                                        </div>
+                                        <div>
+                                            <div class="font-outfit font-bold text-slate-800 text-[15px] lg:text-[17px] leading-tight count-up">{{ totals['usersAll'] }}<span class="text-xs lg:text-[14px]">+</span></div>
+                                            <div class="text-[11px] lg:text-[12px] text-slate-500 font-medium mt-0.5">Active Users</div>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center gap-3 lg:gap-3.5">
+                                        <div class="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center text-blue-600 text-base border border-blue-100">
+                                            <i class="ri-sparkling-2-line"></i>
+                                        </div>
+                                        <div>
+                                            <div class="font-outfit font-bold text-slate-800 text-[15px] lg:text-[17px] leading-tight">6<span class="text-[12px] lg:text-[14px]">+ Years</span></div>
+                                            <div class="text-[11px] lg:text-[12px] text-slate-500 font-medium mt-0.5">Experience</div>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center gap-3 lg:gap-3.5">
+                                        <div class="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center text-blue-600 text-base border border-blue-100">
+                                            <i class="ri-settings-line"></i>
+                                        </div>
+                                        <div>
+                                            <div class="font-outfit font-bold text-slate-800 text-[15px] lg:text-[17px] leading-tight count-up">{{ totals['servicesAll'] }}<span class="text-xs lg:text-[14px]">+</span></div>
+                                            <div class="text-[11px] lg:text-[12px] text-slate-500 font-medium mt-0.5">Services</div>
+                                        </div>
                                     </div>
                                 </div>
 
-                                <!-- Europe - Western Europe -->
-                                <div class="social-bubble bubble-2" data-platform="youtube" data-aos="zoom-in-up">
-                                    <div class="bubble-icon">
-                                        <i class="ri-youtube-fill"></i>
-                                    </div>
-                                </div>
-
-                                <!-- Asia - East Asia -->
-                                <div class="social-bubble bubble-3" data-platform="twitter" data-aos="zoom-in-up">
-                                    <div class="bubble-icon">
-                                        <i class="ri-twitter-x-line"></i>
-                                    </div>
-                                </div>
-
-                                <!-- Africa - Central Africa -->
-                                <div class="social-bubble bubble-4" data-platform="tiktok" data-aos="zoom-in-up">
-                                    <div class="bubble-icon">
-                                        <i class="ri-tiktok-fill"></i>
-                                    </div>
-                                </div>
-
-                                <!-- South America - Brazil -->
-                                <div class="social-bubble bubble-5" data-platform="facebook" data-aos="zoom-in-up">
-                                    <div class="bubble-icon">
-                                        <i class="ri-facebook-fill"></i>
-                                    </div>
-                                </div>
-
-                                <!-- Australia/Oceania -->
-                                <div class="social-bubble bubble-6" data-platform="twitch" data-aos="zoom-in-up">
-                                    <div class="bubble-icon">
-                                        <i class="ri-twitch-fill"></i>
-                                    </div>
-                                </div>
-
-                                <!-- Asia - Central Asia/Russia -->
-                                <div class="social-bubble bubble-7" data-platform="spotify" data-aos="zoom-in-up">
-                                    <div class="bubble-icon">
-                                        <i class="ri-spotify-fill"></i>
-                                    </div>
-                                </div>
-
-                                <!-- North America - Canada -->
-                                <div class="social-bubble bubble-8" data-platform="discord" data-aos="zoom-in-up">
-                                    <div class="bubble-icon">
-                                        <i class="ri-discord-fill"></i>
-                                    </div>
-                                </div>
-
-                                <!-- Exclusive Badge -->
-                                <div class="absolute bottom-[75px] left-0 right-0 z-20 flex justify-center" data-aos="zoom-in-up" data-aos-delay="500">
-                                    <div class="float-animation flex items-center gap-3 bg-gradient-to-r from-blue-600 to-blue-400 text-white px-6 py-3 rounded-full font-bold text-base shadow-lg shadow-blue-500/50 hover:scale-105 transition-transform cursor-pointer">
-                                        <i class="ri-vip-crown-2-fill text-xl"></i>
-                                        <span>Stand Out, Stay EXCLUSIVE</span>
-                                    </div>
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -231,64 +373,7 @@
             </section>
         {% endif %}
 
-        <section class="stats-section relative container mx-auto px-4 py-8">
-            <div id="particles-payment" class="absolute inset-0"></div>
-            <div class="relative z-10 flex flex-col md:flex-row justify-around items-center text-center md:text-left space-y-8 md:space-y-0">
-                
-                <div class="stat-item flex items-center space-x-4 w-48 md:ml-10" data-aos="fade-up" data-aos-delay="100">
-                    <div class="stat-icon">
-                        <i class="ri-history-line"></i>
-                    </div>
-                    <div class="flex flex-col">
-                        <div class="flex items-baseline">
-                            <span class="stat-number count-up">{{ totals['ordersAll'] }}</span>
-                            <span class="stat-suffix">+</span>
-                        </div>
-                        <span class="stat-label">Completed Order</span>
-                    </div>
-                </div>
 
-                <div class="stat-item flex items-center space-x-4 w-48" data-aos="fade-up" data-aos-delay="200">
-                    <div class="stat-icon">
-                        <i class="ri-group-line"></i>
-                    </div>
-                    <div class="flex flex-col">
-                        <div class="flex items-baseline">
-                            <span class="stat-number count-up">{{ totals['usersAll'] }}</span>
-                            <span class="stat-suffix">+</span>
-                        </div>
-                        <span class="stat-label">Active Users</span>
-                    </div>
-                </div>
-
-                <div class="stat-item flex items-center space-x-4 w-48" data-aos="fade-up" data-aos-delay="300">
-                    <div class="stat-icon">
-                        <i class="ri-sparkling-2-line"></i>
-                    </div>
-                    <div class="flex flex-col">
-                        <div class="flex items-baseline">
-                            <span class="stat-number count-up">6</span>
-                            <span class="stat-suffix">+ Years</span>
-                        </div>
-                        <span class="stat-label">Experience</span>
-                    </div>
-                </div>
-
-                <div class="stat-item flex items-center space-x-4 w-48" data-aos="fade-up" data-aos-delay="400">
-                    <div class="stat-icon">
-                        <i class="ri-settings-line"></i>
-                    </div>
-                    <div class="flex flex-col">
-                        <div class="flex items-baseline">
-                            <span class="stat-number count-up">{{ totals['servicesAll'] }}</span>
-                            <span class="stat-suffix">+</span>
-                        </div>
-                        <span class="stat-label">Services</span>
-                    </div>
-                </div>
-
-            </div>
-        </section>
 
 
         <!-- About Us Section -->
