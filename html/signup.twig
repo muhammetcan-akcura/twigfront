@@ -28,159 +28,56 @@
     <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet" />
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        @font-face {
-            font-family: "Satoshi";
-            src: url(https://cdn.smmspot.net/smm1stv4/assets/Satoshi-Variable.woff2) format("woff2"),
-                 url(https://cdn.smmspot.net/smm1stv4/assets/Satoshi-Variable.woff) format("woff"),
-                 url(https://cdn.smmspot.net/smm1stv4/assets/Satoshi-Variable.ttf) format("truetype");
-            font-weight: 300 900;
-            font-display: swap;
-            font-style: normal;
-        }
-        @font-face {
-            font-family: "Aeonik";
-            src: url(https://cdn.smmspot.net/smm1stv4/assets/Aeonik-Medium.woff2) format("woff2"),
-                 url(https://cdn.smmspot.net/smm1stv4/assets/Aeonik-Medium.woff) format("woff");
-            font-weight: 500;
-            font-style: normal;
-            font-display: swap;
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&display=swap');
+
+        body, html {
+            /* Sol üst yumuşak kalırken sol alt biraz daha maviye dönük (blue-200 tonu) */
+            background: radial-gradient(ellipse at top right, #ffffff 0%, #eff6ff 50%, #bfdbfe 100%) !important;
+            background-attachment: fixed !important;
+            color: #1E293B;
+            overflow-x: hidden;
         }
 
-        :root {
-            --primary-blue: #2563eb;
-            --light-bg: #f8fafc;
-            --secondary-bg: #ffffff;
-            --text-heading: #1e293b;
-            --text-dark: #334155;
-            --text-light: #64748b;
-            --border-color: #e2e8f0;
-            --card-bg-color: #ffffff; 
-            --stroke-color: #e2e8f0;
-            --body-text: #334155;
+        .font-outfit { font-family: 'Outfit', sans-serif; }
+
+        /* Animations Disabled for Performance Optimization */
+        .anim-float-slow, .anim-float-medium, .anim-float-fast { transform: none !important; animation: none !important; }
+
+        /* Custom Button Gradients */
+        .btn-gradient-blue {
+            background: linear-gradient(90deg, #2563eb 0%, #3b82f6 100%);
+            box-shadow: 0 10px 25px -5px rgba(59, 130, 246, 0.4);
         }
         
-        body {
-            font-family: "Aeonik", "Satoshi", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-        }
-
-        .background-effects {
+        /* Abstract Background Lines SVG */
+        .bg-lines {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            overflow: hidden;
             z-index: 0;
-        }
-        .grid-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image:
-                linear-gradient(rgba(0,0,0,0.03) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(0,0,0,0.03) 1px, transparent 1px);
-            background-size: 60px 60px;
-        }
-        .blur-orb {
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(120px);
-            opacity: 0.15;
-        }
-        .orb1 { background-color: #00c6ff; width: 400px; height: 400px; top: -100px; left: -150px; }
-        .orb2 { background-color: #ff00aa; width: 300px; height: 300px; top: 200px; right: -100px; }
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 7px 20px -4px rgba(37, 99, 235, 0.4);
-        }
-        
-        .title {
-            color: var(--text-heading);
-            font-size: 35px;
-            font-style: normal;
-            font-weight: 550;
-            line-height: 48px;
-            margin: 0;
-            text-align: center;
-            letter-spacing: -2.057px;
+            pointer-events: none;
+            opacity: 0.6;
         }
 
-        .subtitle {
-            color: var(--text-light);
-            text-align: center;
-            font-size: 15px;
-            font-style: normal;
-            font-weight: 400;
-            line-height: 22px;
+        /* Mobile responsive shadow hiding */
+        @media (max-width: 768px) {
+            .shadow-2xl {
+                box-shadow: none !important;
+            }
         }
 
-        .btn-primary-custom {
-            /* Base styles */
-            min-height: 50px;
-            padding: 12px 25px;
+        /* Reduce gap to fit screen perfectly */
+        .hero {
+            padding-top: 2rem !important;
+            padding-bottom: 3rem !important;
+            min-height: calc(100vh - 100px);
             display: flex;
             align-items: center;
-            justify-content: center;
-            border-radius: 15px;
-            gap: 9px;
-            transition: all .14s ease;
-            text-decoration: none;
-            width: 100%;
-            font-size: 1rem;
-            font-weight: 500;
-
-            /* Custom styles */
-            border: 1px solid var(--primary-blue);
-            background: var(--primary-blue);
-            box-shadow: 0px 1.18245px 2.3649px 0px rgba(37, 99, 235, 0.4), 0px 0px 0px 1.18245px var(--primary-blue);
-            color: #fff;
         }
 
-        .form-control-custom {
-            background-color: var(--secondary-bg);
-            border: 1px solid #bfdbfe;
-            color: var(--text-dark);
-            width: 100%;
-            display: block;
-            font-size: 16px;
-            font-style: normal;
-            font-weight: 500;
-            line-height: 19px;
-            letter-spacing: -0.42px;
-            min-height: 55px;
-            border-radius: 10px;
-            padding: 10px 20px;
-            box-shadow: none;
-            transition: all 0.2s ease-in-out;
-        }
-
-        .form-control-custom:focus {
-            outline: none;
-            border-color: var(--primary-blue);
-            background-color: var(--secondary-bg);
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
-        }
-
-        .checkbox-icon {
-            opacity: 0;
-            transition: opacity 0.15s ease-in-out;
-            color: white;
-            font-size: 0.875rem; /* text-sm */
-            line-height: 1.25rem;
-        }
-        .peer:checked ~ .checkbox-container > .checkbox-icon {
-            opacity: 1;
-        }
-
-        .help-icon {
-            color: var(--primary-blue) !important;
-            font-size: 1.125rem !important;
-        }
-
+        /* Old Signup Navbar CSS */
         .header {
             padding: 20px 0;
             position: sticky;
@@ -188,7 +85,6 @@
             z-index: 100;
             width: 100%;
         }
-
         .header-inner {
             display: flex;
             align-items: center;
@@ -205,17 +101,15 @@
             padding: 12px 25px;
             box-shadow: 0 5px 25px rgba(0,0,0,0.07);
         }
-
         .logo {
             display: flex;
             align-items: center;
             gap: 10px;
             font-weight: 700;
             font-size: 1.1rem;
-            color: var(--text-heading);
+            color: #1e293b;
             text-decoration: none;
         }
-
         .logo-icon {
             display: flex;
             align-items: center;
@@ -223,53 +117,81 @@
             width: 36px;
             height: 36px;
             border-radius: 8px;
-            background-color: var(--primary-blue);
+            background-color: #2563eb;
             color: white;
             font-weight: 900;
             font-size: 1rem;
         }
-
         .logo-icon img {
             width: 36px;
             height: 36px;
             border-radius: 8px;
             object-fit: contain;
         }
-
         .logo-text {
             font-weight: 600;
         }
 
-        .signin-prompt {
-            border-radius: 15px;
-            background-color:#2563eb0d;
-            border: 1px solid var(--border-color);
-            padding: 20px;
-            margin-top: 30px;
+        /* Fix PerfectPanel Backend Captcha Modal Styling - Simplified for Performance */
+        .modal {
+            display: none !important;
+            position: fixed;
+            inset: 0;
+            z-index: 99999;
+            background: rgba(0, 0, 0, 0.6);
+            align-items: center;
+            justify-content: center;
+        }
+        .modal.show-modal {
+            display: flex !important;
+        }
+        .modal-dialog {
+            width: 100%;
+            max-width: 380px;
+            margin: 0 auto;
+            padding: 1rem;
+        }
+        .modal-content {
+            background: #ffffff;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+            position: relative;
+        }
+        .modal-header {
             text-align: center;
-            font-size: 1rem;
-            font-weight: 500;
-            color: var(--text-dark);
+            margin-bottom: 1rem;
         }
-        .signin-prompt a {
+        .modal-title {
+            font-size: 1.125rem;
             font-weight: 600;
-            color: var(--primary-blue);
-            text-decoration: none;
-            margin-left: 0.5rem;
+            color: #1e293b;
+            margin: 0;
+            font-family: inherit;
         }
-        .signin-prompt a:hover {
-            text-decoration: underline;
+        .modal-header .close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            width: 2rem;
+            height: 2rem;
+            background: transparent;
+            color: #64748b;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
-
+        .modal-body {
+            display: flex;
+            justify-content: center;
+        }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-700 {% if site['rtl'] %}rtl{% endif %}">
-    <div class="background-effects">
-        <div class="grid-overlay"></div>
-        <div class="blur-orb orb1"></div>
-        <div class="blur-orb orb2"></div>
-    </div>
-
+    
     <div class="relative z-10 flex min-h-screen flex-col">
         <header class="header">
             <div class="header-inner">
@@ -297,123 +219,322 @@
                     </a>
                 </div>
                 <a href="/howitworks" class="inline-flex items-center justify-center rounded-full border border-blue-200 bg-[#2563eb0d] text-sm font-medium text-blue-600 shadow-sm transition hover:-translate-y-px hover:bg-[#2563eb1a] hover:shadow-md w-12 h-12 md:w-auto md:h-auto md:gap-x-2 md:px-5 md:py-3">
-                    <i class="ri-question-line help-icon"></i>
+                    <i class="ri-question-line text-blue-600 text-lg"></i>
                     <span class="hidden md:inline">How it Works</span>
                 </a>
             </div>
         </header>
-    
-        <main class="flex flex-grow flex-col items-center justify-center p-8">
-            <div class="w-full max-w-md text-center">
-                <div class="mb-8">
-                    <div class="mb-5 inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-blue-100">
-                        <i class="ri-user-add-line text-4xl text-blue-600"></i>
-                    </div>
-                    <h1 class="title">Create an Account</h1>
-                    <p class="subtitle mt-2">Let's get you started. Provide your details to join us.</p>
-                </div>
-    
-                <form {% if site['rtl'] %}class="rtl-form"{% endif %} action="" method="post">
-                    {% if error %}
-                        <div class="mb-5 rounded-lg border border-red-200 bg-red-50 p-4 text-red-800">
-                            <div class="flex items-center">
-                                <i class="ri-error-warning-line mr-2 text-lg"></i>
-                                <span>{{ errorMessage }}</span>
-                            </div>
-                        </div>
-                    {% endif %}
-                    {% if success %}
-                        <div class="mb-5 rounded-lg border border-green-200 bg-green-50 p-4 text-green-800">
-                            <div class="flex items-center">
-                                <i class="ri-check-line mr-2 text-lg"></i>
-                                <span>{{ successText }}</span>
-                            </div>
-                        </div>
-                    {% endif %}
+        
+        <main class="flex-grow flex flex-col items-center justify-center relative w-full h-full">
+            <!-- Abstract Background Wave Lines (SVG) -->
+            <svg class="bg-lines hidden lg:block" width="100%" height="100%" viewBox="0 0 1440 800" fill="none" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" style="position:absolute; top:0; left:0; width:100%; height:100%; z-index:0; pointer-events:none;">
+                <!-- Hareketsiz Dalga Çizgileri -->
+                <path d="M-100 600 C 300 800, 600 200, 1500 500" stroke="#ffffff" stroke-width="3" opacity="0.4"/>
+                <path d="M-100 500 C 400 400, 800 900, 1500 300" stroke="#eff6ff" stroke-width="8" opacity="0.6"/>
+                <path d="M-100 200 C 400 -50, 900 600, 1500 200" stroke="#bfdbfe" stroke-width="2" opacity="0.7"/>
+                <path d="M-100 700 C 500 500, 1000 900, 1500 600" stroke="#60a5fa" stroke-width="4" opacity="0.3"/>
+                
+                <!-- Glow Dots -->
+                <circle cx="200" cy="700" r="6" fill="#ffffff" opacity="0.6"/>
+                <circle cx="900" cy="150" r="4" fill="#60a5fa" opacity="0.5"/>
+                <circle cx="1300" cy="650" r="8" fill="#eff6ff" opacity="0.8"/>
+            </svg>
 
-                    {% for field in fields %}
-                        <div class="mb-5 text-left">
-                            <label for="{{ field.code }}" class="mb-2 block text-base font-medium text-slate-700">{{ lang(field.label) }}</label>
-                            {% if field.type == 'password' %}
-                                <div class="relative">
-                                    <input type="{{ field.type }}" id="{{ field.code }}" name="RegistrationForm[{{ field.code }}]" value="{{ field.value }}" class="form-control-custom pr-10">
-                                    <div class="absolute inset-y-0 right-4 flex cursor-pointer items-center text-slate-400 hover:text-slate-600" onclick="togglePasswordVisibility('{{ field.code }}')">
-                                        <i class="ri-eye-off-line"></i>
+            <!-- Floating 3D Spheres & Blurred Elements -->
+            <div class="absolute top-[15%] left-[1%] w-16 h-16 rounded-full bg-white/80 backdrop-blur-md shadow-[0_10px_20px_rgba(0,0,0,0.1)] border border-white/50 anim-float-slow z-0 hidden lg:flex items-center justify-center opacity-70 blur-[1px]">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/b/b8/2021_Facebook_icon.svg" alt="Facebook" class="w-8 h-8 object-contain">
+            </div>
+            <div class="absolute top-[60%] left-[45%] w-12 h-12 rounded-full bg-white/80 backdrop-blur-md shadow-[0_10px_20px_rgba(0,0,0,0.1)] border border-white/50 anim-float-medium z-0 hidden lg:flex items-center justify-center opacity-50 blur-[3px]">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/1/19/Spotify_logo_without_text.svg" alt="Spotify" class="w-6 h-6 object-contain">
+            </div>
+            <div class="absolute bottom-[20%] left-[10%] w-20 h-20 rounded-full bg-white/80 backdrop-blur-md shadow-[0_10px_20px_rgba(0,0,0,0.1)] border border-white/50 anim-float-slow z-0 hidden lg:flex items-center justify-center opacity-60 blur-[2px]">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg" alt="Telegram" class="w-10 h-10 object-contain ml-[-2px] mt-[2px]">
+            </div>
+            <div class="absolute bottom-[32%] left-[52%] w-16 h-16 rounded-full bg-white/80 backdrop-blur-md shadow-[0_10px_20px_rgba(0,0,0,0.1)] border border-white/50 anim-float-medium z-0 hidden lg:flex items-center justify-center opacity-80 blur-[1px] transform rotate-6">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/e/e7/Instagram_logo_2016.svg" alt="Instagram" class="w-8 h-8 object-contain">
+            </div>
+            <div class="absolute bottom-[85%] left-[48%] w-14 h-14 rounded-full bg-white/80 backdrop-blur-md shadow-[0_10px_20px_rgba(0,0,0,0.1)] border border-white/50 anim-float-slow z-0 hidden lg:flex items-center justify-center opacity-65 blur-[2px] transform -rotate-6">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/0/09/YouTube_full-color_icon_%282017%29.svg" alt="YouTube" class="w-7 h-7 object-contain">
+            </div>
+            <div class="absolute top-[12%] right-[28%] w-16 h-16 rounded-full bg-white/80 backdrop-blur-md shadow-[0_10px_20px_rgba(0,0,0,0.1)] border border-white/50 anim-float-slow z-0 hidden lg:flex items-center justify-center opacity-70 blur-[1px] transform -rotate-12">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" class="w-9 h-9 object-contain">
+            </div>
+            <div class="absolute top-[25%] right-[18%] w-20 h-20 rounded-full bg-white/80 backdrop-blur-md shadow-[0_10px_20px_rgba(0,0,0,0.1)] border border-white/50 anim-float-medium z-0 hidden lg:flex items-center justify-center opacity-60 blur-[2px] transform rotate-12">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/d/d3/Twitch_Glitch_Logo_Purple.svg" alt="Twitch" class="w-10 h-10 object-contain">
+            </div>
+
+            <section class="hero relative z-10 w-full">
+            <div class="container relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="grid lg:grid-cols-2 gap-8 lg:gap-16 items-stretch">
+                    
+                    <!-- Signup Form (Right Side) -->
+                    <div class="lg:order-2 flex flex-col justify-center" style="margin: 0; padding: 0;">
+                        <div class="login-container max-w-lg mx-auto lg:ml-auto lg:mr-0 w-full relative z-20 mt-12 md:mt-0">
+                            
+                            <div class="bg-white/95 backdrop-blur-2xl p-6 md:p-8 rounded-3xl shadow-[0_20px_50px_rgba(0,0,0,0.05)] border border-slate-100 w-full relative z-30 {% if site['rtl'] %} rtl-content {% endif %}">
+                                
+                                <!-- Header Inside Login Box -->
+                                <div class="mb-5 text-center">
+                                    <h2 class="text-2xl md:text-[1.75rem] font-bold text-slate-900 font-outfit tracking-tight mb-3">
+                                        Create Account
+                                    </h2>
+                                    
+                                    <!-- Sleek Tab Switcher -->
+                                    <div class="h-[42px] w-full flex items-center p-1 bg-slate-50/80 border border-slate-100 rounded-xl">
+                                        <a href="{{ page_url('signin') }}" class="w-1/2 h-full flex items-center justify-center text-[13px] font-medium text-slate-500 hover:text-slate-800 hover:bg-slate-200/30 rounded-lg transition-all">
+                                            Sign In
+                                        </a>
+                                        <div class="w-1/2 h-full flex items-center justify-center bg-white rounded-lg shadow-[0_2px_8px_rgba(0,0,0,0.04)] text-[13px] font-bold text-slate-800 cursor-default">
+                                            Sign Up
+                                        </div>
                                     </div>
                                 </div>
-                            {% else %}
-                                <input type="{{ field.type }}" id="{{ field.code }}" name="RegistrationForm[{{ field.code }}]" value="{{ field.value }}" class="form-control-custom">
-                            {% endif %}
-                        </div>
-                    {% endfor %}
 
-                    {% if site['captcha'] %}
-                        <div class="mb-5">
-                            {{ captchaCode }}
-                        </div>
-                    {% endif %}
+                                {% if error %}
+                                    <div class="alert alert-dismissible alert-danger {% if site['rtl'] %} rtl-alert {% endif %} mb-3 p-3 bg-red-100 border border-red-300 text-red-700 rounded-lg text-sm">
+                                        <button type="button" class="close float-right" data-dismiss="alert" onclick="this.parentElement.style.display='none'">&times;</button>
+                                        {{ errorMessage }}
+                                    </div>
+                                {% endif %}
 
-                    {% if check_agreement %}
-                        <div class="mb-6 text-left">
-                            <label class="flex cursor-pointer items-center">
-                                <input type="checkbox" name="RegistrationForm[termsofservice]" class="peer hidden terms-accept-checkbox">
-                                <span class="checkbox-container mr-3 flex h-5 w-5 items-center justify-center rounded border border-blue-300 bg-white transition-all peer-checked:border-blue-600 peer-checked:bg-blue-600">
-                                    <i class="checkbox-icon ri-check-line"></i>
-                                </span>
-                                <span class="text-sm text-slate-700">{{ lang('signup.accept_terms_text') }} <a href="{{ page_url('terms') }}" target="_blank" class="font-medium text-blue-600 hover:underline">{{ lang('terms.signup_checkbox') }}</a></span>
-                            </label>
-                        </div>
-                    {% endif %}
-    
-                    <div class="mt-6">
-                        <input type="hidden" name="_csrf" value="{{csrftoken}}">
-                        <div class="flex flex-col gap-4">
-                            <button type="submit" class="btn-primary-custom">
-                                <span>{{ lang('signup.button') }}</span>
-                                <i class="ri-user-follow-line"></i>
-                            </button>
-                            
-                            {% if googleSignIn %}
-                                <div id="g_id_onload"
-                                   data-client_id="{{ googleClientId }}"
-                                   data-login_uri="{{ googleSignInRedirectUrl }}"
-                                   data-auto_prompt="false"
-                                   data-_csrf="{{csrftoken}}">
-                                </div>
-                                <div class="g_id_signin"
-                                   data-type="standard"
-                                   data-size="large"
-                                   data-theme="outline"
-                                   data-text="signup_with"
-                                   data-shape="rectangular"
-                                   data-logo_alignment="left">
-                                </div>
-                            {% endif %}
+                                {% if success %}
+                                    <div class="alert alert-success alert-dismissible mb-3 p-3 bg-green-100 border border-green-300 text-green-700 rounded-lg text-sm" role="alert">
+                                        <button type="button" class="close float-right" data-dismiss="alert" aria-label="Close" onclick="this.parentElement.style.display='none'"><span aria-hidden="true">&times;</span></button>
+                                        {{ successText }}
+                                    </div>
+                                {% endif %}
+
+                                <form id="signup-form" {% if site['rtl'] %}class="rtl-form"{% endif %} action="{{ page_url('signup') }}" method="post" class="flex flex-col gap-3 text-left">
+                                    
+                                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                        {% for field in fields %}
+                                            <div class="group">
+                                                <label for="{{ field.code }}" class="block text-[11px] font-semibold text-gray-700 mb-1">{{ lang(field.label) }}</label>
+                                                <div class="relative">
+                                                    <div class="absolute inset-y-0 left-0 flex items-center pl-2.5 pointer-events-none text-gray-400 group-focus-within:text-blue-500 transition-colors">
+                                                        <i class="{% if field.type == 'password' %}ri-lock-line{% elseif 'mail' in field.code|lower %}ri-mail-line{% elseif 'user' in field.code|lower %}ri-user-line{% elseif 'phone' in field.code|lower %}ri-phone-line{% else %}ri-edit-line{% endif %} text-[15px]"></i>
+                                                    </div>
+                                                    <input type="{{ field.type }}" id="{{ field.code }}" name="RegistrationForm[{{ field.code }}]" value="{{ field.value }}" placeholder="{{ lang(field.label) }}" required 
+                                                           class="w-full pl-8 pr-8 py-2 bg-gray-50/50 border border-gray-200 text-gray-900 text-xs rounded-xl focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-300 outline-none">
+                                                    
+                                                    {% if field.type == 'password' %}
+                                                        <button type="button" class="absolute inset-y-0 right-0 flex items-center pr-2.5 text-gray-400 hover:text-blue-500 transition-colors focus:outline-none" onclick="togglePasswordVisibility('{{ field.code }}')">
+                                                            <i class="ri-eye-line text-[15px]"></i>
+                                                        </button>
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+
+                                    {% if site['captcha'] %}
+                                        <div class="mt-1">
+                                            {{ captchaCode }}
+                                        </div>
+                                    {% endif %}
+
+                                    {% if check_agreement %}
+                                        <div class="flex items-center justify-between mt-1">
+                                            <div class="flex items-center">
+                                                <label class="custom-checkbox flex items-center cursor-pointer group">
+                                                    <input type="checkbox" name="RegistrationForm[termsofservice]" value="1" id="terms" class="peer hidden" required>
+                                                    <span class="checkmark border-gray-300 group-hover:border-blue-500 transition-colors flex items-center justify-center rounded w-4 h-4 peer-checked:bg-blue-600 peer-checked:border-blue-600 text-white border">
+                                                        <i class="ri-check-line text-xs opacity-0 peer-checked:opacity-100 transition-opacity"></i>
+                                                    </span>
+                                                    <span class="ml-2.5 text-[11px] font-medium text-gray-600 group-hover:text-gray-900 transition-colors">{{ lang('signup.accept_terms_text') }} <a href="{{ page_url('terms') }}" target="_blank" class="font-semibold text-blue-600 hover:text-blue-700 transition-colors">{{ lang('terms.signup_checkbox') }}</a></span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    {% endif %}
+
+                                    <input type="hidden" name="_csrf" value="{{csrftoken}}">
+                                    
+                                    <button id="submit-btn" type="submit" class="w-full flex items-center justify-center gap-2 text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 font-semibold rounded-xl text-sm px-4 py-2.5 text-center mt-2 shadow-md shadow-blue-500/30 hover:shadow-blue-500/50 transform hover:-translate-y-0.5 transition-all duration-300 outline-none focus:ring-4 focus:ring-blue-500/20">
+                                        <span>{{ lang('signup.button') }}</span>
+                                        <i class="ri-user-add-line text-lg"></i>
+                                    </button>
+
+                                    {% if googleSignIn %}
+                                        <div class="flex items-center my-2">
+                                            <hr class="flex-grow border-gray-200">
+                                            <span class="px-3 text-[10px] font-semibold text-gray-400 uppercase tracking-wider">OR</span>
+                                            <hr class="flex-grow border-gray-200">
+                                        </div>
+
+                                        <div class="w-full mb-1">
+                                            <div id="g_id_onload"
+                                               data-client_id="{{ googleClientId }}"
+                                               data-login_uri="{{ googleSignInRedirectUrl }}"
+                                               data-auto_prompt="false"
+                                               data-_csrf="{{csrftoken}}">
+                                            </div>
+                                            <div class="g_id_signin w-full flex items-center justify-center transition-colors"
+                                               data-type="standard"
+                                               data-size="large"
+                                               data-theme="outline"
+                                               data-text="signup_with"
+                                               data-shape="rectangular"
+                                               data-logo_alignment="left">
+                                            </div>
+                                        </div>
+                                    {% endif %}
+
+                                    <p class="text-xs text-center text-gray-500 font-medium mt-1">
+                                        {{ lang('signup.text') }} <a href="{{ page_url('signin') }}" class="font-bold text-blue-600 hover:text-blue-700 transition-colors">{{ lang('signin.title') }}</a>
+                                    </p>
+                                </form>
+                            </div>
                         </div>
                     </div>
-                </form>
 
-                <div class="signin-prompt">
-                    <span>{{ lang('signup.text') }}</span>
-                    <a href="{{ page_url('signin') }}">{{ lang('signin.title') }}</a>
+                    <!-- Typography & Features (Left Side on Desktop) -->
+                    <div class="relative hidden lg:flex flex-col lg:order-1 pr-4 xl:pr-12 text-left h-full">
+                        
+                        <!-- Topline Badge (Absolute Top aligned with Login Form) -->
+                        <div class="absolute top-0 left-0 w-full z-30 pt-2 lg:pt-0">
+                            <span class="text-xs font-bold tracking-wider text-blue-600 uppercase font-outfit">{{ site['name'] }}</span>
+                            <span class="text-xs font-medium text-slate-500 ml-1.5">— #1 Premium SMM Panel For Everyone</span>
+                        </div>
+
+                        <div class="relative z-10 w-full max-w-xl mt-12 lg:mt-[44px]">
+                            
+                            <!-- Headline -->
+                            <h1 class="text-[2.4rem] lg:text-[2.8rem] xl:text-[3.2rem] leading-tight tracking-tight mb-6 text-left font-outfit text-slate-800 font-bold flex flex-nowrap items-center gap-x-2 whitespace-nowrap">
+                                <span>Stand Out, Stay</span>
+                                <div class="flex items-center">
+                                    <img src="https://storage.perfectcdn.com/ed17j7/pbbaj5xaof1yfx3d.png" alt="E" class="h-11 lg:h-[3.2rem] xl:h-[3.8rem] object-contain relative top-0.5">
+                                    <span class="text-[#2b79b8] -ml-1">xclusive</span>
+                                </div>
+                            </h1>
+                            
+                            <!-- Paragraph -->
+                            <p class="text-sm lg:text-base text-slate-500 mb-6 max-w-[450px] leading-relaxed font-medium font-outfit text-left">
+                                Welcome to our panel! <br>
+                              We have been serving to our clients with uninterrupted services for years.
+You can access to premium services by using our panel.
+Our services updating everyday by our technical team.
+Also you can get 24/7 VIP support from ticket, telegram and whatsapp.
+
+<br>Enjoy!
+                            </p>
+                            <!-- Trust Signals (Colorless / Monochrome) -->
+                            {# <div class="flex flex-col gap-3.5 mb-2 max-w-[450px]">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-8 h-8 rounded-full bg-white/80 flex items-center justify-center text-slate-500 text-sm shadow-sm border border-slate-200/60">
+                                        <i class="ri-flashlight-fill"></i>
+                                    </div>
+                                    <span class="text-[13px] lg:text-[14px] font-semibold text-slate-600 font-outfit">Lightning Fast Automated Delivery</span>
+                                </div>
+                                <div class="flex items-center gap-3">
+                                    <div class="w-8 h-8 rounded-full bg-white/80 flex items-center justify-center text-slate-500 text-sm shadow-sm border border-slate-200/60">
+                                        <i class="ri-shield-star-fill"></i>
+                                    </div>
+                                    <span class="text-[13px] lg:text-[14px] font-semibold text-slate-600 font-outfit">Exclusive Premium Quality Services</span>
+                                </div>
+                            </div> #}
+                            
+                            <!-- Action Buttons -->
+                            <div class="flex flex-wrap items-center gap-3 mb-6 mt-6 lg:mt-[24px] xl:mt-[40px]">
+                                <a href="https://smmexclusive.com/signup" class="btn-gradient-blue text-white text-sm font-semibold font-outfit rounded-full px-6 py-2.5 flex items-center gap-2 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-0.5">
+                                    <i class="ri-rocket-line"></i>
+                                    Get Started
+                                    <i class="ri-arrow-right-line ml-1"></i>
+                                </a>
+                                <a href="https://smmexclusive.com/services" class="bg-white border border-slate-200 text-slate-700 text-sm font-semibold font-outfit rounded-full px-6 py-2.5 flex items-center gap-2 hover:bg-slate-50 hover:shadow-md transition-all duration-300">
+                                    <i class="ri-list-check-2"></i>
+                                    View Services
+                                </a>
+                            </div>
+                        </div>
+
+                            <!-- Stats Row (API Driven) -->
+                            <div class="absolute bottom-0 left-0 flex flex-nowrap items-center justify-between gap-5 lg:gap-10 bg-white/90 backdrop-blur-sm border border-slate-100 rounded-[1.25rem] p-4 lg:py-5 lg:pl-8 lg:pr-12 shadow-[0_10px_40px_rgba(0,0,0,0.04)] w-max max-w-[130%] z-20">
+                                <div class="flex items-center gap-3 lg:gap-3.5">
+                                    <div class="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center text-blue-600 text-base border border-blue-100">
+                                        <i class="ri-history-line"></i>
+                                    </div>
+                                    <div>
+                                        <div class="font-outfit font-bold text-slate-800 text-[15px] lg:text-[17px] leading-tight">{{ totals['ordersAll'] }}<span class="text-xs lg:text-[14px]">+</span></div>
+                                        <div class="text-[11px] lg:text-[12px] text-slate-500 font-medium mt-0.5">Completed Order</div>
+                                    </div>
+                                </div>
+                                <div class="flex items-center gap-3 lg:gap-3.5">
+                                    <div class="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center text-blue-600 text-base border border-blue-100">
+                                        <i class="ri-group-line"></i>
+                                    </div>
+                                    <div>
+                                        <div class="font-outfit font-bold text-slate-800 text-[15px] lg:text-[17px] leading-tight">{{ totals['usersAll'] }}<span class="text-xs lg:text-[14px]">+</span></div>
+                                        <div class="text-[11px] lg:text-[12px] text-slate-500 font-medium mt-0.5">Active Users</div>
+                                    </div>
+                                </div>
+                                <div class="flex items-center gap-3 lg:gap-3.5">
+                                    <div class="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center text-blue-600 text-base border border-blue-100">
+                                        <i class="ri-sparkling-2-line"></i>
+                                    </div>
+                                    <div>
+                                        <div class="font-outfit font-bold text-slate-800 text-[15px] lg:text-[17px] leading-tight">6<span class="text-[12px] lg:text-[14px]">+ Years</span></div>
+                                        <div class="text-[11px] lg:text-[12px] text-slate-500 font-medium mt-0.5">Experience</div>
+                                    </div>
+                                </div>
+                                <div class="flex items-center gap-3 lg:gap-3.5">
+                                    <div class="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center text-blue-600 text-base border border-blue-100">
+                                        <i class="ri-settings-line"></i>
+                                    </div>
+                                    <div>
+                                        <div class="font-outfit font-bold text-slate-800 text-[15px] lg:text-[17px] leading-tight count-up">{{ totals['servicesAll'] }}<span class="text-xs lg:text-[14px]">+</span></div>
+                                        <div class="text-[11px] lg:text-[12px] text-slate-500 font-medium mt-0.5">Services</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
                 </div>
             </div>
-        </main>
-    </div>
+        </section>
+    </main>
 
     <script>
+        // Robust Polyfill for Bootstrap modal and auto-submit
+        document.addEventListener('DOMContentLoaded', function() {
+            var polyfillInterval = setInterval(function() {
+                if (typeof window.jQuery !== 'undefined') {
+                    window.jQuery.fn.modal = function(action) {
+                        if (action === 'show') {
+                            this.addClass('show-modal');
+                        } else if (action === 'hide') {
+                            this.removeClass('show-modal');
+                        }
+                        return this;
+                    };
+                    clearInterval(polyfillInterval);
+                }
+            }, 50);
+
+            // Handle close button clicks for the backend generated modal
+            document.addEventListener('click', function(e) {
+                if (e.target.closest('.close') || e.target.closest('[data-dismiss="modal"]')) {
+                    var modal = e.target.closest('.modal');
+                    if (modal) {
+                        modal.classList.remove('show-modal');
+                    }
+                }
+            });
+        });
+
         function togglePasswordVisibility(id) {
             const input = document.getElementById(id);
             const iconContainer = input.nextElementSibling;
             const icon = iconContainer.querySelector('i');
             if (input.type === "password") {
                 input.type = "text";
-                icon.classList.remove('ri-eye-off-line');
-                icon.classList.add('ri-eye-line');
-            } else {
-                input.type = "password";
                 icon.classList.remove('ri-eye-line');
                 icon.classList.add('ri-eye-off-line');
+                iconContainer.classList.add('text-blue-500');
+            } else {
+                input.type = "password";
+                icon.classList.remove('ri-eye-off-line');
+                icon.classList.add('ri-eye-line');
+                iconContainer.classList.remove('text-blue-500');
             }
         }
     </script>
