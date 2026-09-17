@@ -1,38 +1,18 @@
 <style>
         @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&display=swap');
 
-        body {
-            background-color: #F8FBFF;
-            background-image: 
-                radial-gradient(circle at 10% 20%, rgba(59, 130, 246, 0.1) 0%, transparent 40%),
-                radial-gradient(circle at 90% 80%, rgba(6, 182, 212, 0.1) 0%, transparent 40%),
-                radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.8) 0%, transparent 60%);
+        body, html {
+            /* Sol üst yumuşak kalırken sol alt biraz daha maviye dönük (blue-200 tonu) */
+            background: radial-gradient(ellipse at top right, #ffffff 0%, #eff6ff 50%, #bfdbfe 100%) !important;
+            background-attachment: fixed !important;
             color: #1E293B;
             overflow-x: hidden;
         }
 
         .font-outfit { font-family: 'Outfit', sans-serif; }
 
-        /* Floating Animation */
-        @keyframes float-slow {
-            0% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-20px) rotate(5deg); }
-            100% { transform: translateY(0px) rotate(0deg); }
-        }
-        @keyframes float-medium {
-            0% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-15px) rotate(-3deg); }
-            100% { transform: translateY(0px) rotate(0deg); }
-        }
-        @keyframes float-fast {
-            0% { transform: translateY(0px) scale(1); }
-            50% { transform: translateY(-10px) scale(1.05); }
-            100% { transform: translateY(0px) scale(1); }
-        }
-        
-        .anim-float-slow { animation: float-slow 8s ease-in-out infinite; }
-        .anim-float-medium { animation: float-medium 6s ease-in-out infinite; }
-        .anim-float-fast { animation: float-fast 4s ease-in-out infinite; }
+        /* Animations Disabled for Performance Optimization */
+        .anim-float-slow, .anim-float-medium, .anim-float-fast { transform: none !important; animation: none !important; }
 
         /* Custom Button Gradients */
         .btn-gradient-blue {
@@ -67,32 +47,23 @@
             display: flex;
             align-items: center;
         }
+
+
 </style>
         <main class="relative z-10">
             
-            <!-- Abstract Background Curves (SVG) -->
-            <svg class="bg-lines hidden lg:block" width="100%" height="100%" viewBox="0 0 1440 800" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M-100 600 C 300 800, 600 200, 1500 500" stroke="url(#paint0_linear)" stroke-width="2" opacity="0.4"/>
-                <path d="M-100 500 C 400 400, 800 900, 1500 300" stroke="url(#paint1_linear)" stroke-width="1.5" opacity="0.3"/>
-                <path d="M 600 800 C 800 600, 900 100, 1200 0" stroke="url(#paint2_linear)" stroke-width="80" opacity="0.05" filter="blur(20px)"/>
+            <!-- Abstract Background Wave Lines (SVG) -->
+            <svg class="bg-lines hidden lg:block" width="100%" height="100%" viewBox="0 0 1440 800" fill="none" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" style="position:absolute; top:0; left:0; width:100%; height:100%; z-index:0; pointer-events:none;">
+                <!-- Hareketsiz Dalga Çizgileri -->
+                <path d="M-100 600 C 300 800, 600 200, 1500 500" stroke="#ffffff" stroke-width="3" opacity="0.4"/>
+                <path d="M-100 500 C 400 400, 800 900, 1500 300" stroke="#eff6ff" stroke-width="8" opacity="0.6"/>
+                <path d="M-100 200 C 400 -50, 900 600, 1500 200" stroke="#bfdbfe" stroke-width="2" opacity="0.7"/>
+                <path d="M-100 700 C 500 500, 1000 900, 1500 600" stroke="#60a5fa" stroke-width="4" opacity="0.3"/>
+                
                 <!-- Glow Dots -->
-                <circle cx="200" cy="700" r="6" fill="#3B82F6" opacity="0.6"/>
-                <circle cx="900" cy="150" r="4" fill="#06B6D4" opacity="0.5"/>
-                <circle cx="1300" cy="650" r="8" fill="#3B82F6" opacity="0.8"/>
-                <defs>
-                    <linearGradient id="paint0_linear" x1="0" y1="0" x2="1440" y2="800" gradientUnits="userSpaceOnUse">
-                        <stop stop-color="#3B82F6" stop-opacity="0.8"/>
-                        <stop offset="1" stop-color="#06B6D4" stop-opacity="0.1"/>
-                    </linearGradient>
-                    <linearGradient id="paint1_linear" x1="1440" y1="0" x2="0" y2="800" gradientUnits="userSpaceOnUse">
-                        <stop stop-color="#06B6D4" stop-opacity="0.6"/>
-                        <stop offset="1" stop-color="#3B82F6" stop-opacity="0.1"/>
-                    </linearGradient>
-                    <linearGradient id="paint2_linear" x1="600" y1="800" x2="1200" y2="0" gradientUnits="userSpaceOnUse">
-                        <stop stop-color="#E0E7FF" stop-opacity="1"/>
-                        <stop offset="1" stop-color="#FFFFFF" stop-opacity="0"/>
-                    </linearGradient>
-                </defs>
+                <circle cx="200" cy="700" r="6" fill="#ffffff" opacity="0.6"/>
+                <circle cx="900" cy="150" r="4" fill="#60a5fa" opacity="0.5"/>
+                <circle cx="1300" cy="650" r="8" fill="#eff6ff" opacity="0.8"/>
             </svg>
 
             <!-- Floating 3D Spheres & Blurred Elements -->
@@ -135,7 +106,7 @@
                 <div class="container relative z-10 w-full">
                     <div class="grid lg:grid-cols-2 gap-8 lg:gap-16 items-stretch">
                         <!-- Login Form (Now on Right visually on Desktop) -->
-                        <div class="lg:order-2 flex flex-col justify-center" style="margin: 0; padding: 0;" data-aos="fade-left">
+                        <div class="lg:order-2 flex flex-col justify-center" style="margin: 0; padding: 0;">
                             <div class="login-container max-w-md mx-auto lg:ml-auto lg:mr-0 w-full relative z-20">
                                 
                                 <!-- Parallax elements removed per user request -->
@@ -259,7 +230,7 @@
                         </div>
 
                         <!-- Typography & Features (Left Side on Desktop) -->
-                        <div class="relative hidden lg:flex flex-col lg:order-1 pr-4 xl:pr-12 text-left h-full" data-aos="fade-right">
+                        <div class="relative hidden lg:flex flex-col lg:order-1 pr-4 xl:pr-12 text-left h-full">
                             
                             <!-- Topline Badge (Absolute Top aligned with Login Form) -->
                             <div class="absolute top-0 left-0 w-full z-30 pt-2 lg:pt-0">
@@ -280,10 +251,16 @@
                                 
                                 <!-- Paragraph -->
                                 <p class="text-sm lg:text-base text-slate-500 mb-6 max-w-[450px] leading-relaxed font-medium font-outfit text-left">
-                                    The most trusted and cheapest SMM Panel for resellers. High-quality services, fully automated API, and instant delivery 24/7.
+                                    Welcome to our panel! <br>
+                                  We have been serving to our clients with uninterrupted services for years.
+You can access to premium services by using our panel.
+Our services updating everyday by our technical team.
+Also you can get 24/7 VIP support from ticket, telegram and whatsapp.
+
+<br>Enjoy!
                                 </p>
                                 <!-- Trust Signals (Colorless / Monochrome) -->
-                                <div class="flex flex-col gap-3.5 mb-2 max-w-[450px]">
+                                {# <div class="flex flex-col gap-3.5 mb-2 max-w-[450px]">
                                     <div class="flex items-center gap-3">
                                         <div class="w-8 h-8 rounded-full bg-white/80 flex items-center justify-center text-slate-500 text-sm shadow-sm border border-slate-200/60">
                                             <i class="ri-flashlight-fill"></i>
@@ -296,7 +273,7 @@
                                         </div>
                                         <span class="text-[13px] lg:text-[14px] font-semibold text-slate-600 font-outfit">Exclusive Premium Quality Services</span>
                                     </div>
-                                </div>
+                                </div> #}
                                 
                                 <!-- Action Buttons -->
                                 <div class="flex flex-wrap items-center gap-3 mb-6 mt-6 lg:mt-[24px] xl:mt-[40px]">
@@ -319,7 +296,7 @@
                                             <i class="ri-history-line"></i>
                                         </div>
                                         <div>
-                                            <div class="font-outfit font-bold text-slate-800 text-[15px] lg:text-[17px] leading-tight count-up">{{ totals['ordersAll'] }}<span class="text-xs lg:text-[14px]">+</span></div>
+                                            <div class="font-outfit font-bold text-slate-800 text-[15px] lg:text-[17px] leading-tight">{{ totals['ordersAll'] }}<span class="text-xs lg:text-[14px]">+</span></div>
                                             <div class="text-[11px] lg:text-[12px] text-slate-500 font-medium mt-0.5">Completed Order</div>
                                         </div>
                                     </div>
@@ -328,7 +305,7 @@
                                             <i class="ri-group-line"></i>
                                         </div>
                                         <div>
-                                            <div class="font-outfit font-bold text-slate-800 text-[15px] lg:text-[17px] leading-tight count-up">{{ totals['usersAll'] }}<span class="text-xs lg:text-[14px]">+</span></div>
+                                            <div class="font-outfit font-bold text-slate-800 text-[15px] lg:text-[17px] leading-tight">{{ totals['usersAll'] }}<span class="text-xs lg:text-[14px]">+</span></div>
                                             <div class="text-[11px] lg:text-[12px] text-slate-500 font-medium mt-0.5">Active Users</div>
                                         </div>
                                     </div>
@@ -377,7 +354,7 @@
 
 
         <!-- About Us Section -->
-        <section class="about-us-section" data-aos="fade-up">
+        <section class="about-us-section">
             <div class="container mx-auto px-4">
                 <div class="section-header text-center mb-12">
                      <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">About <span class="text-blue-600">{{ site['name'] }}</span></h2>
@@ -447,7 +424,7 @@
 
 
         <!-- Key Features Section -->
-        <section class="key-features-section" data-aos="fade-up">
+        <section class="key-features-section">
             <div class="container mx-auto px-4">
                 <div class="section-header text-center mb-12">
                     <div class="section-badge inline-flex items-center gap-2 bg-blue-100 text-blue-600 border border-blue-200 py-2 px-4 rounded-full font-medium mb-5">
@@ -514,7 +491,7 @@
 
 
 
-    <section class="payment-methods-section py-16 md:py-24" data-aos="fade-up">
+    <section class="payment-methods-section py-16 md:py-24">
             <div class="container mx-auto px-4">
                 <div class="section-header text-center mb-12">
                     <div class="section-badge inline-flex items-center gap-2 bg-blue-100 text-blue-600 border border-blue-200 py-2 px-4 rounded-full font-medium mb-5">
@@ -574,7 +551,7 @@
         </section>
         
     
-        <section class="reviews-section py-16 md:py-24" data-aos="fade-up">
+        <section class="reviews-section py-16 md:py-24">
             <div class="container mx-auto px-4">
                 <div class="section-header text-center mb-12">
                     <div class="section-badge inline-flex items-center gap-2 bg-blue-100 text-blue-600 border border-blue-200 py-2 px-4 rounded-full font-medium mb-5">
@@ -742,7 +719,7 @@
         </section>
 
 
-        <section class="faq-section py-16 md:py-24" data-aos="fade-up">
+        <section class="faq-section py-16 md:py-24">
             <div class="container mx-auto px-4">
                 <div class="section-header text-center mb-12">
                     <div class="section-badge inline-flex items-center gap-2 bg-blue-100 text-blue-600 border border-blue-200 py-2 px-4 rounded-full font-medium mb-5">
@@ -892,7 +869,7 @@
         </section>
 
                 <!-- All SMM Services Section -->
-                <section class="all-services-section py-16 md:py-24" data-aos="fade-up">
+                <section class="all-services-section py-16 md:py-24">
             <div class="container mx-auto px-4">
             <div class="section-header text-center mb-12">
                     <div class="section-badge inline-flex items-center gap-2 bg-blue-100 text-blue-600 border border-blue-200 py-2 px-4 rounded-full font-medium mb-5">

@@ -1942,8 +1942,68 @@ $(document).ready(function() {
 
     <script src="https://storage.perfectcdn.com/libs/jquery/1.12.4/jquery.min.js"></script>
 
+    <style>
+        /* Page Loader Styles */
+        .loader-container-unauth {
+            position: relative;
+            width: 80px;
+            height: 80px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .spinner-ring-unauth {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border: 3px solid rgba(69, 128, 247, 0.2);
+            border-top: 3px solid #2563eb;
+            border-radius: 50%;
+            animation: spin-unauth 1.5s linear infinite;
+        }
+
+        .loader-logo-unauth {
+            width: 35px;
+            height: 35px;
+            object-fit: contain;
+            animation: pulse-spin-unauth 2s ease-in-out infinite;
+        }
+        
+        @keyframes spin-unauth {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes pulse-spin-unauth {
+            0% { transform: scale(0.9) rotate(0deg); }
+            50% { transform: scale(1.1) rotate(180deg); }
+            100% { transform: scale(0.9) rotate(360deg); }
+        }
+        
+        /* Mobile responsive loader */
+        @media (max-width: 768px) {
+            .loader-container-unauth { width: 60px; height: 60px; }
+            .loader-logo-unauth { width: 25px; height: 25px; }
+            .spinner-ring-unauth { border-width: 2.5px; }
+        }
+        
+        @media (max-width: 480px) {
+            .loader-container-unauth { width: 50px; height: 50px; }
+            .loader-logo-unauth { width: 20px; height: 20px; }
+            .spinner-ring-unauth { border-width: 2px; }
+        }
+    </style>
 </head>
 <body class="overflow-x-hidden bg-mesh-premium">
+    <!-- Page Loader -->
+    <div id="page-loader-unauth" class="fixed inset-0 z-[9999] flex items-center justify-center transition-all duration-300 bg-white">
+        <div class="loader-container-unauth">
+            <div class="spinner-ring-unauth"></div>
+            <img src="https://storage.perfectcdn.com/ed17j7/pbbaj5xaof1yfx3d.png" alt="E" class="loader-logo-unauth">
+        </div>
+    </div>
 
     <div class="page-wrapper">
         <!-- Background effects (grid and orbs) removed as requested -->
@@ -2156,8 +2216,8 @@ $(document).ready(function() {
                         </div>
                          <div class="mt-6 space-y-6">
                             <div class="company-info-block">
-                                <h4>ITSJUSTSEO Limited</h4>
-                                <p>Room H 11, 1/F, Kaiser Estate Phase 2, No. 51 Man Yue Street, Hung Hom, Hong Kong</p>
+                                <h4>JUSTANOTHERMARKETING LTD</h4>
+                                <p>128, City Road London EC1V 2NX UNITED KINGDOM</p>
                             </div>
                         </div>
                     </div>
@@ -2211,6 +2271,23 @@ $(document).ready(function() {
     <script src="https://stellular-entremet-72cec4.netlify.app/script.js?time=34234234"></script>
     
 <script>
+    (function() {
+        var hideLoader = function() {
+            const loader = document.getElementById('page-loader-unauth');
+            if (loader) {
+                setTimeout(() => {
+                    loader.style.opacity = '0';
+                    setTimeout(() => {
+                        loader.style.display = 'none';
+                    }, 300);
+                }, 250);
+            }
+        };
+        window.addEventListener('load', hideLoader);
+        // Fallback in case load takes too long
+        setTimeout(hideLoader, 2000);
+    })();
+
     // Mobile Language Dropdown Logic
     document.addEventListener('DOMContentLoaded', function() {
         const mobileLanguageContainer = document.getElementById('mobile-language-dropdown-container');
