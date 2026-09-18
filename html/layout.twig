@@ -30,7 +30,7 @@
 			window.modules = {};
 		</script>
 
-{% if user['auth'] %}
+{% if user['auth'] and page['url'] != '/confirmemail' %}
 
  <link rel="stylesheet" href="https://cdn.sosyaltrend.net/dashboard/styles.css?time=455555555">
     <link rel="stylesheet" href="https://cdn.sosyaltrend.net/dashboard/style2.css?time=455555555">
@@ -2117,17 +2117,26 @@ $(document).ready(function() {
                     </div>
                     <nav class="main-nav">
                         <ul>
-                            {% for menu in site['menu'] %}
-                                <li><a href="{{ menu['link'] }}" {% if menu['external'] %} target="_blank" {% endif %}>
-                                    {% if menu['icon'] %}
-                                        <i class="{{ menu['icon'] }}"></i>
-                                    {% else %}
-                                        <i data-feather="list"></i>
-                                    {% endif %}
-                                    <span>{{ menu['name'] }}</span>
-                                </a></li>
-                                {% if not loop.last %}<li class="separator"></li>{% endif %}
-                            {% endfor %}
+                            <li>
+                                <a href="{{ page_url('services') }}">
+                                    <i class="ri-list-check"></i>
+                                    <span>Services</span>
+                                </a>
+                            </li>
+                            <li class="separator"></li>
+                            <li>
+                                <a href="{{ page_url('howitworks') }}">
+                                    <i class="ri-question-line"></i>
+                                    <span>How It Works</span>
+                                </a>
+                            </li>
+                            <li class="separator"></li>
+                            <li>
+                                <a href="{{ page_url('contact') }}">
+                                    <i class="ri-mail-line"></i>
+                                    <span>Contact</span>
+                                </a>
+                            </li>
                             <li class="separator"></li>
                             <li class="relative group">
                                 <a href="#" class="flex items-center">
@@ -2136,8 +2145,8 @@ $(document).ready(function() {
                                 </a>
                                 <div class="absolute left-0 top-full pt-2 w-48 origin-top-left bg-white border border-gray-200/50 rounded-xl shadow-lg hidden group-hover:block z-20">
                                     <div class="p-2">
-                                        <a href="/api" class="flex items-center gap-3 w-full px-4 py-2 text-left text-sm text-gray-700 rounded-lg hover:bg-gray-100">API</a>
-                                        <a href="/terms" class="flex items-center gap-3 w-full px-4 py-2 text-left text-sm text-gray-700 rounded-lg hover:bg-gray-100">Terms</a>
+                                        <a href="{{ page_url('api') }}" class="flex items-center gap-3 w-full px-4 py-2 text-left text-sm text-gray-700 rounded-lg hover:bg-gray-100">API</a>
+                                        <a href="{{ page_url('terms') }}" class="flex items-center gap-3 w-full px-4 py-2 text-left text-sm text-gray-700 rounded-lg hover:bg-gray-100">Terms</a>
                                     </div>
                                 </div>
                             </li>
@@ -2147,8 +2156,8 @@ $(document).ready(function() {
                         <!-- Language Switcher removed from guest navbar per user request -->
 
 
-                        <a href="/" class="btn btn-secondary hidden md:inline-flex"><span>Login</span> <i class="ri-user-shared-line"></i></a>
-                        <a href="/signup" class="btn btn-primary hidden md:inline-flex"><span>Sign Up</span> <i class="ri-user-add-line"></i></a>
+                        <a href="{{ page_url('index') }}" class="btn btn-secondary hidden md:inline-flex"><span>Login</span> <i class="ri-user-shared-line"></i></a>
+                        <a href="{{ page_url('signup') }}" class="btn btn-primary hidden md:inline-flex"><span>Sign Up</span> <i class="ri-user-add-line"></i></a>
                         <button id="menu-toggle" class="md:hidden btn btn-secondary">
                             <i data-feather="menu"></i>
                         </button>
@@ -2156,14 +2165,18 @@ $(document).ready(function() {
                 </div>
                 <div id="mobile-menu" class="hidden md:hidden mt-4 bg-white border border-gray-200/50 rounded-2xl p-4">
                     <nav class="flex flex-col space-y-4">
-                        {% for menu in site['menu'] %}
-                            <a href="{{ menu['link'] }}" {% if menu['external'] %} target="_blank" {% endif %} class="flex items-center gap-2 text-gray-700 hover:text-blue-600">
-                                {% if menu['icon'] %}
-                                    <i class="{{ menu['icon'] }}"></i>
-                                {% endif %}
-                                <span>{{ menu['name'] }}</span>
-                            </a>
-                        {% endfor %}
+                        <a href="{{ page_url('services') }}" class="flex items-center gap-2 text-gray-700 hover:text-blue-600">
+                            <i class="ri-list-check"></i>
+                            <span>Services</span>
+                        </a>
+                        <a href="{{ page_url('howitworks') }}" class="flex items-center gap-2 text-gray-700 hover:text-blue-600">
+                            <i class="ri-question-line"></i>
+                            <span>How It Works</span>
+                        </a>
+                        <a href="{{ page_url('contact') }}" class="flex items-center gap-2 text-gray-700 hover:text-blue-600">
+                            <i class="ri-mail-line"></i>
+                            <span>Contact</span>
+                        </a>
                         <div>
                             <button id="mobile-others-toggle" class="flex items-center justify-between w-full gap-2 text-gray-700 hover:text-blue-600">
                                 <span class="flex items-center gap-2">
@@ -2173,15 +2186,15 @@ $(document).ready(function() {
                                 <i data-feather="chevron-down" class="w-5 h-5 transition-transform"></i>
                             </button>
                             <div id="mobile-others-content" class="hidden mt-2 pl-6 space-y-2">
-                                <a href="/api" class="flex items-center gap-2 text-gray-600 hover:text-blue-600">API</a>
-                                <a href="/terms" class="flex items-center gap-2 text-gray-600 hover:text-blue-600">Terms</a>
+                                <a href="{{ page_url('api') }}" class="flex items-center gap-2 text-gray-600 hover:text-blue-600">API</a>
+                                <a href="{{ page_url('terms') }}" class="flex items-center gap-2 text-gray-600 hover:text-blue-600">Terms</a>
                             </div>
                         </div>
                     </nav>
                     <div class="border-t border-gray-200/80 my-4"></div>
                     <div class="flex flex-col space-y-3">
-                        <a href="/" class="btn btn-secondary w-full"><span>Login</span> <i class="ri-user-shared-line"></i></a>
-                        <a href="/signup" class="btn btn-primary w-full"><span>Sign Up</span> <i class="ri-user-add-line"></i></a>
+                        <a href="{{ page_url('index') }}" class="btn btn-secondary w-full"><span>Login</span> <i class="ri-user-shared-line"></i></a>
+                        <a href="{{ page_url('signup') }}" class="btn btn-primary w-full"><span>Sign Up</span> <i class="ri-user-add-line"></i></a>
                     </div>
                 </div>
             </div>
@@ -2224,10 +2237,10 @@ $(document).ready(function() {
                     <div class="footer-links">
                         <h4>Quick Links</h4>
                         <ul>
-                            <li><a href="/signup">Sign up</a></li>
-                            <li><a href="/terms">Terms</a></li>
-                            <li><a href="/howitworks">How it Works</a></li>
-                            <li><a href="/blog">Blogs</a></li>
+                            <li><a href="{{ page_url('signup') }}">Sign up</a></li>
+                            <li><a href="{{ page_url('terms') }}">Terms</a></li>
+                            <li><a href="{{ page_url('howitworks') }}">How it Works</a></li>
+                            <li><a href="{{ page_url('blog') }}">Blogs</a></li>
                         </ul>
                         <div class="footer-payment-logos" style="display: flex; flex-wrap: wrap; gap: 10px; margin-top: 15px;">
                             <div class="payment-logo-card" style="background: white; border: 1px solid #e2e8f0; border-radius: 8px; padding: 6px 12px; display: flex; align-items: center; justify-content: center; height: 38px;">
@@ -2246,10 +2259,13 @@ $(document).ready(function() {
                                 <img src="https://storage.perfectcdn.com/ed17j7/6pk9qxekijxri9hy.png" alt="Wise" style="height: 16px; width: auto; object-fit: contain;">
                             </div>
                             <div class="payment-logo-card" style="background: white; border: 1px solid #e2e8f0; border-radius: 8px; padding: 6px 12px; display: flex; align-items: center; justify-content: center; height: 38px;">
-                                <img src="https://storage.perfectcdn.com/ed17j7/84b05h0w6smz19ee.png" alt="Payoneer" style="height: 28px; width: auto; object-fit: contain;">
+                                <img src="https://storage.perfectcdn.com/ed17j7/84b05h0w6smz19ee.png" alt="Payoneer" style="height: 40px; width: auto; object-fit: contain;">
                             </div>
                              <div class="payment-logo-card" style="background: white; border: 1px solid #e2e8f0; border-radius: 8px; padding: 6px 12px; display: flex; align-items: center; justify-content: center; height: 38px;">
-                                <img src="https://storage.perfectcdn.com/ed17j7/cwgriidcs5h8o1te.png" alt="Cryptomus" style="height: 28px; width: auto; object-fit: contain;">
+                                <img src="https://storage.perfectcdn.com/ed17j7/cwgriidcs5h8o1te.png" alt="Cryptomus" style="height: 40px; width: auto; object-fit: contain;">
+                            </div>
+                              <div class="payment-logo-card" style="background: white; border: 1px solid #e2e8f0; border-radius: 8px; padding: 6px 12px; display: flex; align-items: center; justify-content: center; height: 38px;">
+                                <img src="https://storage.perfectcdn.com/ed17j7/pd96b7eupbzq9c0k.png" alt="Heleket" style="height: 28px; width: auto; object-fit: contain;">
                             </div>
                         </div>
                     </div>
