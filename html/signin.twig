@@ -14,6 +14,20 @@
         /* Animations Disabled for Performance Optimization */
         .anim-float-slow, .anim-float-medium, .anim-float-fast { transform: none !important; animation: none !important; }
 
+        /* Global Performance & Lag Fixes */
+        * {
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        .payment-logos, .hero-image-wrapper img, .feature-card, .service-card, .anim-float-slow, .anim-float-medium, .anim-float-fast {
+            will-change: transform;
+            transform: translateZ(0);
+            backface-visibility: hidden;
+        }
+        /* Downgrade heavy blur filters on background decorative spheres to improve FPS */
+        .blur-\[1px\], .blur-\[2px\], .blur-\[3px\] {
+            filter: none !important;
+        }
         /* Custom Button Gradients */
         .btn-gradient-blue {
             background: linear-gradient(90deg, #2563eb 0%, #3b82f6 100%);
@@ -396,25 +410,7 @@ Also you can get 24/7 VIP support from ticket, telegram and whatsapp.
                         
                         
                         <div class="about-us-image-wrapper">
-                             <!-- Floating Follower Bubbles -->
-                            <div id="follower-bubble-1" class="follower-bubble">
-                                <div class="follower-bubble-img">
-                                    <img src="https://randomuser.me/api/portraits/men/86.jpg" alt="User Avatar">
-                                    <div class="follower-bubble-badge">
-                                        <i class="ri-instagram-line"></i>
-                                    </div>
-                                </div>
-                                <span>New followers are coming! 🎉</span>
-                            </div>
-                            <div id="follower-bubble-2" class="follower-bubble">
-                                <div class="follower-bubble-img">
-                                    <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="User Avatar">
-                                    <div class="follower-bubble-badge">
-                                        <i class="ri-instagram-line"></i>
-                                    </div>
-                                </div>
-                                <span>New followers are coming! 🎉</span>
-                            </div>
+
                              <img src="https://storage.perfectcdn.com/ed17j7/wje65i9nolyra4ww.png" alt="{{ site['name'] }} Dashboard">
                         </div>
                     </div>

@@ -491,6 +491,42 @@ $(function() {
     const itemsPerPage = servicesData.config.pagination.items_per_page || 20;
     const maxCategoriesOnLoad = 25; // İlk yüklemede 25 kategori göster
 
+    // Hızlı erişim için lookup tabloları (O(1) arama)
+    const categoryByName = new Map();
+    const serviceById = new Map();
+    servicesData.categories.forEach(cat => {
+        categoryByName.set(cat.name, cat);
+        (cat.services || []).forEach(s => serviceById.set(s.id, s));
+    });
+
+    // Lazy render: kategori açılana kadar servisler DOM'a basılmaz
+    const pendingServices = new Map(); // categoryId (string) -> services[]
+
+    function appendCategories(categoryEntries) {
+        let html = '';
+        categoryEntries.forEach(([categoryName, categoryServices]) => {
+            const category = categoryByName.get(categoryName);
+            if (!category) return;
+            pendingServices.set(String(category.id), categoryServices);
+            html += renderCategoryHeader(category);
+        });
+        if (html) {
+            $servicesList[0].insertAdjacentHTML('beforeend', html);
+        }
+    }
+
+    function ensureServicesRendered(containerEl) {
+        if (!containerEl) return;
+        const id = containerEl.getAttribute('data-category-id');
+        const list = pendingServices.get(id);
+        if (!list) return;
+        pendingServices.delete(id);
+        const target = containerEl.querySelector('.category-services-list');
+        if (target) {
+            target.insertAdjacentHTML('beforeend', list.map(s => renderService(s)).join(''));
+        }
+    }
+
     // Icon mappings cache
     const iconCache = new Map();
     
@@ -595,7 +631,7 @@ $(function() {
         // Admin panelden gelen ikon öncelikli
         if (category.icon && category.icon.type && (category.icon.value || category.icon.url)) {
             if (category.icon.type === 'image' && category.icon.url) {
-                iconHtml = `<img src="${category.icon.url}" alt="${category.name}" class="w-6 h-6 object-contain rounded-sm">`;
+                iconHtml = `<img src="${category.icon.url}" alt="${category.name}" loading="lazy" decoding="async" class="w-6 h-6 object-contain rounded-sm">`;
             } else if (category.icon.type === 'icon' && category.icon.value) {
                 iconHtml = `<span class="${category.icon.value} text-xl"></span>`;
             } else if (category.icon.type === 'emoji' && category.icon.value) {
@@ -603,7 +639,7 @@ $(function() {
             }
         }
         if (!iconHtml) {
-            iconHtml = iconData.imageUrl ? `<img src="${iconData.imageUrl}" alt="${category.name}" class="w-6 h-6 object-contain rounded-sm">` : `<i class="${iconData.icon} ${iconData.color} text-2xl"></i>`;
+            iconHtml = iconData.imageUrl ? `<img src="${iconData.imageUrl}" alt="${category.name}" loading="lazy" decoding="async" class="w-6 h-6 object-contain rounded-sm">` : `<i class="${iconData.icon} ${iconData.color} text-2xl"></i>`;
         }
         
         return `
@@ -647,14 +683,12 @@ $(function() {
         return `
             <div class="flex flex-col p-4 border-b hover:bg-gray-50 service-row"
                  data-service-id="${service.id}"
-                 data-service-name="${service.name}"
-                 data-description="${service.description || ''}"
                  style="display: flex;">
                 <!-- Desktop görünümü -->
                 <div class="hidden md:flex md:items-center w-full">
                     <!-- Sol taraf: Icon, Favorite ve Servis Adı -->
                     <div class="flex items-center w-full mb-2 md:mb-0 flex-1">
-                        <img alt="Service Icon" class="w-8 h-8 mr-[10px] rounded-lg shrink-0" src="${iconUrl}">
+                        <img alt="Service Icon" loading="lazy" decoding="async" width="32" height="32" class="w-8 h-8 mr-[10px] rounded-lg shrink-0" src="${iconUrl}">
                         ${servicesData.config.user_favorites_enabled ? `
                             <button class="like-button w-9 h-8 flex items-center justify-center bg-white hover:bg-gray-100 rounded-lg transition-colors border border-gray-200 mr-4 shrink-0"
                                     ${service.favorite ? 'data-favorite-active="true"' : ''}
@@ -698,7 +732,7 @@ $(function() {
                 <div class="flex md:hidden flex-col items-center w-full text-center">
                     <!-- 1. İkon ve Favori Butonu (Ortalanmış) -->
                     <div class="flex items-center justify-center gap-3 mb-3">
-                        <img alt="Service Icon" class="w-10 h-10 rounded-lg" src="${iconUrl}">
+                        <img alt="Service Icon" loading="lazy" decoding="async" width="40" height="40" class="w-10 h-10 rounded-lg" src="${iconUrl}">
                         ${servicesData.config.user_favorites_enabled ? `
                             <button class="like-button w-9 h-8 flex items-center justify-center bg-white hover:bg-gray-100 rounded-lg transition-colors border border-gray-200"
                                     ${service.favorite ? 'data-favorite-active="true"' : ''}
@@ -905,26 +939,10 @@ $(function() {
             servicesByCategory[service.category_name].push(service);
         });
         
-        // İlk 25 kategoriyi al ve render et
+        // İlk 25 kategoriyi al ve render et (servisler kategori açılınca basılır)
+        pendingServices.clear();
         const categoryEntries = Object.entries(servicesByCategory).slice(0, 25);
-        
-        categoryEntries.forEach(([categoryName, categoryServices]) => {
-            const category = servicesData.categories.find(cat => cat.name === categoryName);
-            if (!category) return;
-
-            // Kategori header'ını ekle
-            $servicesList.append(renderCategoryHeader(category));
-            
-            // Bu kategorinin servislerini ekle
-            const $categoryContainer = $(`.service-category-container[data-category-id="${category.id}"]`);
-            const $categoryServicesList = $categoryContainer.find('.category-services-list');
-            
-            const servicesHtml = categoryServices.map(service =>
-                renderService(service, category)
-            ).join('');
-            
-            $categoryServicesList.append(servicesHtml);
-        });
+        appendCategories(categoryEntries);
         
         // Global değişkenleri güncelle
         window.filteredServicesByCategory = servicesByCategory;
@@ -950,7 +968,6 @@ $(function() {
     
     // İlk yükleme için özel fonksiyon
     function initialLoad() {
-        console.log('Initial load starting...');
         
         // İlk yüklemede kesinlikle showAllCategories false olsun
         showAllCategories = false;
@@ -965,7 +982,6 @@ $(function() {
         
         // Tüm servisleri al
         const allServices = getAllServices();
-        console.log('Total services:', allServices.length);
         
         // Kategori bazında grupla
         const servicesByCategory = {};
@@ -978,32 +994,14 @@ $(function() {
         
         // İlk 25 kategoriyi al
         const categoryEntries = Object.entries(servicesByCategory).slice(0, 25);
-        console.log('Categories to show:', categoryEntries.length);
         
-        // Her kategoriyi render et
-        categoryEntries.forEach(([categoryName, categoryServices]) => {
-            const category = servicesData.categories.find(cat => cat.name === categoryName);
-            if (!category) return;
-
-            // Kategori header'ını ekle
-            $servicesList.append(renderCategoryHeader(category));
-            
-            // Bu kategorinin servislerini ekle
-            const $categoryContainer = $(`.service-category-container[data-category-id="${category.id}"]`);
-            const $categoryServicesList = $categoryContainer.find('.category-services-list');
-            
-            const servicesHtml = categoryServices.map(service =>
-                renderService(service, category)
-            ).join('');
-            
-            $categoryServicesList.append(servicesHtml);
-        });
+        // Sadece kategori başlıklarını tek seferde bas (servisler açılınca)
+        pendingServices.clear();
+        appendCategories(categoryEntries);
         
         // Kategorileri global değişkene kaydet scroll için
         window.allServicesByCategory = servicesByCategory;
         window.loadedCategories = 25;
-        
-        console.log('Initial load completed');
     }
 
     // Yeni kategorileri yüklemek için fonksiyon
@@ -1027,24 +1025,7 @@ $(function() {
         const categoryEntries = Object.entries(window.allServicesByCategory)
             .slice(window.loadedCategories, window.loadedCategories + categoriesToLoad);
         
-        // Her kategoriyi render et
-        categoryEntries.forEach(([categoryName, categoryServices]) => {
-            const category = servicesData.categories.find(cat => cat.name === categoryName);
-            if (!category) return;
-
-            // Kategori header'ını ekle
-            $servicesList.append(renderCategoryHeader(category));
-            
-            // Bu kategorinin servislerini ekle
-            const $categoryContainer = $(`.service-category-container[data-category-id="${category.id}"]`);
-            const $categoryServicesList = $categoryContainer.find('.category-services-list');
-            
-            const servicesHtml = categoryServices.map(service =>
-                renderService(service, category)
-            ).join('');
-            
-            $categoryServicesList.append(servicesHtml);
-        });
+        appendCategories(categoryEntries);
         
         window.loadedCategories += categoriesToLoad;
         
@@ -1079,24 +1060,7 @@ $(function() {
         const categoryEntries = Object.entries(window.filteredServicesByCategory)
             .slice(window.loadedFilteredCategories, window.loadedFilteredCategories + categoriesToLoad);
         
-        // Her kategoriyi render et
-        categoryEntries.forEach(([categoryName, categoryServices]) => {
-            const category = servicesData.categories.find(cat => cat.name === categoryName);
-            if (!category) return;
-
-            // Kategori header'ını ekle
-            $servicesList.append(renderCategoryHeader(category));
-            
-            // Bu kategorinin servislerini ekle
-            const $categoryContainer = $(`.service-category-container[data-category-name="${categoryName}"]`);
-            const $categoryServicesList = $categoryContainer.find('.category-services-list');
-            
-            const servicesHtml = categoryServices.map(service =>
-                renderService(service, category)
-            ).join('');
-            
-            $categoryServicesList.append(servicesHtml);
-        });
+        appendCategories(categoryEntries);
         
         window.loadedFilteredCategories += categoriesToLoad;
         
@@ -1221,6 +1185,9 @@ $(function() {
         if (!$servicesTableContent.length) return;
 
         const isExpanding = !$servicesTableContent.is(':visible');
+        if (isExpanding) {
+            ensureServicesRendered($button.closest('.service-category-container')[0]);
+        }
         const $icon = $button.find('button i');
         const $buttonText = $button.find('button span');
         
@@ -1272,12 +1239,8 @@ $(function() {
             const $serviceRow = $(this).closest('.service-row');
             const serviceId = parseInt($serviceRow.data('service-id'));
             
-            // Find service data from JSON
-            let serviceData = null;
-            servicesData.categories.forEach(category => {
-                const service = category.services.find(s => s.id === serviceId);
-                if (service) serviceData = service;
-            });
+            // Find service data from lookup map (O(1))
+            const serviceData = serviceById.get(serviceId) || null;
             
             if (serviceData) {
                 openModal(serviceData);
@@ -1413,6 +1376,7 @@ $(function() {
                 const $toggleText = $toggleButton.find('button span');
                 
                 if (!$content.is(':visible')) {
+                    ensureServicesRendered(this);
                     $toggleIcon.removeClass('expand-icon').addClass('rotate-90');
                     $toggleButton.addClass('border-b');
                     if ($toggleText.length) {

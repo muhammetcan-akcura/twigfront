@@ -73,110 +73,108 @@ white-space: nowrap;
         <!-- Blank Card -->
 <div>
 
-        <div class="w-full overflow-x-auto scrollbar-hide mb-8">
-            <div class="inline-flex items-center gap-[2px] list-none p-[6px] m-0 rounded-full border border-gray-200 bg-white min-w-max">
-                <a href="/" class="flex items-center justify-center gap-[10px] py-[12px] px-[14px] rounded-full font-medium whitespace-nowrap text-[15px] leading-[160%] tracking-[-0.3px] !text-white border border-white/15 btn-custom-active shadow-[0px_0px_3px_0px_#0139ff,0px_0px_0px_1.182px_#0139ff]">
-                    <i class="ri-shopping-cart-line text-[22px]"></i>
-                    <span>New Order</span>
-                </a>     <a href="/massorder" class="flex items-center justify-center gap-[10px] py-[12px] px-[14px] rounded-full font-medium whitespace-nowrap text-[15px] leading-[160%] tracking-[-0.3px] text-gray-600 hover:bg-gray-200 hover:text-gray-800">
-                    <i class="ri-stack-line text-[22px]"></i>
-                    <span>Mass Order</span>
-                </a>
-                <a href="#" class="flex items-center justify-center gap-[10px] py-[12px] px-[14px] rounded-full font-medium whitespace-nowrap text-[15px] leading-[160%] tracking-[-0.3px] text-gray-600 hover:bg-gray-200 hover:text-gray-800" id="favorites-btn">
-                    <i class="ri-heart-line text-[22px]"></i>
-                    <span>Favorites</span>
-                </a>
-           
-     
-                <a href="#" class="flex items-center justify-center gap-[10px] py-[12px] px-[14px] rounded-full font-medium whitespace-nowrap text-[15px] leading-[160%] tracking-[-0.3px] text-gray-600 hover:bg-gray-200 hover:text-gray-800" id="search-services-btn">
-                    <i class="ri-search-line text-[22px]"></i>
-                    <span>Search Services</span>
-                </a>
-     
-            </div>
-        </div>
-
-               <!-- Social Media Platform Filters -->
-        <div class="mb-8">
-             <div class="flex flex-wrap items-center gap-2">
-                <button class="filter-btn filter-btn-active flex items-center gap-2 px-4 py-2 rounded-[25px] text-sm font-semibold" data-platform="all">
-                    <i class="ri-layout-grid-fill text-base font-normal"></i>
-                    <span>All</span>
-                </button>
-                <button class="filter-btn flex items-center gap-2 px-4 py-2 rounded-[25px] text-sm font-semibold text-gray-700 bg-white border border-gray-200 hover:bg-gray-50" data-platform="instagram">
-                    <img src="https://storage.perfectcdn.com/f3b92e/hhzsztp4pjw79lq6.svg" alt="Instagram" class="w-5 h-5">
-                    <span>Instagram</span>
-                </button>
-                <button class="filter-btn flex items-center gap-2 px-4 py-2 rounded-[25px] text-sm font-semibold text-gray-700 bg-white border border-gray-200 hover:bg-gray-50" data-platform="tiktok">
-                    <img src="https://i.hizliresim.com/cjkftds.png" alt="TikTok" class="w-5 h-5">
-                    <span>TikTok</span>
-                </button>
-                <button class="filter-btn flex items-center gap-2 px-4 py-2 rounded-[25px] text-sm font-semibold text-gray-700 bg-white border border-gray-200 hover:bg-gray-50" data-platform="youtube">
-                    <img src="https://storage.perfectcdn.com/f3b92e/613d1l69p0oz9rzr.svg" alt="YouTube" class="w-5 h-5">
-                    <span>YouTube</span>
-                </button>
-                <button class="filter-btn flex items-center gap-2 px-4 py-2 rounded-[25px] text-sm font-semibold text-gray-700 bg-white border border-gray-200 hover:bg-gray-50" data-platform="facebook">
-                    <img src="https://storage.perfectcdn.com/f3b92e/fcxdcr0rcj7yy89q.svg" alt="Facebook" class="w-5 h-5">
-                    <span>Facebook</span>
-                </button>
-                <button class="filter-btn flex items-center gap-2 px-4 py-2 rounded-[25px] text-sm font-semibold text-gray-700 bg-white border border-gray-200 hover:bg-gray-50" data-platform="twitter">
-                    <img src="https://storage.perfectcdn.com/f3b92e/oihba445llengou2.svg" alt="Twitter" class="w-5 h-5">
-                    <span>Twitter</span>
-                </button>
-                <button class="filter-btn flex items-center gap-2 px-4 py-2 rounded-[25px] text-sm font-semibold text-gray-700 bg-white border border-gray-200 hover:bg-gray-50" data-platform="telegram">
-                    <img src="https://storage.perfectcdn.com/f3b92e/yp1fm63ad8prc97k.svg" alt="Telegram" class="w-5 h-5">
-                    <span>Telegram</span>
-                </button>
-                
-                <!-- More Button with Dropdown -->
-                <div class="relative">
-                    <button id="more-platforms-btn" class="filter-btn flex items-center gap-2 px-4 py-2 rounded-[25px] text-sm font-semibold text-gray-700 bg-white border border-gray-200 hover:bg-gray-50">
-                        <span>More</span>
-                        <i class="ri-arrow-down-s-line text-base"></i>
+        <!-- Unified Mode & Platform Filter Bar -->
+        <div id="order-filter-bar" class="bg-white border border-gray-200 rounded-[20px] p-2.5 sm:p-3.5 mb-6 shadow-[0_2px_12px_-4px_rgba(15,23,42,0.06)]">
+            <div class="flex flex-col xl:flex-row xl:items-center gap-2.5 xl:gap-3">
+                <!-- Mode Switcher (New Order / Favorites) -->
+                <div id="order-mode-tabs" class="grid grid-cols-2 sm:inline-flex items-center gap-1 p-1 rounded-[14px] bg-slate-100/90 border border-gray-200/70 shrink-0">
+                    <button type="button" id="new-order-tab-btn" class="order-mode-btn order-mode-active flex items-center justify-center gap-2 py-2 px-3.5 rounded-[11px] font-semibold whitespace-nowrap text-[13px] sm:text-sm transition-all duration-200">
+                        <i class="ri-shopping-cart-2-line text-[17px] leading-none"></i>
+                        <span>New Order</span>
                     </button>
-                    <div id="more-platforms-dropdown" class="hidden absolute z-20 mt-1 bg-white shadow-lg border border-gray-200 rounded-lg min-w-[200px] left-1/2 transform -translate-x-1/2">
-                        <div class="p-2">
-                            <input type="text" id="platform-search" placeholder="Search platforms..." class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm">
+                    <button type="button" id="favorites-btn" class="order-mode-btn flex items-center justify-center gap-2 py-2 px-3.5 rounded-[11px] font-semibold whitespace-nowrap text-[13px] sm:text-sm text-gray-600 hover:text-gray-900 hover:bg-white/80 transition-all duration-200">
+                        <i class="ri-heart-3-line text-[17px] leading-none"></i>
+                        <span>Favorites</span>
+                    </button>
+                </div>
+
+                <!-- Responsive Divider -->
+                <div class="xl:hidden h-px w-full bg-gray-100" id="order-filter-divider-mobile"></div>
+                <div class="hidden xl:block w-px h-8 bg-gray-200 shrink-0" id="order-filter-divider-desktop"></div>
+
+                <!-- Social Media Platform Filters -->
+                <div class="relative flex-1 min-w-0" id="platform-filters-wrapper">
+                    <div class="grid grid-cols-4 gap-1.5 sm:gap-2 md:flex md:flex-wrap md:items-center md:gap-1.5 2xl:gap-2">
+                        <button type="button" class="filter-btn filter-btn-active flex flex-col md:flex-row items-center justify-center gap-1 md:gap-1.5 py-2.5 px-1.5 md:px-3 2xl:px-3.5 md:py-2 rounded-[14px] md:rounded-xl text-[11px] md:text-[13px] font-semibold leading-tight transition-all duration-200" data-platform="all">
+                            <i class="ri-layout-grid-fill text-[20px] md:text-[16px] leading-none shrink-0"></i>
+                            <span class="truncate max-w-full">All</span>
+                        </button>
+                        <button type="button" class="filter-btn flex flex-col md:flex-row items-center justify-center gap-1 md:gap-1.5 py-2.5 px-1.5 md:px-3 2xl:px-3.5 md:py-2 rounded-[14px] md:rounded-xl text-[11px] md:text-[13px] font-semibold leading-tight text-gray-700 bg-gray-50/70 md:bg-white border border-gray-200/90 hover:bg-gray-100/80 md:hover:bg-gray-50 transition-all duration-200" data-platform="instagram">
+                            <img src="https://storage.perfectcdn.com/f3b92e/hhzsztp4pjw79lq6.svg" alt="Instagram" class="w-5 h-5 md:w-[18px] md:h-[18px] object-contain shrink-0">
+                            <span class="truncate max-w-full">Instagram</span>
+                        </button>
+                        <button type="button" class="filter-btn flex flex-col md:flex-row items-center justify-center gap-1 md:gap-1.5 py-2.5 px-1.5 md:px-3 2xl:px-3.5 md:py-2 rounded-[14px] md:rounded-xl text-[11px] md:text-[13px] font-semibold leading-tight text-gray-700 bg-gray-50/70 md:bg-white border border-gray-200/90 hover:bg-gray-100/80 md:hover:bg-gray-50 transition-all duration-200" data-platform="tiktok">
+                            <img src="https://i.hizliresim.com/cjkftds.png" alt="TikTok" class="w-5 h-5 md:w-[18px] md:h-[18px] object-contain shrink-0">
+                            <span class="truncate max-w-full">TikTok</span>
+                        </button>
+                        <button type="button" class="filter-btn flex flex-col md:flex-row items-center justify-center gap-1 md:gap-1.5 py-2.5 px-1.5 md:px-3 2xl:px-3.5 md:py-2 rounded-[14px] md:rounded-xl text-[11px] md:text-[13px] font-semibold leading-tight text-gray-700 bg-gray-50/70 md:bg-white border border-gray-200/90 hover:bg-gray-100/80 md:hover:bg-gray-50 transition-all duration-200" data-platform="youtube">
+                            <img src="https://storage.perfectcdn.com/f3b92e/613d1l69p0oz9rzr.svg" alt="YouTube" class="w-5 h-5 md:w-[18px] md:h-[18px] object-contain shrink-0">
+                            <span class="truncate max-w-full">YouTube</span>
+                        </button>
+                        <button type="button" class="filter-btn flex flex-col md:flex-row items-center justify-center gap-1 md:gap-1.5 py-2.5 px-1.5 md:px-3 2xl:px-3.5 md:py-2 rounded-[14px] md:rounded-xl text-[11px] md:text-[13px] font-semibold leading-tight text-gray-700 bg-gray-50/70 md:bg-white border border-gray-200/90 hover:bg-gray-100/80 md:hover:bg-gray-50 transition-all duration-200" data-platform="facebook">
+                            <img src="https://storage.perfectcdn.com/f3b92e/fcxdcr0rcj7yy89q.svg" alt="Facebook" class="w-5 h-5 md:w-[18px] md:h-[18px] object-contain shrink-0">
+                            <span class="truncate max-w-full">Facebook</span>
+                        </button>
+                        <button type="button" class="filter-btn flex flex-col md:flex-row items-center justify-center gap-1 md:gap-1.5 py-2.5 px-1.5 md:px-3 2xl:px-3.5 md:py-2 rounded-[14px] md:rounded-xl text-[11px] md:text-[13px] font-semibold leading-tight text-gray-700 bg-gray-50/70 md:bg-white border border-gray-200/90 hover:bg-gray-100/80 md:hover:bg-gray-50 transition-all duration-200" data-platform="twitter">
+                            <img src="https://storage.perfectcdn.com/f3b92e/oihba445llengou2.svg" alt="Twitter" class="w-5 h-5 md:w-[18px] md:h-[18px] object-contain shrink-0 platform-x-icon">
+                            <span class="truncate max-w-full">Twitter</span>
+                        </button>
+                        <button type="button" class="filter-btn flex flex-col md:flex-row items-center justify-center gap-1 md:gap-1.5 py-2.5 px-1.5 md:px-3 2xl:px-3.5 md:py-2 rounded-[14px] md:rounded-xl text-[11px] md:text-[13px] font-semibold leading-tight text-gray-700 bg-gray-50/70 md:bg-white border border-gray-200/90 hover:bg-gray-100/80 md:hover:bg-gray-50 transition-all duration-200" data-platform="telegram">
+                            <img src="https://storage.perfectcdn.com/f3b92e/yp1fm63ad8prc97k.svg" alt="Telegram" class="w-5 h-5 md:w-[18px] md:h-[18px] object-contain shrink-0">
+                            <span class="truncate max-w-full">Telegram</span>
+                        </button>
+                        <button type="button" id="more-platforms-btn" class="filter-btn flex flex-col md:flex-row items-center justify-center gap-1 md:gap-1.5 py-2.5 px-1.5 md:px-3 2xl:px-3.5 md:py-2 rounded-[14px] md:rounded-xl text-[11px] md:text-[13px] font-semibold leading-tight text-gray-700 bg-gray-50/70 md:bg-white border border-gray-200/90 hover:bg-gray-100/80 md:hover:bg-gray-50 transition-all duration-200">
+                            <i id="more-btn-default-icon" class="ri-apps-2-line text-[20px] md:text-[16px] leading-none shrink-0"></i>
+                            <img id="more-btn-custom-icon" src="" alt="" class="hidden w-5 h-5 md:w-[18px] md:h-[18px] object-contain rounded-sm shrink-0">
+                            <span class="inline-flex items-center gap-0.5 max-w-full min-w-0">
+                                <span id="more-btn-label" class="truncate">More</span>
+                                <i id="more-btn-chevron" class="ri-arrow-down-s-line text-xs md:text-sm leading-none shrink-0 transition-transform duration-200"></i>
+                            </span>
+                        </button>
+                    </div>
+
+                    <!-- More Platforms Dropdown -->
+                    <div id="more-platforms-dropdown" class="hidden absolute z-40 mt-2 w-full md:w-64 bg-white shadow-xl border border-gray-200 rounded-[16px] overflow-hidden">
+                        <div class="p-2.5 border-b border-gray-100">
+                            <div class="relative">
+                                <i class="ri-search-line text-gray-400 text-sm absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none"></i>
+                                <input type="text" id="platform-search" placeholder="Search platforms..." class="w-full pl-8 pr-3 py-2 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs sm:text-sm">
+                            </div>
                         </div>
-
-                <ul class="max-h-60 overflow-y-auto">
-                         <li class="platform-option px-4 py-2 hover:bg-gray-100 cursor-pointer flex items-center gap-3" data-platform="linkedin">
-    <img src="https://cdn-icons-png.flaticon.com/512/174/174857.png" alt="LinkedIn" class="w-5 h-5">
-    <span class="font-medium">LinkedIn</span>
-  </li>
-  <li class="platform-option px-4 py-2 hover:bg-gray-100 cursor-pointer flex items-center gap-3" data-platform="spotify">
-    <img src="https://storage.perfectcdn.com/f3b92e/3xwmuk6fdihz3oec.svg" alt="Spotify" class="w-5 h-5">
-    <span class="font-medium">Spotify</span>
-  </li>
-    <li class="platform-option px-4 py-2 hover:bg-gray-100 cursor-pointer flex items-center gap-3" data-platform="threads">
-    <img src="https://storage.perfectcdn.com/ed17j7/fxm1jrdli8ajwbxw.jpeg" alt="Threads" class="w-5 h-5">
-    <span class="font-medium">Threads</span>
-  </li>
-    <li class="platform-option px-4 py-2 hover:bg-gray-100 cursor-pointer flex items-center gap-3" data-platform="kwai">
-    <img src="https://storage.perfectcdn.com/ed17j7/6w1735blhfq5ce4f.png" alt="Kwai" class="w-5 h-5">
-    <span class="font-medium">Kwai</span>
-  </li>
-  <li class="platform-option px-4 py-2 hover:bg-gray-100 cursor-pointer flex items-center gap-3" data-platform="twitch">
-    <img src="https://i.hizliresim.com/nhbvs75.png" alt="Twitch" class="w-5 h-5">
-    <span class="font-medium">Twitch</span>
-  </li>
-  <li class="platform-option px-4 py-2 hover:bg-gray-100 cursor-pointer flex items-center gap-3" data-platform="rumble">
-    <img src="https://storage.perfectcdn.com/ed17j7/qca62hwq1k70riht.png" alt="Rumble" class="w-5 h-5">
-    <span class="font-medium">Rumble</span>
-  </li>
-
-  <li class="platform-option px-4 py-2 hover:bg-gray-100 cursor-pointer flex items-center gap-3" data-platform="snackvideo">
-    <img src="https://storage.perfectcdn.com/ed17j7/rs4mesfy5mjlfilr.png" alt="SnackVideo" class="w-5 h-5">
-    <span class="font-medium">SnackVideo</span>
-  </li>
-
-  <li class="platform-option px-4 py-2 hover:bg-gray-100 cursor-pointer flex items-center gap-3" data-platform="rednote">
-    <img src="https://storage.perfectcdn.com/ed17j7/zzhlpxzlmzao00r6.png" alt="Rednote" class="w-5 h-5">
-    <span class="font-medium">Rednote</span>
-  </li>
- 
-</ul>
-
+                        <ul class="max-h-64 overflow-y-auto p-1.5 grid grid-cols-2 md:grid-cols-1 gap-1 custom-scrollbar">
+                            <li class="platform-option px-3 py-2 rounded-xl hover:bg-gray-100 cursor-pointer flex items-center gap-2.5 text-xs sm:text-sm transition-colors" data-platform="linkedin">
+                                <img src="https://cdn-icons-png.flaticon.com/512/174/174857.png" alt="LinkedIn" class="w-5 h-5 object-contain shrink-0">
+                                <span class="font-medium truncate">LinkedIn</span>
+                            </li>
+                            <li class="platform-option px-3 py-2 rounded-xl hover:bg-gray-100 cursor-pointer flex items-center gap-2.5 text-xs sm:text-sm transition-colors" data-platform="spotify">
+                                <img src="https://storage.perfectcdn.com/f3b92e/3xwmuk6fdihz3oec.svg" alt="Spotify" class="w-5 h-5 object-contain shrink-0">
+                                <span class="font-medium truncate">Spotify</span>
+                            </li>
+                            <li class="platform-option px-3 py-2 rounded-xl hover:bg-gray-100 cursor-pointer flex items-center gap-2.5 text-xs sm:text-sm transition-colors" data-platform="threads">
+                                <img src="https://storage.perfectcdn.com/ed17j7/fxm1jrdli8ajwbxw.jpeg" alt="Threads" class="w-5 h-5 object-contain rounded-sm shrink-0">
+                                <span class="font-medium truncate">Threads</span>
+                            </li>
+                            <li class="platform-option px-3 py-2 rounded-xl hover:bg-gray-100 cursor-pointer flex items-center gap-2.5 text-xs sm:text-sm transition-colors" data-platform="kwai">
+                                <img src="https://storage.perfectcdn.com/ed17j7/6w1735blhfq5ce4f.png" alt="Kwai" class="w-5 h-5 object-contain rounded-sm shrink-0">
+                                <span class="font-medium truncate">Kwai</span>
+                            </li>
+                            <li class="platform-option px-3 py-2 rounded-xl hover:bg-gray-100 cursor-pointer flex items-center gap-2.5 text-xs sm:text-sm transition-colors" data-platform="twitch">
+                                <img src="https://i.hizliresim.com/nhbvs75.png" alt="Twitch" class="w-5 h-5 object-contain shrink-0">
+                                <span class="font-medium truncate">Twitch</span>
+                            </li>
+                            <li class="platform-option px-3 py-2 rounded-xl hover:bg-gray-100 cursor-pointer flex items-center gap-2.5 text-xs sm:text-sm transition-colors" data-platform="rumble">
+                                <img src="https://storage.perfectcdn.com/ed17j7/qca62hwq1k70riht.png" alt="Rumble" class="w-5 h-5 object-contain rounded-sm shrink-0">
+                                <span class="font-medium truncate">Rumble</span>
+                            </li>
+                            <li class="platform-option px-3 py-2 rounded-xl hover:bg-gray-100 cursor-pointer flex items-center gap-2.5 text-xs sm:text-sm transition-colors" data-platform="snackvideo">
+                                <img src="https://storage.perfectcdn.com/ed17j7/rs4mesfy5mjlfilr.png" alt="SnackVideo" class="w-5 h-5 object-contain rounded-sm shrink-0">
+                                <span class="font-medium truncate">SnackVideo</span>
+                            </li>
+                            <li class="platform-option px-3 py-2 rounded-xl hover:bg-gray-100 cursor-pointer flex items-center gap-2.5 text-xs sm:text-sm transition-colors" data-platform="rednote">
+                                <img src="https://storage.perfectcdn.com/ed17j7/zzhlpxzlmzao00r6.png" alt="Rednote" class="w-5 h-5 object-contain rounded-sm shrink-0">
+                                <span class="font-medium truncate">Rednote</span>
+                            </li>
+                        </ul>
                     </div>
                 </div>
             </div>
@@ -627,53 +625,68 @@ white-space: nowrap;
     display: inline-block !important;
 }
 
-/* Mobil için buton container iyileştirmeleri */
-@media (max-width: 768px) {
-    .inline-flex.scrollbar-hide {
-        padding-left: 0.5rem;
-        padding-right: 0.5rem;
+/* Mode Switcher & Filter Bar Styles */
+.order-mode-active {
+    border: 1px solid #4580f7;
+    background: linear-gradient(0deg, rgba(255, 255, 255, 0.16) 6.48%, rgba(255, 255, 255, 0) 100%), #134de2;
+    box-shadow: 0 2px 8px -2px rgba(19, 77, 226, 0.45);
+    color: #ffffff !important;
+}
+
+#order-filter-bar .filter-btn.filter-btn-active {
+    border-radius: 14px;
+    color: #ffffff !important;
+    box-shadow: 0 2px 8px -2px rgba(19, 77, 226, 0.4);
+}
+
+@media (min-width: 768px) {
+    #order-filter-bar .filter-btn.filter-btn-active {
+        border-radius: 12px;
     }
-    
-    .inline-flex.scrollbar-hide a {
-        flex-shrink: 0;
-        min-width: max-content;
-    }
-    
-    /* Platform filter butonlarını mobilde küçült */
-    .filter-btn {
-        padding: 6px 10px !important; /* px-4 py-2 yerine daha küçük padding */
-        gap: 4px !important; /* gap-2 yerine daha küçük gap */
-        font-size: 12px !important; /* text-sm yerine daha küçük font */
-    }
-    
-    /* Platform filter butonlarının içindeki yazıları mobilde gizle (data-platform olan butonlar) */
-    .filter-btn[data-platform] span {
-        display: none !important;
-    }
-    
-    /* More butonundaki "More" yazısını mobilde gizle */
-    #more-platforms-btn span {
-        display: none !important;
-    }
-    
-    
-    /* Navigation butonları için mobil optimizasyonu */
-    .w-full.overflow-x-auto.scrollbar-hide.mb-8 .inline-flex.items-center a {
-        padding: 6px 8px !important; /* Daha da küçük padding */
-        gap: 4px !important; /* Daha küçük gap */
-        font-size: 12px !important; /* Daha küçük font */
-        border-radius: 20px !important; /* rounded-full yerine daha küçük radius */
-    }
-    
-    .w-full.overflow-x-auto.scrollbar-hide.mb-8 .inline-flex.items-center a i {
-        font-size: 16px !important; /* Daha küçük icon */
-    }
-    
-    /* Container padding'ini de azalt */
-    .w-full.overflow-x-auto.scrollbar-hide.mb-8 .inline-flex.items-center {
-        padding: 3px !important; /* Daha küçük container padding */
-        gap: 0px !important; /* Gap'i sıfır yap */
-    }
+}
+
+#order-filter-bar .filter-btn.filter-btn-active .platform-x-icon {
+    filter: brightness(0) invert(1);
+}
+
+/* Dark mode support for filter bar */
+html.dark-mode #order-mode-tabs {
+    background-color: #0f172a !important;
+    border-color: #1f2a3c !important;
+}
+
+html.dark-mode #order-mode-tabs .order-mode-btn:not(.order-mode-active) {
+    color: #94a3b8 !important;
+}
+
+html.dark-mode #order-mode-tabs .order-mode-btn:not(.order-mode-active):hover {
+    background-color: #1e293b !important;
+    color: #f8fafc !important;
+}
+
+html.dark-mode #order-filter-divider-mobile,
+html.dark-mode #order-filter-divider-desktop {
+    background-color: #1f2a3c !important;
+}
+
+html.dark-mode #order-filter-bar .filter-btn:not(.filter-btn-active) {
+    background-color: #0f172a !important;
+    border-color: #1f2a3c !important;
+    color: #cbd5e1 !important;
+}
+
+html.dark-mode #order-filter-bar .filter-btn:not(.filter-btn-active):hover {
+    background-color: #1e293b !important;
+    color: #f8fafc !important;
+}
+
+html.dark-mode #order-filter-bar .platform-x-icon {
+    filter: brightness(0) invert(1);
+}
+
+html.dark-mode #more-platforms-dropdown .platform-option.bg-blue-100 {
+    background-color: rgba(59, 130, 246, 0.2) !important;
+    color: #60a5fa !important;
 }
 </style>
 
@@ -775,13 +788,15 @@ $(document).ready(function() {
                 }
                 
                 // Favorites butonunu göster
-                $favoritesBtn.show();
+                $favoritesBtn.removeClass('hidden').show();
+                $('#order-mode-tabs').removeClass('grid-cols-1').addClass('grid-cols-2');
             } else {
 
                 selectCategoryByValue(firstCategory.value, firstCategory.text);
 
                 // İlk kategori -1 değilse favorites butonunu gizle
-                $favoritesBtn.hide();
+                $favoritesBtn.addClass('hidden').hide();
+                $('#order-mode-tabs').removeClass('grid-cols-2').addClass('grid-cols-1');
                 
                 // -1 kategorisini gizle (varsa)
                 const $favoriteCategoryLi = $('#category-menu li[data-value="-1"]');
@@ -810,14 +825,38 @@ $(document).ready(function() {
         updateServiceDropdown(categoryValue);
         $('#orderform-category').trigger('change');
     }
+
+    const inactiveFilterBtnClasses = 'text-gray-700 bg-gray-50/70 md:bg-white border border-gray-200/90 hover:bg-gray-100/80 md:hover:bg-gray-50';
+
+    function setOrderModeTab(mode) {
+        const $newOrderBtn = $('#new-order-tab-btn');
+        const $favBtn = $('#favorites-btn');
+        if (mode === 'favorites') {
+            $newOrderBtn.removeClass('order-mode-active').addClass('text-gray-600 hover:text-gray-900 hover:bg-white/80');
+            $favBtn.removeClass('text-gray-600 hover:text-gray-900 hover:bg-white/80').addClass('order-mode-active');
+            $favBtn.find('i').removeClass('ri-heart-3-line').addClass('ri-heart-3-fill');
+        } else {
+            $favBtn.removeClass('order-mode-active').addClass('text-gray-600 hover:text-gray-900 hover:bg-white/80');
+            $favBtn.find('i').removeClass('ri-heart-3-fill').addClass('ri-heart-3-line');
+            $newOrderBtn.removeClass('text-gray-600 hover:text-gray-900 hover:bg-white/80').addClass('order-mode-active');
+        }
+    }
+
+    function resetMorePlatformsButton() {
+        $('#more-btn-label').text('More');
+        $('#more-btn-custom-icon').addClass('hidden').attr('src', '');
+        $('#more-btn-default-icon').removeClass('hidden');
+        $('.platform-option').removeClass('bg-blue-100 text-blue-700 processing').addClass('hover:bg-gray-100');
+    }
     
     // Favorites butonu click handler
     $('#favorites-btn').on('click', function(e) {
         e.preventDefault();
+        setOrderModeTab('favorites');
         
-        // Nav tabs'da aktif durumu güncelle
-        $('.inline-flex a').removeClass('btn-custom-active shadow-[0px_0px_3px_0px_#0139ff,0px_0px_0px_1.182px_#0139ff] !text-white border border-white/15').addClass('text-gray-600 hover:bg-gray-200 hover:text-gray-800');
-        $(this).removeClass('text-gray-600 hover:bg-gray-200 hover:text-gray-800').addClass('btn-custom-active shadow-[0px_0px_3px_0px_#0139ff,0px_0px_0px_1.182px_#0139ff] !text-white border border-white/15');
+        // Platform filtre aktifliğini temizle (favoriler tüm platformları kapsar)
+        $('.filter-btn').removeClass('filter-btn-active processing').addClass(inactiveFilterBtnClasses);
+        resetMorePlatformsButton();
         
         // -1 kategorisini bul ve seç
         const $categorySelect = $('#orderform-category');
@@ -837,20 +876,18 @@ $(document).ready(function() {
         }
     });
     
-    // Other nav buttons click handler
-    $('.inline-flex a').not('#favorites-btn').on('click', function(e) {
-        // Normal navigation için varsayılan davranışı koru
-        if ($(this).attr('href') !== '#') {
-            return true;
-        }
-        
+    // New Order tab click handler
+    $('#new-order-tab-btn').on('click', function(e) {
         e.preventDefault();
+        setOrderModeTab('neworder');
         
-        // Nav tabs'da aktif durumu güncelle
-        $('.inline-flex a').removeClass('btn-custom-active shadow-[0px_0px_3px_0px_#0139ff,0px_0px_0px_1.182px_#0139ff] !text-white border border-white/15').addClass('text-gray-600 hover:bg-gray-200 hover:text-gray-800');
-        $(this).removeClass('text-gray-600 hover:bg-gray-200 hover:text-gray-800').addClass('btn-custom-active shadow-[0px_0px_3px_0px_#0139ff,0px_0px_0px_1.182px_#0139ff] !text-white border border-white/15');
+        // All platform filtresini aktif yap
+        $('.filter-btn').removeClass('filter-btn-active processing').addClass(inactiveFilterBtnClasses);
+        $('.filter-btn[data-platform="all"]').removeClass(inactiveFilterBtnClasses).addClass('filter-btn-active');
+        resetMorePlatformsButton();
         
-        // -1 kategorisini gizle
+        // Normal kategorileri geri göster ve -1'i gizle
+        $('#category-menu ul li').not('[data-value="-1"]').show();
         const $favoriteCategoryLi = $('#category-menu li[data-value="-1"]');
         if ($favoriteCategoryLi.length) {
             $favoriteCategoryLi.hide();
@@ -2174,6 +2211,7 @@ if (speedMatch) {
         // Close more platforms dropdown if clicking outside
         if (!$(e.target).closest('#more-platforms-btn, #more-platforms-dropdown').length) {
             $('#more-platforms-dropdown').addClass('hidden');
+            $('#more-btn-chevron').removeClass('rotate-180');
         }
     });
 
@@ -2196,6 +2234,12 @@ if (speedMatch) {
         
         const platform = $btn.data('platform');
         
+        // Ensure New Order tab is active when selecting a platform
+        setOrderModeTab('neworder');
+        resetMorePlatformsButton();
+        $('#more-platforms-dropdown').addClass('hidden');
+        $('#more-btn-chevron').removeClass('rotate-180');
+        
         // Mark button as processing
         $btn.addClass('processing');
         
@@ -2204,10 +2248,10 @@ if (speedMatch) {
         isFirstServiceSelected = false;
         
         // Remove active class from all filter buttons
-        $('.filter-btn').removeClass('filter-btn-active processing').addClass('text-gray-700 bg-white border border-gray-200 hover:bg-gray-50');
+        $('.filter-btn').removeClass('filter-btn-active processing').addClass(inactiveFilterBtnClasses);
         
         // Add active class to clicked button
-        $btn.removeClass('text-gray-700 bg-white border border-gray-200 hover:bg-gray-50').addClass('filter-btn-active');
+        $btn.removeClass(inactiveFilterBtnClasses).addClass('filter-btn-active');
         
         // Handle platform filtering logic with delay to ensure state cleanup
         setTimeout(function() {
@@ -2218,10 +2262,9 @@ if (speedMatch) {
 
     // Function to filter categories by platform
     function filterCategoriesByPlatform(platform) {
-        console.log('Filtering categories by platform:', platform);
-        
         const $categoryMenu = $('#category-menu ul');
-        const $allCategories = $categoryMenu.find('li');
+        const $allCategories = $categoryMenu.find('li').not('[data-value="-1"]');
+        $('#category-menu li[data-value="-1"]').hide();
         
         // Clear any existing timeouts
         if (window.platformFilterTimeout) {
@@ -2232,7 +2275,7 @@ if (speedMatch) {
         $('#category-menu li').removeClass('bg-gray-100');
         
         if (platform === 'all') {
-            // Show all categories
+            // Show all normal categories
             $allCategories.show();
             
             // Reset to first category if available with slight delay
@@ -2407,76 +2450,46 @@ if (speedMatch) {
         
         // Toggle dropdown visibility
         $dropdown.toggleClass('hidden');
+        const isOpen = !$dropdown.hasClass('hidden');
+        $('#more-btn-chevron').toggleClass('rotate-180', isOpen);
         
         // Apply dynamic positioning only when dropdown is visible
-        if (!$dropdown.hasClass('hidden')) {
+        if (isOpen) {
             positionMorePlatformsDropdown($button, $dropdown);
+            $('#platform-search').val('').trigger('input');
         }
     });
     
-    // Function to dynamically position the more platforms dropdown
+    // Function to dynamically position the more platforms dropdown inside #platform-filters-wrapper
     function positionMorePlatformsDropdown($button, $dropdown) {
         const windowWidth = $(window).width();
+        const $wrapper = $('#platform-filters-wrapper');
+        
+        if (windowWidth < 768 || !$wrapper.length) {
+            // Mobile: full-width card right below the 4x2 grid
+            $dropdown.css({
+                'left': '0',
+                'right': '0',
+                'transform': 'none'
+            });
+            return;
+        }
+        
+        // Desktop: anchor cleanly below #more-platforms-btn, clamped inside wrapper
+        const wrapperOffset = $wrapper.offset();
+        const wrapperWidth = $wrapper.outerWidth();
         const buttonOffset = $button.offset();
         const buttonWidth = $button.outerWidth();
-        const dropdownWidth = $dropdown.outerWidth();
+        const dropdownWidth = $dropdown.outerWidth() || 256;
         
-        // Reset any previous positioning styles
+        let relLeft = (buttonOffset.left - wrapperOffset.left) + (buttonWidth / 2) - (dropdownWidth / 2);
+        relLeft = Math.max(0, Math.min(wrapperWidth - dropdownWidth, relLeft));
+        
         $dropdown.css({
-            'left': '',
-            'right': '',
-            'transform': ''
+            'left': relLeft + 'px',
+            'right': 'auto',
+            'transform': 'none'
         });
-        
-        // Check if dropdown would overflow on the right side
-        const wouldOverflowRight = (buttonOffset.left + dropdownWidth) > windowWidth;
-        
-        // Check if dropdown would overflow on the left side (when positioned to the left)
-        const wouldOverflowLeft = (buttonOffset.left + buttonWidth - dropdownWidth) < 0;
-        
-        if (windowWidth <= 768) { // Mobile screens
-            if (wouldOverflowRight && !wouldOverflowLeft) {
-                // Position to the right edge of the button
-                $dropdown.css({
-                    'left': 'auto',
-                    'right': '0',
-                    'transform': 'none'
-                });
-            } else if (wouldOverflowLeft && !wouldOverflowRight) {
-                // Position to the left edge of the button
-                $dropdown.css({
-                    'left': '0',
-                    'right': 'auto',
-                    'transform': 'none'
-                });
-            } else if (wouldOverflowRight && wouldOverflowLeft) {
-                // Center but constrain to screen edges
-                const maxLeft = windowWidth - dropdownWidth - 10; // 10px margin
-                const minLeft = 10; // 10px margin
-                const centerLeft = buttonOffset.left + (buttonWidth / 2) - (dropdownWidth / 2);
-                const finalLeft = Math.max(minLeft, Math.min(maxLeft, centerLeft));
-                
-                $dropdown.css({
-                    'left': finalLeft - buttonOffset.left + 'px',
-                    'right': 'auto',
-                    'transform': 'none'
-                });
-            } else {
-                // Use default centered positioning
-                $dropdown.css({
-                    'left': '50%',
-                    'right': 'auto',
-                    'transform': 'translateX(-50%)'
-                });
-            }
-        } else { // Desktop screens
-            // Use default centered positioning for desktop
-            $dropdown.css({
-                'left': '50%',
-                'right': 'auto',
-                'transform': 'translateX(-50%)'
-            });
-        }
     }
     
     // Reposition dropdown on window resize
@@ -2505,11 +2518,16 @@ if (speedMatch) {
         
         const $option = $(this);
         const platform = $option.data('platform');
+        const optionLabel = $option.find('span').text().trim();
+        const optionIcon = $option.find('img').attr('src');
         
         // Prevent multiple rapid clicks
         if ($option.hasClass('processing')) {
             return;
         }
+        
+        // Ensure New Order tab is active
+        setOrderModeTab('neworder');
         
         // Mark as processing
         $option.addClass('processing');
@@ -2519,25 +2537,31 @@ if (speedMatch) {
         isFirstServiceSelected = false;
         
         // Remove active class from all filter buttons and platform options
-        $('.filter-btn').removeClass('filter-btn-active processing').addClass('text-gray-700 bg-white border border-gray-200 hover:bg-gray-50');
+        $('.filter-btn').removeClass('filter-btn-active processing').addClass(inactiveFilterBtnClasses);
         $('.platform-option').removeClass('bg-blue-100 text-blue-700 processing').addClass('hover:bg-gray-100');
         
         // Add active class to selected option
         $option.removeClass('hover:bg-gray-100').addClass('bg-blue-100 text-blue-700');
         
-        // Visually activate the "More" button to show something is selected from it
-        $('#more-platforms-btn').removeClass('text-gray-700 bg-white border border-gray-200 hover:bg-gray-50').addClass('filter-btn-active');
+        // Update More button icon + label to reflect selected platform
+        if (optionLabel) {
+            $('#more-btn-label').text(optionLabel);
+        }
+        if (optionIcon) {
+            $('#more-btn-default-icon').addClass('hidden');
+            $('#more-btn-custom-icon').attr('src', optionIcon).attr('alt', optionLabel).removeClass('hidden');
+        }
+        $('#more-platforms-btn').removeClass(inactiveFilterBtnClasses).addClass('filter-btn-active');
         
         // Close dropdown
         $('#more-platforms-dropdown').addClass('hidden');
+        $('#more-btn-chevron').removeClass('rotate-180');
         
         // Apply platform filtering with delay
         setTimeout(function() {
             filterCategoriesByPlatform(platform);
             $option.removeClass('processing');
         }, 50);
-        
-        console.log('Selected platform from dropdown:', platform);
     });
 
     // Search Services Modal Functionality

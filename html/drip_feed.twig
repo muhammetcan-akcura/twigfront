@@ -40,81 +40,91 @@
         <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
             <!-- Desktop Table -->
             <div class="hidden md:block overflow-x-auto">
-                <table class="w-full {% if site['rtl'] %} rtl-table {% endif %}">
+                <table class="w-full table-fixed {% if site['rtl'] %} rtl-table {% endif %}">
+                    <colgroup>
+                        <col style="width:8%">
+                        <col style="width:10%">
+                        <col style="width:18%">
+                        <col style="width:7%">
+                        <col style="width:7%">
+                        <col style="width:16%">
+                        <col style="width:7%">
+                        <col style="width:7%">
+                        <col style="width:8%">
+                        <col style="width:12%">
+                    </colgroup>
                     <thead class="bg-gray-50 border-b border-gray-200">
                         <tr>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ lang('dripfeed.id') }}</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ lang('dripfeed.date') }}</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-[25%]">{{ lang('dripfeed.link') }}</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ lang('dripfeed.total_charge') }}</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ lang('dripfeed.quantity') }}</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-[30%]">{{ lang('dripfeed.service') }}</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ lang('dripfeed.runs') }}</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ lang('dripfeed.interval') }}</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ lang('dripfeed.total_quantity') }}</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ lang('dripfeed.status') }}</th>
+                            <th class="px-2 xl:px-3 2xl:px-5 py-3 text-left text-[11px] xl:text-xs font-medium text-gray-500 uppercase tracking-wide break-words">{{ lang('dripfeed.id') }}</th>
+                            <th class="px-2 xl:px-3 2xl:px-5 py-3 text-left text-[11px] xl:text-xs font-medium text-gray-500 uppercase tracking-wide break-words">{{ lang('dripfeed.date') }}</th>
+                            <th class="px-2 xl:px-3 2xl:px-5 py-3 text-left text-[11px] xl:text-xs font-medium text-gray-500 uppercase tracking-wide break-words">{{ lang('dripfeed.link') }}</th>
+                            <th class="px-2 xl:px-3 2xl:px-5 py-3 text-left text-[11px] xl:text-xs font-medium text-gray-500 uppercase tracking-wide break-words">{{ lang('dripfeed.total_charge') }}</th>
+                            <th class="px-2 xl:px-3 2xl:px-5 py-3 text-left text-[11px] xl:text-xs font-medium text-gray-500 uppercase tracking-wide break-words">{{ lang('dripfeed.quantity') }}</th>
+                            <th class="px-2 xl:px-3 2xl:px-5 py-3 text-left text-[11px] xl:text-xs font-medium text-gray-500 uppercase tracking-wide break-words">{{ lang('dripfeed.service') }}</th>
+                            <th class="px-2 xl:px-3 2xl:px-5 py-3 text-left text-[11px] xl:text-xs font-medium text-gray-500 uppercase tracking-wide break-words">{{ lang('dripfeed.runs') }}</th>
+                            <th class="px-2 xl:px-3 2xl:px-5 py-3 text-left text-[11px] xl:text-xs font-medium text-gray-500 uppercase tracking-wide break-words">{{ lang('dripfeed.interval') }}</th>
+                            <th class="px-2 xl:px-3 2xl:px-5 py-3 text-left text-[11px] xl:text-xs font-medium text-gray-500 uppercase tracking-wide break-words">{{ lang('dripfeed.total_quantity') }}</th>
+                            <th class="px-2 xl:px-3 2xl:px-5 py-3 text-center text-[11px] xl:text-xs font-medium text-gray-500 uppercase tracking-wide break-words">{{ lang('dripfeed.status') }}</th>
                         </tr>
                     </thead>
                     <tbody class="bg-white divide-y divide-gray-200 font-medium">
                         {% for dripFeed in dripFeedList %}
+                        {% set dateParts = dripFeed['date']|split(' ') %}
                         <tr class="hover:bg-gray-50">
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-bold text-blue-600">
-                                <div class="flex items-center gap-2 group cursor-pointer" onclick="copyToClipboard('{{ dripFeed['id'] }}')">
-                                    <span>{{ dripFeed['id'] }}</span>
-                                    <i class="ri-clipboard-line text-sm opacity-0 group-hover:opacity-100 transition-opacity duration-200 text-gray-400 group-hover:text-blue-600"></i>
+                            <td class="px-2 xl:px-3 2xl:px-5 py-4 text-xs xl:text-sm font-bold text-blue-600">
+                                <div class="flex items-center gap-1 group cursor-pointer min-w-0" onclick="copyToClipboard('{{ dripFeed['id'] }}')">
+                                    <span class="truncate">{{ dripFeed['id'] }}</span>
+                                    <i class="ri-clipboard-line text-sm opacity-0 group-hover:opacity-100 transition-opacity duration-200 text-gray-400 group-hover:text-blue-600 flex-shrink-0"></i>
                                 </div>
                             </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ dripFeed['date'] }}</td>
-                            <td class="px-6 py-4 text-sm text-blue-600 w-[25%]">
-                                <div class="flex items-center gap-2 group">
-                                    <a href="{{ dripFeed['link'] }}" target="_blank" class="break-all hover:text-blue-800 transition-colors">
-                                        {{ dripFeed['link'] }}
-                                    </a>
+                            <td class="px-2 xl:px-3 2xl:px-5 py-4 text-xs xl:text-sm font-medium text-gray-900 leading-tight">
+                                <div class="whitespace-nowrap">{{ dateParts|first }}</div>
+                                <div class="whitespace-nowrap text-gray-500 font-normal">{{ dateParts|slice(1)|join(' ') }}</div>
+                            </td>
+                            <td class="px-2 xl:px-3 2xl:px-5 py-4 text-xs xl:text-sm text-blue-600">
+                                <div class="flex items-center gap-1 group min-w-0">
+                                    <a href="{{ dripFeed['link'] }}" target="_blank" title="{{ dripFeed['link'] }}" class="block truncate min-w-0 hover:text-blue-800 transition-colors">{{ dripFeed['link'] }}</a>
                                     <i class="ri-external-link-line text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0"></i>
                                 </div>
                             </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-900">{{ dripFeed['total_charges'] }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ dripFeed['quantity'] }}</td>
-                            <td class="px-6 py-4 text-base font-medium text-gray-900 w-[30%]" data-service-name="{{ dripFeed['service'] }}">
-                                <div class="flex items-center gap-3">
-                                    <i class="ri-star-fill text-2xl text-yellow-500 flex-shrink-0"></i>
-                                    <div class="flex-1">
-                                        <span class="break-words block" title="{{ dripFeed['service'] }}">
-                                            {{ dripFeed['service'] }}
-                                        </span>
-                                        <div class="text-xs text-gray-500 mt-1 font-normal">{{ dripFeed['date'] }}</div>
+                            <td class="px-2 xl:px-3 2xl:px-5 py-4 text-xs xl:text-sm font-bold text-gray-900 break-words">{{ dripFeed['total_charges'] }}</td>
+                            <td class="px-2 xl:px-3 2xl:px-5 py-4 text-xs xl:text-sm font-medium text-gray-900 break-words">{{ dripFeed['quantity'] }}</td>
+                            <td class="px-2 xl:px-3 2xl:px-5 py-4 text-xs xl:text-sm font-medium text-gray-900" data-service-name="{{ dripFeed['service'] }}">
+                                <div class="flex items-center gap-2 min-w-0">
+                                    <i class="ri-star-fill text-xl xl:text-2xl text-yellow-500 flex-shrink-0"></i>
+                                    <div class="flex-1 min-w-0">
+                                        <span class="block break-words line-clamp-2" title="{{ dripFeed['service'] }}">{{ dripFeed['service'] }}</span>
+                                        <div class="text-[11px] xl:text-xs text-gray-500 mt-0.5 font-normal truncate">{{ dripFeed['date'] }}</div>
                                     </div>
                                 </div>
                             </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 nowrap">
+                            <td class="px-2 xl:px-3 2xl:px-5 py-4 whitespace-nowrap text-xs xl:text-sm font-medium text-gray-900">
                                 {% if dripFeed['runs_current'] %}
-                                  <a href="{{ page_url('orders') }}?drip-feed={{ dripFeed['id'] }}" class="text-blue-600 hover:text-blue-800">
-                                      {{ dripFeed['runs_current'] }}
-                                  </a>
+                                  <a href="{{ page_url('orders') }}?drip-feed={{ dripFeed['id'] }}" class="text-blue-600 hover:text-blue-800">{{ dripFeed['runs_current'] }}</a>
                                 {% else %}
                                   {{ dripFeed['runs_current'] }}
                                 {% endif %} / {{ dripFeed['runs_all'] }}
                             </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ dripFeed['interval'] }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ dripFeed['total_quantity'] }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-center">
+                            <td class="px-2 xl:px-3 2xl:px-5 py-4 text-xs xl:text-sm font-medium text-gray-900 break-words">{{ dripFeed['interval'] }}</td>
+                            <td class="px-2 xl:px-3 2xl:px-5 py-4 text-xs xl:text-sm font-medium text-gray-900 break-words">{{ dripFeed['total_quantity'] }}</td>
+                            <td class="px-2 xl:px-3 2xl:px-5 py-4 text-center">
                                 {% if dripFeed['status_name'] == 'Active' %}
-                                <div class="inline-flex items-center px-3 py-1 bg-green-100 border border-green-500 rounded-full">
-                                    <i class="ri-play-circle-line text-green-700 mr-2"></i>
-                                    <span class="text-green-800 text-xs font-semibold">{{ dripFeed['status_name'] }}</span>
+                                <div class="inline-flex items-center max-w-full px-2 xl:px-3 py-1 bg-green-100 border border-green-500 rounded-full">
+                                    <i class="ri-play-circle-line text-green-700 mr-1 hidden xl:inline"></i>
+                                    <span class="text-green-800 text-[11px] xl:text-xs font-semibold truncate">{{ dripFeed['status_name'] }}</span>
                                 </div>
                                 {% elseif dripFeed['status_name'] == 'Completed' %}
-                                <div class="inline-flex items-center px-3 py-1 bg-blue-100 border border-blue-500 rounded-full">
-                                    <i class="ri-check-line text-blue-700 mr-2"></i>
-                                    <span class="text-blue-800 text-xs font-semibold">{{ dripFeed['status_name'] }}</span>
+                                <div class="inline-flex items-center max-w-full px-2 xl:px-3 py-1 bg-blue-100 border border-blue-500 rounded-full">
+                                    <i class="ri-check-line text-blue-700 mr-1 hidden xl:inline"></i>
+                                    <span class="text-blue-800 text-[11px] xl:text-xs font-semibold truncate">{{ dripFeed['status_name'] }}</span>
                                 </div>
                                 {% elseif dripFeed['status_name'] == 'Canceled' %}
-                                <div class="inline-flex items-center px-3 py-1 bg-red-100 border border-red-500 rounded-full">
-                                    <i class="ri-close-circle-line text-red-700 mr-2"></i>
-                                    <span class="text-red-800 text-xs font-semibold">{{ dripFeed['status_name'] }}</span>
+                                <div class="inline-flex items-center max-w-full px-2 xl:px-3 py-1 bg-red-100 border border-red-500 rounded-full">
+                                    <i class="ri-close-circle-line text-red-700 mr-1 hidden xl:inline"></i>
+                                    <span class="text-red-800 text-[11px] xl:text-xs font-semibold truncate">{{ dripFeed['status_name'] }}</span>
                                 </div>
                                 {% else %}
-                                <span class="text-gray-900 text-xs font-semibold">{{ dripFeed['status_name'] }}</span>
+                                <span class="text-gray-900 text-[11px] xl:text-xs font-semibold break-words">{{ dripFeed['status_name'] }}</span>
                                 {% endif %}
                             </td>
                         </tr>
@@ -403,7 +413,7 @@
             const iconElement = cell.querySelector('i');
             if (iconElement && serviceName) {
                 const iconData = getRemixIconForCategory(serviceName);
-                iconElement.className = `${iconData.icon} text-2xl ${iconData.color}`;
+                iconElement.className = `${iconData.icon} text-xl xl:text-2xl flex-shrink-0 ${iconData.color}`;
             }
         });
     });
