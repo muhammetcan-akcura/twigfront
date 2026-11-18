@@ -20,12 +20,9 @@
 		{{ site['custom_header'] }}
 
 
-					<link rel="stylesheet" type="text/css" href="https://storage.perfectcdn.com/ed17j7/txrq3etljfarlqb7.css">
-					<link rel="stylesheet" type="text/css" href="https://storage.perfectcdn.com/global/iw240wwdiy8r3ce4.css">
-					<link rel="stylesheet" type="text/css" href="https://storage.perfectcdn.com/libs/bootstrap-datetimepicker/4.17.47/bootstrap-datetimepicker.min.css">
-					<link rel="stylesheet" type="text/css" href="https://storage.perfectcdn.com/css/font-awesome/css/all.min.css">
-					<link rel="stylesheet" type="text/css" href="https://storage.perfectcdn.com/global/w1ak29btsbdhu8s0.css">
-					<link rel="stylesheet" type="text/css" href="https://storage.perfectcdn.com/global/cao32di3zo8u7xgq.css">
+		{% for style in site['styles'] %}
+			<link rel="stylesheet" type="text/css" href="{{ style['href'] }}">
+		{% endfor %}
 		<script>
 			window.modules = {};
 		</script>

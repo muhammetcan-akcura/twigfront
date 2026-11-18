@@ -46,48 +46,8 @@
             </div>
         </div>
 
-        <!-- Sticky Bulk Copy Action Bar (appears when 1+ orders selected) -->
-        <div id="orders-bulk-bar" class="hidden sticky top-3 z-30 mb-4 bg-white border border-blue-200 rounded-[16px] p-3 shadow-lg transition-all">
-            <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-2.5">
-                <div class="flex items-center justify-between lg:justify-start gap-3">
-                    <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-blue-50 text-blue-700 font-semibold text-xs sm:text-sm" id="selected-badge">
-                        <i class="ri-checkbox-multiple-fill text-base"></i>
-                        <span><strong id="selected-orders-count">0</strong> Selected</span>
-                    </div>
-                    <button type="button" id="mobile-select-all-btn" class="md:hidden inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg border border-gray-200 text-xs font-semibold text-gray-700 hover:bg-gray-50">
-                        <i class="ri-check-double-line"></i>
-                        <span>Select All</span>
-                    </button>
-                </div>
-
-                <div class="flex flex-wrap items-center gap-1.5 sm:gap-2">
-                    <span class="text-xs font-semibold text-gray-400 mr-1 hidden sm:inline">Copy:</span>
-                    <button type="button" data-copy-type="id" class="bulk-copy-btn inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs sm:text-[13px] font-semibold btn-custom-active text-white hover:opacity-95 transition">
-                        <i class="ri-hashtag"></i>
-                        <span>Order ID</span>
-                    </button>
-                    <button type="button" data-copy-type="service_id" class="bulk-copy-btn inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs sm:text-[13px] font-semibold bg-gray-100 hover:bg-gray-200 text-gray-800 border border-gray-200 transition">
-                        <i class="ri-price-tag-3-line text-blue-600"></i>
-                        <span>Service ID</span>
-                    </button>
-                    <button type="button" data-copy-type="service_name" class="bulk-copy-btn inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs sm:text-[13px] font-semibold bg-gray-100 hover:bg-gray-200 text-gray-800 border border-gray-200 transition">
-                        <i class="ri-stack-line text-blue-600"></i>
-                        <span>Service Name</span>
-                    </button>
-                    <button type="button" data-copy-type="link" class="bulk-copy-btn inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs sm:text-[13px] font-semibold bg-gray-100 hover:bg-gray-200 text-gray-800 border border-gray-200 transition">
-                        <i class="ri-link text-blue-600"></i>
-                        <span>Link</span>
-                    </button>
-                    <button type="button" id="clear-selected-orders" class="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-xl text-xs sm:text-[13px] font-semibold text-red-600 hover:bg-red-50 border border-transparent hover:border-red-200 transition ml-auto sm:ml-1" title="Clear selection">
-                        <i class="ri-close-line text-base leading-none"></i>
-                        <span>Clear</span>
-                    </button>
-                </div>
-            </div>
-        </div>
-
         <!-- Orders Table -->
-        <div class="bg-white rounded-[14px] shadow-sm border border-gray-200 overflow-hidden">
+        <div class="bg-white rounded-[14px] shadow-sm border border-gray-200">
             <!-- Desktop Table -->
             <div class="hidden md:block">
                 <table class="w-full table-fixed orders-desktop-table {% if site['rtl'] %} rtl-table {% endif %}">
@@ -102,10 +62,13 @@
                         <col class="col-status">
                         {% if task == 1 %}<col class="col-action">{% endif %}
                     </colgroup>
-                    <thead class="bg-gray-50 border-b border-gray-200">
-                        <tr>
-                            <th class="px-1.5 py-2 text-center">
-                                <input type="checkbox" id="select-all-orders" aria-label="Select all orders" class="w-3.5 h-3.5 rounded border-gray-300 text-blue-600 focus:ring-blue-500 cursor-pointer align-middle">
+                    <thead class="bg-gray-50 border-b border-gray-200 md:sticky md:top-[72px] z-20">
+                        <!-- Normal Column Headers (0 selected) -->
+                        <tr id="orders-thead-default">
+                            <th class="px-0 py-1.5 text-center rounded-tl-[14px]">
+                                <label class="orders-select-box inline-flex items-center justify-center w-[26px] h-[24px] bg-white border border-gray-300 rounded-[5px] cursor-pointer hover:border-gray-400 transition-colors mx-auto">
+                                    <input type="checkbox" class="select-all-orders-cb w-3.5 h-3.5 rounded border-gray-300 text-blue-600 focus:ring-blue-500 cursor-pointer" aria-label="Select all orders">
+                                </label>
                             </th>
                             <th class="px-2 xl:px-3 py-2 text-left text-[9.5px] xl:text-[10.5px] font-semibold text-gray-500 uppercase tracking-wider">{{ lang('orders.id') }}</th>
                             <th class="px-2 xl:px-3 py-2 text-left text-[9.5px] xl:text-[10.5px] font-semibold text-gray-500 uppercase tracking-wider">{{ lang('orders.link') }}</th>
@@ -113,14 +76,61 @@
                             <th class="px-2 xl:px-3 py-2 text-left text-[9.5px] xl:text-[10.5px] font-semibold text-gray-500 uppercase tracking-wider break-words">{{ lang('orders.startcount') }}</th>
                             <th class="px-2 xl:px-3 py-2 text-left text-[9.5px] xl:text-[10.5px] font-semibold text-gray-500 uppercase tracking-wider">{{ lang('orders.quantity') }}</th>
                             <th class="px-2 xl:px-3 py-2 text-left text-[9.5px] xl:text-[10.5px] font-semibold text-gray-500 uppercase tracking-wider">{{ lang('orders.service') }}</th>
-                            <th class="px-2 xl:px-3 py-2 text-center text-[9.5px] xl:text-[10.5px] font-semibold text-gray-500 uppercase tracking-wider">{{ lang('orders.status') }}</th>
-                            {% if task == 1 %}<th class="px-2 xl:px-3 py-2 text-center text-[9.5px] xl:text-[10.5px] font-semibold text-gray-500 uppercase tracking-wider">&nbsp;</th>{% endif %}
+                            <th class="px-2 xl:px-3 py-2 text-center text-[9.5px] xl:text-[10.5px] font-semibold text-gray-500 uppercase tracking-wider {% if task != 1 %}rounded-tr-[14px]{% endif %}">{{ lang('orders.status') }}</th>
+                            {% if task == 1 %}<th class="px-2 xl:px-3 py-2 text-center text-[9.5px] xl:text-[10.5px] font-semibold text-gray-500 uppercase tracking-wider rounded-tr-[14px]">&nbsp;</th>{% endif %}
+                        </tr>
+
+                        <!-- Inline Bulk Selection Header (1+ selected) -->
+                        <tr id="orders-thead-bulk" class="hidden">
+                            <th colspan="{% if task == 1 %}9{% else %}8{% endif %}" class="py-1.5 pl-[5px] pr-3 text-left font-normal rounded-t-[14px]">
+                                <div class="orders-bulk-group inline-flex items-stretch bg-white border border-gray-300 rounded-[5px] shadow-[0_1px_1px_rgba(0,0,0,0.04)]">
+                                    <label class="orders-bulk-check inline-flex items-center justify-center w-[26px] py-1 border-r border-gray-300 rounded-l-[4px] bg-white cursor-pointer hover:bg-gray-50 transition-colors">
+                                        <input type="checkbox" class="select-all-orders-cb w-3.5 h-3.5 rounded border-gray-300 text-blue-600 focus:ring-blue-500 cursor-pointer" aria-label="Select all orders">
+                                    </label>
+                                    <div class="orders-bulk-count inline-flex items-center px-3 py-1 border-r border-gray-300 bg-white text-[11.5px] text-gray-700 font-normal whitespace-nowrap select-none">
+                                        <span class="selected-orders-label">0 orders selected</span>
+                                    </div>
+                                    <div class="relative inline-flex" data-actions-dropdown>
+                                        <button type="button" class="orders-actions-toggle inline-flex items-center gap-1 px-2.5 py-1 bg-white hover:bg-gray-50 text-[11.5px] font-medium text-gray-800 rounded-r-[4px] transition-colors cursor-pointer whitespace-nowrap" aria-haspopup="true" aria-expanded="false">
+                                            <span>Actions</span>
+                                            <i class="ri-arrow-down-s-fill text-xs text-gray-700 leading-none"></i>
+                                        </button>
+                                        <div class="orders-actions-menu hidden absolute left-0 top-full mt-1 w-48 bg-white border border-gray-200 rounded-lg shadow-lg py-1 z-50 text-left font-normal">
+                                            <button type="button" data-copy-type="id" class="bulk-copy-btn w-full flex items-center justify-between px-3 py-1.5 text-[11.5px] text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition-colors">
+                                                <span>Copy Order ID</span>
+                                                <i class="ri-file-copy-line text-gray-400 text-xs"></i>
+                                            </button>
+                                            <button type="button" data-copy-type="link" class="bulk-copy-btn w-full flex items-center justify-between px-3 py-1.5 text-[11.5px] text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition-colors">
+                                                <span>Copy Link</span>
+                                                <i class="ri-link text-gray-400 text-xs"></i>
+                                            </button>
+                                            <button type="button" data-copy-type="service_id" class="bulk-copy-btn w-full flex items-center justify-between px-3 py-1.5 text-[11.5px] text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition-colors">
+                                                <span>Copy Service ID</span>
+                                                <i class="ri-price-tag-3-line text-gray-400 text-xs"></i>
+                                            </button>
+                                            <button type="button" data-copy-type="service_name" class="bulk-copy-btn w-full flex items-center justify-between px-3 py-1.5 text-[11.5px] text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition-colors">
+                                                <span>Copy Service Name</span>
+                                                <i class="ri-stack-line text-gray-400 text-xs"></i>
+                                            </button>
+                                            <button type="button" data-copy-type="service_full" class="bulk-copy-btn w-full flex items-center justify-between px-3 py-1.5 text-[11.5px] text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition-colors">
+                                                <span>Copy ID + Service Name</span>
+                                                <i class="ri-list-check text-gray-400 text-xs"></i>
+                                            </button>
+                                            <div class="orders-actions-divider border-t border-gray-100 my-1"></div>
+                                            <button type="button" data-bulk-clear class="w-full flex items-center justify-between px-3 py-1.5 text-[11.5px] text-red-600 hover:bg-red-50 transition-colors">
+                                                <span>Unselect all</span>
+                                                <i class="ri-close-line text-xs"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </th>
                         </tr>
                     </thead>
                     <tbody class="bg-white divide-y divide-gray-200 font-medium">
                         {% for order in orderList %}
                         <tr class="order-item-row hover:bg-gray-50 transition-colors" data-row-order-id="{{ order['id'] }}">
-                            <td class="px-1.5 py-2.5 text-center">
+                            <td class="px-0 py-2.5 text-center">
                                 <input
                                     type="checkbox"
                                     class="order-select-checkbox w-3.5 h-3.5 rounded border-gray-300 text-blue-600 focus:ring-blue-500 cursor-pointer align-middle"
@@ -236,6 +246,59 @@
 
             <!-- Mobile Cards -->
             <div class="md:hidden">
+                {% if orderList %}
+                <div class="sticky top-[72px] z-20 px-3 py-2 bg-gray-50 border-b border-gray-200 rounded-t-[14px]">
+                    <div id="mobile-orders-head-default">
+                        <label class="orders-select-box inline-flex items-center gap-2 px-2 py-1 bg-white border border-gray-300 rounded-[5px] cursor-pointer text-[11px] font-medium text-gray-700">
+                            <input type="checkbox" class="select-all-orders-cb w-3.5 h-3.5 rounded border-gray-300 text-blue-600 focus:ring-blue-500 cursor-pointer" aria-label="Select all orders">
+                            <span>Select all</span>
+                        </label>
+                    </div>
+                    <div id="mobile-orders-head-bulk" class="hidden">
+                        <div class="orders-bulk-group inline-flex items-stretch bg-white border border-gray-300 rounded-[5px] shadow-[0_1px_1px_rgba(0,0,0,0.04)]">
+                            <label class="orders-bulk-check inline-flex items-center justify-center w-[26px] py-1 border-r border-gray-300 rounded-l-[4px] bg-white cursor-pointer">
+                                <input type="checkbox" class="select-all-orders-cb w-3.5 h-3.5 rounded border-gray-300 text-blue-600 focus:ring-blue-500 cursor-pointer" aria-label="Select all orders">
+                            </label>
+                            <div class="orders-bulk-count inline-flex items-center px-2.5 py-1 border-r border-gray-300 bg-white text-[11.5px] text-gray-700 font-normal whitespace-nowrap select-none">
+                                <span class="selected-orders-label">0 orders selected</span>
+                            </div>
+                            <div class="relative inline-flex" data-actions-dropdown>
+                                <button type="button" class="orders-actions-toggle inline-flex items-center gap-1 px-2.5 py-1 bg-white hover:bg-gray-50 text-[11.5px] font-medium text-gray-800 rounded-r-[4px] transition-colors cursor-pointer whitespace-nowrap" aria-haspopup="true" aria-expanded="false">
+                                    <span>Actions</span>
+                                    <i class="ri-arrow-down-s-fill text-xs text-gray-700 leading-none"></i>
+                                </button>
+                                <div class="orders-actions-menu hidden absolute right-0 top-full mt-1 w-48 bg-white border border-gray-200 rounded-lg shadow-lg py-1 z-50 text-left font-normal">
+                                    <button type="button" data-copy-type="id" class="bulk-copy-btn w-full flex items-center justify-between px-3 py-1.5 text-[11.5px] text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition-colors">
+                                        <span>Copy Order ID</span>
+                                        <i class="ri-file-copy-line text-gray-400 text-xs"></i>
+                                    </button>
+                                    <button type="button" data-copy-type="link" class="bulk-copy-btn w-full flex items-center justify-between px-3 py-1.5 text-[11.5px] text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition-colors">
+                                        <span>Copy Link</span>
+                                        <i class="ri-link text-gray-400 text-xs"></i>
+                                    </button>
+                                    <button type="button" data-copy-type="service_id" class="bulk-copy-btn w-full flex items-center justify-between px-3 py-1.5 text-[11.5px] text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition-colors">
+                                        <span>Copy Service ID</span>
+                                        <i class="ri-price-tag-3-line text-gray-400 text-xs"></i>
+                                    </button>
+                                    <button type="button" data-copy-type="service_name" class="bulk-copy-btn w-full flex items-center justify-between px-3 py-1.5 text-[11.5px] text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition-colors">
+                                        <span>Copy Service Name</span>
+                                        <i class="ri-stack-line text-gray-400 text-xs"></i>
+                                    </button>
+                                    <button type="button" data-copy-type="service_full" class="bulk-copy-btn w-full flex items-center justify-between px-3 py-1.5 text-[11.5px] text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition-colors">
+                                        <span>Copy ID + Service Name</span>
+                                        <i class="ri-list-check text-gray-400 text-xs"></i>
+                                    </button>
+                                    <div class="orders-actions-divider border-t border-gray-100 my-1"></div>
+                                    <button type="button" data-bulk-clear class="w-full flex items-center justify-between px-3 py-1.5 text-[11.5px] text-red-600 hover:bg-red-50 transition-colors">
+                                        <span>Unselect all</span>
+                                        <i class="ri-close-line text-xs"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
                 {% for order in orderList %}
                 <div class="order-item-row bg-white border border-gray-200 rounded-xl p-3 m-2 shadow-sm transition-colors" data-row-order-id="{{ order['id'] }}">
                     <!-- Select Checkbox + ID Header -->
@@ -530,16 +593,27 @@
             }
         });
 
-        // Multi-Select Orders & Bulk Copy Logic
+        // Multi-Select Orders & Inline Actions Dropdown Logic
         const selectedOrders = new Map(); // orderId -> { id, serviceId, serviceName, link }
-        const selectAllCheckbox = document.getElementById('select-all-orders');
-        const mobileSelectAllBtn = document.getElementById('mobile-select-all-btn');
-        const bulkBar = document.getElementById('orders-bulk-bar');
-        const countEl = document.getElementById('selected-orders-count');
-        const clearBtn = document.getElementById('clear-selected-orders');
+        const selectAllCheckboxes = Array.from(document.querySelectorAll('.select-all-orders-cb'));
+        const selectedLabels = Array.from(document.querySelectorAll('.selected-orders-label'));
+        const theadDefault = document.getElementById('orders-thead-default');
+        const theadBulk = document.getElementById('orders-thead-bulk');
+        const mobileHeadDefault = document.getElementById('mobile-orders-head-default');
+        const mobileHeadBulk = document.getElementById('mobile-orders-head-bulk');
+        const actionDropdowns = Array.from(document.querySelectorAll('[data-actions-dropdown]'));
         const desktopCheckboxes = Array.from(document.querySelectorAll('.orders-desktop-table .order-select-checkbox'));
         const allCheckboxes = Array.from(document.querySelectorAll('.order-select-checkbox'));
         let lastClickedDesktopIdx = -1;
+
+        function closeAllActionMenus() {
+            actionDropdowns.forEach(wrap => {
+                const menu = wrap.querySelector('.orders-actions-menu');
+                const toggle = wrap.querySelector('.orders-actions-toggle');
+                if (menu) menu.classList.add('hidden');
+                if (toggle) toggle.setAttribute('aria-expanded', 'false');
+            });
+        }
 
         // Collect unique order metadata in page order
         const pageOrders = [];
@@ -559,10 +633,25 @@
 
         function syncSelectionUI() {
             const count = selectedOrders.size;
-            if (countEl) countEl.textContent = count;
+            const hasSelection = count > 0;
+            const labelText = `${count} ${count === 1 ? 'order' : 'orders'} selected`;
 
-            if (bulkBar) {
-                bulkBar.classList.toggle('hidden', count === 0);
+            selectedLabels.forEach(el => {
+                el.textContent = labelText;
+            });
+
+            if (theadDefault && theadBulk) {
+                theadDefault.classList.toggle('hidden', hasSelection);
+                theadBulk.classList.toggle('hidden', !hasSelection);
+            }
+
+            if (mobileHeadDefault && mobileHeadBulk) {
+                mobileHeadDefault.classList.toggle('hidden', hasSelection);
+                mobileHeadBulk.classList.toggle('hidden', !hasSelection);
+            }
+
+            if (!hasSelection) {
+                closeAllActionMenus();
             }
 
             // Sync all checkboxes & row highlights (desktop + mobile)
@@ -576,12 +665,12 @@
                 }
             });
 
-            // Sync Select All checkbox state
-            if (selectAllCheckbox) {
-                const total = pageOrders.length;
-                selectAllCheckbox.checked = total > 0 && count === total;
-                selectAllCheckbox.indeterminate = count > 0 && count < total;
-            }
+            // Sync all Select All checkboxes (checked + indeterminate)
+            const total = pageOrders.length;
+            selectAllCheckboxes.forEach(cb => {
+                cb.checked = total > 0 && count === total;
+                cb.indeterminate = count > 0 && count < total;
+            });
         }
 
         function setOrderSelected(orderObj, shouldSelect) {
@@ -621,30 +710,56 @@
             });
         });
 
-        if (selectAllCheckbox) {
-            selectAllCheckbox.addEventListener('change', function() {
-                const shouldSelect = selectAllCheckbox.checked;
+        selectAllCheckboxes.forEach(cb => {
+            cb.addEventListener('change', function() {
+                // If indeterminate or unchecked -> select all; if all selected -> unselect all
+                const allCurrentlySelected = selectedOrders.size === pageOrders.length && pageOrders.length > 0;
+                const shouldSelect = !allCurrentlySelected;
                 pageOrders.forEach(item => setOrderSelected(item, shouldSelect));
                 syncSelectionUI();
             });
-        }
+        });
 
-        if (mobileSelectAllBtn) {
-            mobileSelectAllBtn.addEventListener('click', function() {
-                const allSelected = selectedOrders.size === pageOrders.length;
-                pageOrders.forEach(item => setOrderSelected(item, !allSelected));
-                syncSelectionUI();
+        // Actions Dropdown Toggle
+        actionDropdowns.forEach(wrap => {
+            const toggle = wrap.querySelector('.orders-actions-toggle');
+            const menu = wrap.querySelector('.orders-actions-menu');
+            if (!toggle || !menu) return;
+
+            toggle.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                const isHidden = menu.classList.contains('hidden');
+                closeAllActionMenus();
+                if (isHidden) {
+                    menu.classList.remove('hidden');
+                    toggle.setAttribute('aria-expanded', 'true');
+                }
             });
-        }
+        });
 
-        if (clearBtn) {
-            clearBtn.addEventListener('click', function() {
+        // Close Actions Dropdown on outside click or Escape
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('[data-actions-dropdown]')) {
+                closeAllActionMenus();
+            }
+        });
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeAllActionMenus();
+            }
+        });
+
+        // Unselect All Buttons inside Actions Dropdown
+        document.querySelectorAll('[data-bulk-clear]').forEach(btn => {
+            btn.addEventListener('click', function() {
                 selectedOrders.clear();
+                closeAllActionMenus();
                 syncSelectionUI();
             });
-        }
+        });
 
-        // Bulk Copy Buttons
+        // Bulk Copy Options inside Actions Dropdown
         document.querySelectorAll('.bulk-copy-btn').forEach(btn => {
             btn.addEventListener('click', function() {
                 if (selectedOrders.size === 0) return;
@@ -657,6 +772,9 @@
                 if (copyType === 'id') {
                     textToCopy = orderedItems.map(o => o.id).join(', ');
                     label = `${orderedItems.length} Order ID copied`;
+                } else if (copyType === 'link') {
+                    textToCopy = orderedItems.map(o => o.link).filter(Boolean).join('\n');
+                    label = `${orderedItems.length} Link copied`;
                 } else if (copyType === 'service_id') {
                     const uniqueServiceIds = Array.from(new Set(orderedItems.map(o => o.serviceId).filter(Boolean)));
                     textToCopy = uniqueServiceIds.join(', ');
@@ -665,11 +783,13 @@
                     const uniqueNames = Array.from(new Set(orderedItems.map(o => o.serviceName).filter(Boolean)));
                     textToCopy = uniqueNames.join('\n');
                     label = `${uniqueNames.length} Service Name copied`;
-                } else if (copyType === 'link') {
-                    textToCopy = orderedItems.map(o => o.link).filter(Boolean).join('\n');
-                    label = `${orderedItems.length} Link copied`;
+                } else if (copyType === 'service_full') {
+                    const uniqueFull = Array.from(new Set(orderedItems.map(o => `${o.serviceId} - ${o.serviceName}`.trim())));
+                    textToCopy = uniqueFull.join('\n');
+                    label = `${uniqueFull.length} Service copied`;
                 }
 
+                closeAllActionMenus();
                 if (textToCopy) {
                     writeTextToClipboard(textToCopy, label);
                 }
@@ -688,7 +808,7 @@
 }
 
 /* Fixed column sizing that scales cleanly from 1024px laptops up to 2560px+ monitors (~25% compact scale) */
-.orders-desktop-table .col-select { width: 34px; }
+.orders-desktop-table .col-select { width: 36px; }
 .orders-desktop-table .col-id     { width: 78px; }
 .orders-desktop-table .col-link   { width: 22%; }
 .orders-desktop-table .col-charge { width: 70px; }
@@ -699,7 +819,7 @@
 .orders-desktop-table .col-action { width: 86px; }
 
 @media (min-width: 1280px) {
-    .orders-desktop-table .col-select { width: 38px; }
+    .orders-desktop-table .col-select { width: 36px; }
     .orders-desktop-table .col-id     { width: 92px; }
     .orders-desktop-table .col-link   { width: 25%; }
     .orders-desktop-table .col-charge { width: 82px; }
@@ -711,6 +831,14 @@
 
 @media (min-width: 1536px) {
     .orders-desktop-table .col-link   { width: 28%; }
+}
+
+/* Keep bottom corners rounded without overflow-hidden (so Actions dropdown never clips) */
+.orders-desktop-table tbody tr:last-child td:first-child {
+    border-bottom-left-radius: 14px;
+}
+.orders-desktop-table tbody tr:last-child td:last-child {
+    border-bottom-right-radius: 14px;
 }
 
 /* Selected row highlight */
@@ -733,21 +861,35 @@ html.dark-mode #orders-search-group {
 html.dark-mode #orders-search-group:focus-within {
     border-color: #3b82f6 !important;
 }
-html.dark-mode #orders-bulk-bar {
-    background-color: #0f172a !important;
-    border-color: rgba(59, 130, 246, 0.4) !important;
-}
-html.dark-mode #orders-bulk-bar #selected-badge {
-    background-color: rgba(59, 130, 246, 0.15) !important;
-    color: #60a5fa !important;
-}
-html.dark-mode #orders-bulk-bar .bulk-copy-btn:not(.btn-custom-active) {
+html.dark-mode .orders-select-box,
+html.dark-mode .orders-bulk-group,
+html.dark-mode .orders-bulk-check,
+html.dark-mode .orders-bulk-count,
+html.dark-mode .orders-actions-toggle {
     background-color: #1e293b !important;
     border-color: #334155 !important;
     color: #e2e8f0 !important;
 }
-html.dark-mode #orders-bulk-bar .bulk-copy-btn:not(.btn-custom-active):hover {
-    background-color: #334155 !important;
+html.dark-mode .orders-actions-toggle:hover,
+html.dark-mode .orders-bulk-check:hover {
+    background-color: #273549 !important;
+}
+html.dark-mode .orders-actions-toggle i {
+    color: #cbd5e1 !important;
+}
+html.dark-mode .orders-actions-menu {
+    background-color: #111827 !important;
+    border-color: #334155 !important;
+}
+html.dark-mode .orders-actions-menu .bulk-copy-btn {
+    color: #e2e8f0 !important;
+}
+html.dark-mode .orders-actions-menu .bulk-copy-btn:hover {
+    background-color: rgba(59, 130, 246, 0.16) !important;
+    color: #93c5fd !important;
+}
+html.dark-mode .orders-actions-divider {
+    border-color: #1f2a3c !important;
 }
 html.dark-mode .order-item-row.order-row-selected {
     background-color: rgba(59, 130, 246, 0.14) !important;

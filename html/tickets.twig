@@ -1,52 +1,20 @@
-<div class="relative z-10 pb-16 md:pb-15 bg-white pt-6">
+<div class="tickets-page relative z-10 pb-16 md:pb-15 bg-white pt-6">
     <div class="container mx-auto px-4 relative z-10">
         
-            <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-8 gap-4">
-        <!-- Tab Navigation -->
-        <div class="inline-flex items-center gap-[2px] list-none p-[6px] m-0 rounded-full border border-gray-200 bg-white w-fit">
-            <a href="#" id="create-tab" class="tab-btn active flex items-center justify-center gap-[10px] py-[12px] px-[14px] rounded-full font-medium whitespace-nowrap text-[15px] leading-[160%] tracking-[-0.3px] !text-white border border-white/15 btn-custom-active shadow-[0px_0px_3px_0px_#0139ff,0px_0px_0px_1.182px_#0139ff] cursor-pointer">
-                <i class="ri-add-line text-[22px]"></i>
-                <span>Create Ticket</span>
-            </a>
-            <a href="#" id="list-tab" class="tab-btn flex items-center justify-center gap-[10px] py-[12px] px-[14px] rounded-full font-medium whitespace-nowrap text-[15px] leading-[160%] tracking-[-0.3px] text-gray-600 hover:bg-gray-200 hover:text-gray-800 cursor-pointer">
-                <i class="ri-list-check text-[22px]"></i>
-                <span>Ticket List</span>
-            </a>
-        </div>
-
-        {% if ticketList or search %}
-        <!-- Search Bar -->
-        <div class="flex items-center w-full md:w-auto">
-            <form action="{{ page['url'] }}" method="get" id="history-search" class="relative w-full md:w-auto">
-                <div class="relative">
-                    <input type="text" 
-                           class="w-full md:w-[250px] h-[48px] pl-10 pr-4 py-3 border border-gray-300 rounded-full focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors text-base bg-white" 
-                           name="search" 
-                           value="{{ search }}"
-                           placeholder="{{ lang('general.search.placeholder') }}">
-                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                        <i class="ri-search-line text-gray-400 text-lg"></i>
-                    </div>
-                </div>
-            </form>
-        </div>
-        {% endif %}
-        </div>
-
-        <!-- Two Cards Layout -->
-        <div id="create-tab-content" class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <!-- Create Ticket (top) -->
+        <div id="create-tab-content" class="max-w-[986px] mx-auto">
             
             <!-- Main Ticket Form Card -->
-            <div class="lg:col-span-2 bg-white border border-gray-200 rounded-xl overflow-hidden">
-                <div class="border-b border-gray-200 px-6 py-4">
-                    <h2 class="text-lg font-semibold text-gray-800 flex items-center gap-2">
-                        <i class="ri-customer-service-2-line text-blue-600 text-xl font-normal"></i>
+            <div class="bg-white border border-gray-200 rounded-xl overflow-hidden">
+                <div class="border-b border-gray-200 px-5 py-3">
+                    <h2 class="text-base font-semibold text-gray-800 flex items-center gap-2">
+                        <i class="ri-customer-service-2-line tk-ink text-lg font-normal"></i>
                         Create Support Ticket
                     </h2>
                 </div>
                 
-                <div class="p-6">
-                    <form {% if site['rtl'] %}class="rtl-form"{% endif %} method="post" action="" id="ticketsend" class="space-y-6">
+                <div class="p-5">
+                    <form {% if site['rtl'] %}class="rtl-form"{% endif %} method="post" action="" id="ticketsend" class="space-y-4">
                         <div class="alert alert-dismissible alert-danger ticket-danger {% if site['rtl'] %} rtl-alert {% endif %}" style="display: none">
                             <button type="button" class="close">&times;</button>
                             <div></div>
@@ -59,7 +27,7 @@
                         <!-- Category Selection -->
                         <div>
                             <label for="ticket-category-field" class="block text-sm font-medium text-gray-700 mb-3">{{ lang('tickets.category') }}</label>
-                            <select id="ticket-category-field" name="TicketForm[category]" class="w-full px-[0.625rem] py-[0.875rem] md:px-4 md:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors text-[0.9rem] md:text-[0.95rem] font-normal min-h-[48px] leading-[1.5]">
+                            <select id="ticket-category-field" name="TicketForm[category]" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500/15 focus:border-blue-500 transition-colors text-sm font-normal min-h-[40px] leading-[1.5]">
                                 {% for categoryField in additionalFields %}
                                   <option value="{{ categoryField.id }}">{{ categoryField.name }}</option>
                                 {% endfor %}
@@ -69,45 +37,50 @@
                         {% else %}
                         <!-- Issue Type Selection -->
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-3">Select Issue Type</label>
-                            <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
-                                <button type="button" class="issue-type-btn active p-4 border-2 border-green-500 bg-green-50 rounded-lg hover:border-green-500 transition-colors text-center group cursor-pointer">
-                                    <div class="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center mb-3 mx-auto">
-                                        <i class="ri-shopping-cart-line text-2xl text-white"></i>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Select Issue Type</label>
+                            <div class="grid grid-cols-2 md:grid-cols-4 gap-2">
+                                <button type="button" class="issue-type-btn active flex items-center gap-2.5 px-3 py-2.5 border rounded-lg transition-colors text-left group cursor-pointer min-w-0">
+                                    <div class="tk-icon-circle w-8 h-8 shrink-0 rounded-full flex items-center justify-center">
+                                        <i class="ri-shopping-cart-line text-base"></i>
                                     </div>
-                                    <div class="text-sm font-semibold text-gray-700">Orders</div>
-                                    <div class="text-xs font-normal text-gray-500 mt-1">Problems with your orders</div>
+                                    <div class="min-w-0"><div class="text-sm font-semibold text-gray-700 leading-tight">Orders</div><div class="text-[11px] font-normal text-gray-500 leading-tight truncate">Problems with your orders</div></div>
                                 </button>
-                                <button type="button" class="issue-type-btn p-4 border-2 border-gray-200 rounded-lg hover:border-blue-500 transition-colors text-center group cursor-pointer">
-                                    <div class="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center mb-3 mx-auto">
-                                        <i class="ri-bank-card-line text-2xl text-white font-normal"></i>
+                                <button type="button" class="issue-type-btn flex items-center gap-2.5 px-3 py-2.5 border rounded-lg transition-colors text-left group cursor-pointer min-w-0">
+                                    <div class="tk-icon-circle w-8 h-8 shrink-0 rounded-full flex items-center justify-center">
+                                        <i class="ri-bank-card-line text-base font-normal"></i>
                                     </div>
-                                    <div class="text-sm font-semibold text-gray-700">Payment</div>
-                                    <div class="text-xs font-normal text-gray-500 mt-1">Billing and payment issues</div>
+                                    <div class="min-w-0"><div class="text-sm font-semibold text-gray-700 leading-tight">Payment</div><div class="text-[11px] font-normal text-gray-500 leading-tight truncate">Billing and payment issues</div></div>
                                 </button>
-                                <button type="button" class="issue-type-btn p-4 border-2 border-gray-200 rounded-lg hover:border-purple-500 transition-colors text-center group cursor-pointer">
-                                    <div class="w-12 h-12 bg-purple-500 rounded-full flex items-center justify-center mb-3 mx-auto">
-                                        <i class="ri-question-line text-2xl text-white font-normal"></i>
+                                <button type="button" class="issue-type-btn flex items-center gap-2.5 px-3 py-2.5 border rounded-lg transition-colors text-left group cursor-pointer min-w-0">
+                                    <div class="tk-icon-circle w-8 h-8 shrink-0 rounded-full flex items-center justify-center">
+                                        <i class="ri-question-line text-base font-normal"></i>
                                     </div>
-                                    <div class="text-sm font-semibold text-gray-700">General</div>
-                                    <div class="text-xs font-normal text-gray-500 mt-1">Other questions or concerns</div>
+                                    <div class="min-w-0"><div class="text-sm font-semibold text-gray-700 leading-tight">General</div><div class="text-[11px] font-normal text-gray-500 leading-tight truncate">Other questions or concerns</div></div>
                                 </button>
-                                <button type="button" class="issue-type-btn p-4 border-2 border-gray-200 rounded-lg hover:border-orange-500 transition-colors text-center group cursor-pointer">
-                                    <div class="w-12 h-12 bg-orange-500 rounded-full flex items-center justify-center mb-3 mx-auto">
-                                        <i class="ri-team-line text-2xl text-white font-normal"></i>
+                                <button type="button" class="issue-type-btn flex items-center gap-2.5 px-3 py-2.5 border rounded-lg transition-colors text-left group cursor-pointer min-w-0">
+                                    <div class="tk-icon-circle w-8 h-8 shrink-0 rounded-full flex items-center justify-center">
+                                        <i class="ri-team-line text-base font-normal"></i>
                                     </div>
-                                    <div class="text-sm font-semibold text-gray-700">Cooperation</div>
-                                    <div class="text-xs font-normal text-gray-500 mt-1">Cooperate with Smmexclusive</div>
+                                    <div class="min-w-0"><div class="text-sm font-semibold text-gray-700 leading-tight">Cooperation</div><div class="text-[11px] font-normal text-gray-500 leading-tight truncate">Cooperate with Smmexclusive</div></div>
                                 </button>
                             </div>
                         </div>
 
-                        <!-- Request Type -->
+                        <!-- Request Type + Order ID (side by side on desktop) -->
+                        <div class="tk-req-row grid grid-cols-1 md:grid-cols-2 gap-4 items-start">
                         <div id="requestTypeContainer">
-                            <label for="requestType" class="block text-sm font-semibold text-gray-700 mb-2 text-[0.9rem] md:text-[0.95rem]">Select issue type</label>
-                            <select id="requestType" name="request_type_field" class="w-full px-[0.625rem] py-[0.875rem] md:px-4 md:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors text-[0.9rem] md:text-[0.95rem] font-normal min-h-[48px] leading-[1.5]">
+                            <label for="requestType" class="block text-sm font-semibold text-gray-700 mb-2 text-sm">Select issue type</label>
+                            <select id="requestType" name="request_type_field" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500/15 focus:border-blue-500 transition-colors text-sm font-normal min-h-[40px] leading-[1.5]">
                                
                             </select>
+                        </div>
+
+                        <!-- Order ID (initially hidden, shown for Orders type) -->
+                        <div id="orderIdField" style="display: none;">
+                            <label for="orderId" class="block text-sm font-semibold text-gray-700 mb-2 text-sm">Order ID</label>
+                            <input type="text" id="orderId" name="order_id_field" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500/15 focus:border-blue-500 transition-colors text-sm font-normal min-h-[40px] leading-[1.5] placeholder:text-gray-400 placeholder:font-normal" placeholder="Enter order ID">
+                            <p class="text-xs text-gray-500 mt-1">For multiple orders, pls separate them with comma. (78565714,78565715)</p>
+                        </div>
                         </div>
 
                         <!-- Dynamic Form Fields -->
@@ -115,23 +88,16 @@
                             <!-- Fields will be populated by JavaScript -->
                         </div>
 
-                        <!-- Order ID (initially hidden, shown for Orders type) -->
-                        <div id="orderIdField" style="display: none;">
-                            <label for="orderId" class="block text-sm font-semibold text-gray-700 mb-2 text-[0.9rem] md:text-[0.95rem]">Order ID</label>
-                            <input type="text" id="orderId" name="order_id_field" class="w-full px-[0.625rem] py-[0.875rem] md:px-4 md:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors text-[0.9rem] md:text-[0.95rem] font-normal min-h-[48px] leading-[1.5] placeholder:text-gray-400 placeholder:font-normal" placeholder="Enter order ID">
-                            <p class="text-xs text-gray-500 mt-1">For multiple orders, pls separate them with comma. (78565714,78565715)</p>
-                        </div>
-
                         <!-- Payment Fields (initially hidden) -->
                         <div id="paymentFields" style="display: none;">
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div>
-                                    <label for="transactionId" class="block text-sm font-semibold text-gray-700 mb-2 text-[0.95rem]">Transaction ID</label>
-                                    <input type="text" id="transactionId" name="transaction_id_field" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors text-[0.95rem] font-normal min-h-[48px] leading-[1.5] placeholder:text-gray-400 placeholder:font-normal" placeholder="Enter transaction ID">
+                                    <label for="transactionId" class="block text-sm font-semibold text-gray-700 mb-2 text-sm">Transaction ID</label>
+                                    <input type="text" id="transactionId" name="transaction_id_field" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500/15 focus:border-blue-500 transition-colors text-sm font-normal min-h-[40px] leading-[1.5] placeholder:text-gray-400 placeholder:font-normal" placeholder="Enter transaction ID">
                                 </div>
                                 <div>
-                                    <label for="paymentMethod" class="block text-sm font-semibold text-gray-700 mb-2 text-[0.95rem]">Payment Method</label>
-                                    <select id="paymentMethod" name="payment_method_field" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors text-[0.95rem] font-normal min-h-[48px] leading-[1.5]">
+                                    <label for="paymentMethod" class="block text-sm font-semibold text-gray-700 mb-2 text-sm">Payment Method</label>
+                                    <select id="paymentMethod" name="payment_method_field" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500/15 focus:border-blue-500 transition-colors text-sm font-normal min-h-[40px] leading-[1.5]">
                                         <option value="credit-card">Credit Card</option>
                                         <option value="payeer">Payeer</option>
                                         <option value="cryptomus">Cryptomus</option>
@@ -148,46 +114,48 @@
                         <div id="cooperationFields" style="display: none;">
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div>
-                                    <label for="companyName" class="block text-sm font-semibold text-gray-700 mb-2 text-[0.95rem]">Company Name</label>
-                                    <input type="text" id="companyName" name="company_name_field" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors text-[0.95rem] font-normal min-h-[48px] leading-[1.5] placeholder:text-gray-400 placeholder:font-normal" placeholder="Enter your company name">
+                                    <label for="companyName" class="block text-sm font-semibold text-gray-700 mb-2 text-sm">Company Name</label>
+                                    <input type="text" id="companyName" name="company_name_field" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500/15 focus:border-blue-500 transition-colors text-sm font-normal min-h-[40px] leading-[1.5] placeholder:text-gray-400 placeholder:font-normal" placeholder="Enter your company name">
                                 </div>
                                 <div>
-                                    <label for="website" class="block text-sm font-semibold text-gray-700 mb-2 text-[0.95rem]">Website</label>
-                                    <input type="url" id="website" name="website_field" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors text-[0.95rem] font-normal min-h-[48px] leading-[1.5] placeholder:text-gray-400 placeholder:font-normal" placeholder="https://yourwebsite.com">
+                                    <label for="website" class="block text-sm font-semibold text-gray-700 mb-2 text-sm">Website</label>
+                                    <input type="url" id="website" name="website_field" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500/15 focus:border-blue-500 transition-colors text-sm font-normal min-h-[40px] leading-[1.5] placeholder:text-gray-400 placeholder:font-normal" placeholder="https://yourwebsite.com">
                                 </div>
                                 <div>
-                                    <label for="contactPerson" class="block text-sm font-semibold text-gray-700 mb-2 text-[0.95rem]">Contact Person</label>
-                                    <input type="text" id="contactPerson" name="contact_person_field" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors text-[0.95rem] font-normal min-h-[48px] leading-[1.5] placeholder:text-gray-400 placeholder:font-normal" placeholder="Enter contact person name">
+                                    <label for="contactPerson" class="block text-sm font-semibold text-gray-700 mb-2 text-sm">Contact Person</label>
+                                    <input type="text" id="contactPerson" name="contact_person_field" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500/15 focus:border-blue-500 transition-colors text-sm font-normal min-h-[40px] leading-[1.5] placeholder:text-gray-400 placeholder:font-normal" placeholder="Enter contact person name">
                                 </div>
                                 <div>
-                                    <label for="phone" class="block text-sm font-semibold text-gray-700 mb-2 text-[0.95rem]">Phone Number</label>
-                                    <input type="tel" id="phone" name="phone_field" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors text-[0.95rem] font-normal min-h-[48px] leading-[1.5] placeholder:text-gray-400 placeholder:font-normal" placeholder="Enter phone number">
+                                    <label for="phone" class="block text-sm font-semibold text-gray-700 mb-2 text-sm">Phone Number</label>
+                                    <input type="tel" id="phone" name="phone_field" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500/15 focus:border-blue-500 transition-colors text-sm font-normal min-h-[40px] leading-[1.5] placeholder:text-gray-400 placeholder:font-normal" placeholder="Enter phone number">
                                 </div>
                             </div>
                         </div>
 
                         {% endif %}
 
+                        <!-- Message -->
+                        <div>
+                            <label for="message" class="block text-sm font-semibold text-gray-700 mb-2 text-sm">{{ lang('tickets.message') }}</label>
+                            <textarea id="message" name="message_field" rows="4" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500/15 focus:border-blue-500 transition-colors resize-none text-sm font-normal min-h-[96px] leading-[1.5] placeholder:text-gray-400 placeholder:font-normal" placeholder="Describe your issue in detail..."></textarea>
+                        </div>
+
+                        <!-- Priority + Attachment row -->
+                        <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
                         <!-- Priority -->
                         <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-3">Priority</label>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Priority</label>
                             <div class="flex gap-2">
-                                <button type="button" class="priority-btn active px-3 py-1.5 rounded-full border-2 border-emerald-400 text-white bg-emerald-400 font-medium hover:bg-emerald-500 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 cursor-pointer text-sm">
+                                <button type="button" class="priority-btn active px-3 py-1 rounded-full border font-medium transition-all duration-200 cursor-pointer text-xs">
                                     Low
                                 </button>
-                                <button type="button" class="priority-btn px-3 py-1.5 rounded-full border-2 border-amber-400 text-amber-600 bg-transparent font-medium hover:bg-amber-50 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 cursor-pointer text-sm">
+                                <button type="button" class="priority-btn px-3 py-1 rounded-full border font-medium transition-all duration-200 cursor-pointer text-xs">
                                     Medium
                                 </button>
-                                <button type="button" class="priority-btn px-3 py-1.5 rounded-full border-2 border-rose-400 text-rose-600 bg-transparent font-medium hover:bg-rose-50 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 cursor-pointer text-sm">
+                                <button type="button" class="priority-btn px-3 py-1 rounded-full border font-medium transition-all duration-200 cursor-pointer text-xs">
                                     High
                                 </button>
                             </div>
-                        </div>
-
-                        <!-- Message -->
-                        <div>
-                            <label for="message" class="block text-sm font-semibold text-gray-700 mb-2 text-[0.9rem] md:text-[0.95rem]">{{ lang('tickets.message') }}</label>
-                            <textarea id="message" name="message_field" rows="6" class="w-full px-[0.625rem] py-[0.875rem] md:px-4 md:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors resize-none text-[0.9rem] md:text-[0.95rem] font-normal min-h-[110px] leading-[1.5] placeholder:text-gray-400 placeholder:font-normal" placeholder="Describe your issue in detail..."></textarea>
                         </div>
 
                         <!-- File Upload -->
@@ -212,9 +180,11 @@
                             </div>
                         </div>
 
+                        </div>
+
                         <input type="hidden" name="_csrf" value="{{csrftoken}}">
                         <!-- Submit Button -->
-                        <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors flex items-center justify-center gap-2" id="submitBtn">
+                        <button type="submit" class="tk-solid w-full border font-semibold text-sm py-2.5 px-6 rounded-lg transition-colors flex items-center justify-center gap-2" id="submitBtn">
                             <i class="ri-send-plane-line"></i>
                             {{ lang('tickets.button') }}
                         </button>
@@ -222,101 +192,34 @@
                 </div>
             </div>
 
-            <!-- Right Side Cards -->
-            <div class="space-y-6">
-                <!-- Support Stats Card -->
-                <div class="bg-white border border-gray-200 rounded-xl overflow-hidden h-fit">
-                                    <div class="border-b border-gray-200 px-6 py-4">
-                    <div class="flex items-center justify-between">
-                        <h2 class="text-lg font-semibold text-gray-800 flex items-center gap-2">
-                            <i class="ri-bar-chart-box-line text-green-600 text-xl font-normal"></i>
-                            Support Stats
-                        </h2>
-                        <div class="flex items-center gap-2">
-                            <div class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                            <span class="text-sm font-semibold text-green-600">Live</span>
-                        </div>
-                    </div>
-                </div>
-                    
-                    <div class="p-6 space-y-6">
-                        <!-- Response Time -->
-                        <div class="flex items-center gap-4">
-                            <div class="w-10 h-10 bg-blue-100 border border-blue-600 rounded-lg flex items-center justify-center">
-                                <i class="ri-time-line text-blue-600"></i>
-                            </div>
-                            <div>
-                                <div class="text-lg font-semibold text-blue-600">2h 15m</div>
-                                <div class="text-sm text-gray-600">85% faster than average</div>
-                            </div>
-                        </div>
-
-                        <!-- Resolution Rate -->
-                        <div class="flex items-center gap-4">
-                            <div class="w-10 h-10 bg-green-100 border border-green-600 rounded-lg flex items-center justify-center">
-                                <i class="ri-check-line text-green-600"></i>
-                            </div>
-                            <div>
-                                <div class="text-lg font-semibold text-green-600">99.2%</div>
-                                <div class="text-sm text-gray-600">First contact resolution</div>
-                            </div>
-                        </div>
-
-                        <!-- Satisfaction -->
-                        <div class="flex items-center gap-4">
-                            <div class="w-10 h-10 bg-purple-100 dark:bg-purple-900/20 border border-purple-300 dark:border-purple-500 rounded-lg flex items-center justify-center">
-                                <i class="ri-bar-chart-line text-purple-300 dark:text-purple-500"></i>
-                            </div>
-                            <div>
-                                <div class="text-lg font-semibold text-purple-300 dark:text-purple-500">4.9/5</div>
-                                <div class="text-sm text-gray-600 dark:text-gray-400">Based on 2,847 reviews</div>
-                            </div>
-                        </div>
-
-                        <!-- Support Availability -->
-                        <div class="flex-1">
-                            <div class="w-full h-px bg-gray-200 mb-4"></div>
-                            <div class="flex items-center gap-2 mb-3">
-                                <i class="ri-customer-service-line text-orange-600 text-lg"></i>
-                                <span class="text-sm font-medium text-gray-700">Support Availability</span>
-                            </div>
-                                <div class="grid grid-cols-2 gap-3">
-                                    <div class="p-2 bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-lg shadow-sm flex flex-col justify-center">
-                                        <div class="flex items-center justify-center gap-2 mb-1">
-                                            <div class="w-2 h-2 bg-green-500 rounded-full"></div>
-                                            <span class="text-xs font-semibold text-gray-700">Weekdays</span>
-                                        </div>
-                                        <div class="text-center">
-                                            <span class="text-sm font-bold text-green-700">24/7</span>
-                                        </div>
-                                    </div>
-                                    <div class="p-2 bg-gradient-to-r from-orange-50 to-amber-50 border border-orange-200 rounded-lg shadow-sm flex flex-col justify-center">
-                                        <div class="flex items-center justify-center gap-2 mb-1">
-                                            <div class="w-2 h-2 bg-orange-500 rounded-full"></div>
-                                            <span class="text-xs font-semibold text-gray-700">Weekend</span>
-                                        </div>
-                                        <div class="text-center">
-                                            <span class="text-sm font-bold text-orange-700">0-3 Hours</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-
-
-                </div>
-
-       
-            </div>
         </div>
 
-        <!-- Ticket List Tab Content -->
-        <div id="list-tab-content" class="hidden container mx-auto px-4 relative z-10">
-            {% if ticketList %}
-            <!-- Tickets Table -->
+        <!-- Ticket List (below the form) -->
+        <div id="ticket-list-section" class="max-w-[986px] mx-auto mt-8">
             <div class="bg-white border border-gray-200 rounded-xl overflow-hidden">
+                <!-- List Header + Search -->
+                <div class="border-b border-gray-200 px-5 py-3 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                    <h2 class="text-base font-semibold text-gray-800 flex items-center gap-2">
+                        <i class="ri-list-check tk-ink text-lg font-normal"></i>
+                        My Tickets
+                    </h2>
+                    {% if ticketList or search %}
+                    <form action="{{ page['url'] }}" method="get" id="history-search" class="relative w-full sm:w-auto">
+                        <div class="relative">
+                            <input type="text"
+                                   class="w-full sm:w-[260px] h-[42px] pl-10 pr-4 py-2 border border-gray-300 rounded-full focus:ring-2 focus:ring-blue-500/15 focus:border-blue-500 transition-colors text-sm bg-white"
+                                   name="search"
+                                   value="{{ search }}"
+                                   placeholder="{{ lang('general.search.placeholder') }}">
+                            <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+                                <i class="ri-search-line text-gray-400 text-lg"></i>
+                            </div>
+                        </div>
+                    </form>
+                    {% endif %}
+                </div>
+
+                {% if ticketList %}
                 <div class="overflow-x-auto hidden md:block">
                     <table class="w-full {% if site['rtl'] %} rtl-table {% endif %}">
                         <thead class="bg-gray-50 border-b border-gray-200">
@@ -333,30 +236,30 @@
                                 <td class="px-4 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ ticket['id'] }}</td>
                                 <td class="px-4 py-4 text-sm text-gray-900">
                                     {% if ticket['new'] == 1 %}
-                                    <a href="{{ page_url('viewticket') }}/{{ ticket['id'] }}" class="text-blue-600 hover:text-blue-800 font-medium hover:underline">
+                                    <a href="{{ page_url('viewticket') }}/{{ ticket['id'] }}" class="tk-link font-medium hover:underline">
                                         <strong>{{ ticket['theme'] }}</strong>
                                     </a>
                                     {% else %}
-                                    <a href="{{ page_url('viewticket') }}/{{ ticket['id'] }}" class="text-blue-600 hover:text-blue-800 font-medium hover:underline">
+                                    <a href="{{ page_url('viewticket') }}/{{ ticket['id'] }}" class="tk-link font-medium hover:underline">
                                         {{ ticket['theme'] }}
                                     </a>
                                     {% endif %}
                                 </td>
                                 <td class="px-4 py-4 whitespace-nowrap">
                                     {% if ticket['status']|lower == 'pending' %}
-                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-amber-100 text-amber-800 border border-amber-300">
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium tk-badge-pending border">
                                             {{ ticket['status'] }}
                                         </span>
                                     {% elseif ticket['status']|lower == 'answered' %}
-                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 border border-green-300">
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium tk-badge-answered border">
                                             {{ ticket['status'] }}
                                         </span>
                                     {% elseif ticket['status']|lower == 'closed' %}
-                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800 border border-gray-300">
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium tk-badge-closed border">
                                             {{ ticket['status'] }}
                                         </span>
                                     {% else %}
-                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 border border-blue-300">
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium tk-badge-pending border">
                                             {{ ticket['status'] }}
                                         </span>
                                     {% endif %}
@@ -377,44 +280,53 @@
                         <div class="flex items-center justify-between mb-2">
                             <span class="text-sm font-medium text-gray-900">#{{ ticket['id'] }}</span>
                             {% if ticket['status']|lower == 'pending' %}
-                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-amber-100 text-amber-800 border border-amber-300">
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium tk-badge-pending border">
                                     {{ ticket['status'] }}
                                 </span>
                             {% elseif ticket['status']|lower == 'answered' %}
-                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 border border-green-300">
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium tk-badge-answered border">
                                     {{ ticket['status'] }}
                                 </span>
                             {% elseif ticket['status']|lower == 'closed' %}
-                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800 border border-gray-300">
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium tk-badge-closed border">
                                     {{ ticket['status'] }}
                                 </span>
                             {% else %}
-                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 border border-blue-300">
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium tk-badge-pending border">
                                     {{ ticket['status'] }}
                                 </span>
                             {% endif %}
                         </div>
                         {% if ticket['new'] == 1 %}
-                        <a href="{{ page_url('viewticket') }}/{{ ticket['id'] }}" class="text-blue-600 hover:text-blue-800 font-medium hover:underline block mb-2">
+                        <a href="{{ page_url('viewticket') }}/{{ ticket['id'] }}" class="tk-link font-medium hover:underline block mb-2">
                             <strong>{{ ticket['theme'] }}</strong>
                         </a>
                         {% else %}
-                        <a href="{{ page_url('viewticket') }}/{{ ticket['id'] }}" class="text-blue-600 hover:text-blue-800 font-medium hover:underline block mb-2">
+                        <a href="{{ page_url('viewticket') }}/{{ ticket['id'] }}" class="tk-link font-medium hover:underline block mb-2">
                             {{ ticket['theme'] }}
                         </a>
                         {% endif %}
                         <div class="text-xs text-gray-500 mb-3">Last updated: {{ ticket['time'] }}</div>
                         <div class="flex gap-2">
-                            <a href="{{ page_url('viewticket') }}/{{ ticket['id'] }}" class="text-blue-600 hover:text-blue-800 text-sm">
+                            <a href="{{ page_url('viewticket') }}/{{ ticket['id'] }}" class="tk-link hover:underline text-sm">
                                 <i class="ri-eye-line mr-1"></i>View
                             </a>
                         </div>
                     </div>
                     {% endfor %}
                 </div>
+                {% else %}
+                <!-- Empty State -->
+                <div class="px-6 py-10 text-center">
+                    <div class="tk-icon-box w-12 h-12 border rounded-full flex items-center justify-center mx-auto mb-3">
+                        <i class="ri-inbox-line text-xl"></i>
+                    </div>
+                    <div class="text-sm font-semibold text-gray-700">{% if search %}No tickets found{% else %}No tickets yet{% endif %}</div>
+                    <div class="text-xs text-gray-500 mt-1">{% if search %}Try a different search term.{% else %}Tickets you create above will appear here.{% endif %}</div>
+                </div>
+                {% endif %}
             </div>
-            {% endif %}
-            
+
             {% if pagination['count'] > 50 %}
             <!-- Pagination -->
             <div class="flex justify-center mt-8">
@@ -444,7 +356,7 @@
                             {% if i >= (pagination['current']-l) and i <= (pagination['current']+r) %}
                             <li>
                                 <a href="{{ page['url'] }}/{{ i }}" 
-                                   class="flex items-center justify-center w-8 h-8 text-sm font-medium {% if i == pagination['current'] %}text-blue-600 border border-blue-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700{% else %}text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700{% endif %} rounded-lg">
+                                   class="flex items-center justify-center w-8 h-8 text-sm font-medium {% if i == pagination['current'] %}tk-solid border{% else %}text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700{% endif %} rounded-lg">
                                     {{ i }}
                                 </a>
                             </li>
@@ -480,6 +392,71 @@
 
 <style>
 
+/* ===== Tickets page: overall scale (0.7 + 15%) without changing layout ===== */
+.tickets-page { zoom: 0.805; }
+/* Mobile: slightly less shrink so text and tap targets stay usable */
+@media (max-width: 767px) {
+    .tickets-page { zoom: 0.98; }
+}
+
+/* Request type takes the full row when Order ID is hidden (Payment / General / Cooperation) */
+@media (min-width: 768px) {
+    .tickets-page .tk-req-row:has(#orderIdField[style*="none"]) { grid-template-columns: 1fr; }
+}
+
+/* ===== Palette: site blue as accent, everything else neutral ===== */
+/* Site blue: #134de2 (primary), #4580f7 (border/light), #103fad (hover) */
+.tickets-page .tk-ink { color: #374151 !important; }
+.tickets-page .tk-link { color: #134de2 !important; }
+.tickets-page .tk-link:hover { color: #103fad !important; }
+.tickets-page .tk-solid {
+    background: linear-gradient(0deg, rgba(255,255,255,0.16) 6.48%, rgba(255,255,255,0) 100%), #134de2 !important;
+    border-color: #4580f7 !important;
+    color: #ffffff !important;
+}
+.tickets-page .tk-solid i { color: #ffffff !important; }
+.tickets-page button.tk-solid:hover,
+.tickets-page a.tk-solid:hover { background: #103fad !important; border-color: #103fad !important; }
+.tickets-page .tk-dot { background-color: #4580f7; }
+.tickets-page .tk-icon-box {
+    background-color: #f3f4f6;
+    border-color: #e5e7eb;
+    color: #4b5563;
+}
+
+/* Issue type cards: neutral, selected one gets the blue */
+.tickets-page .issue-type-btn { border-color: #e5e7eb; background-color: #ffffff; }
+.tickets-page .issue-type-btn:hover { border-color: #9db8fb; }
+.tickets-page .issue-type-btn.active { border-color: #4580f7; background-color: #f5f8ff; }
+.tickets-page .tk-icon-circle { background-color: #f3f4f6; color: #6b7280; transition: all .2s ease; }
+.tickets-page .issue-type-btn.active .tk-icon-circle { background-color: #134de2; color: #ffffff; }
+
+/* Priority pills: neutral, selected one blue */
+.tickets-page .priority-btn { border-color: #e5e7eb; color: #4b5563; background-color: transparent; }
+.tickets-page .priority-btn:hover { border-color: #9db8fb; color: #134de2; }
+.tickets-page .priority-btn.active { border-color: #134de2; background-color: #134de2; color: #ffffff; }
+
+/* Status badges */
+.tickets-page .tk-badge-pending  { background-color: #f3f4f6; border-color: #e5e7eb; color: #374151; }
+.tickets-page .tk-badge-answered { background-color: #eef3ff; border-color: #c7d7fe; color: #134de2; }
+.tickets-page .tk-badge-closed   { background-color: #ffffff; border-color: #e5e7eb; color: #9ca3af; }
+
+/* Dark mode */
+html.dark-mode .tickets-page .tk-ink { color: #cbd5e1 !important; }
+html.dark-mode .tickets-page .tk-link { color: #7aa2fa !important; }
+html.dark-mode .tickets-page .tk-link:hover { color: #9db8fb !important; }
+html.dark-mode .tickets-page .tk-icon-box { background-color: #1e293b; border-color: #334155; color: #cbd5e1; }
+html.dark-mode .tickets-page .issue-type-btn { border-color: #334155; background-color: transparent; }
+html.dark-mode .tickets-page .issue-type-btn:hover { border-color: #4580f7; }
+html.dark-mode .tickets-page .issue-type-btn.active { border-color: #4580f7; background-color: rgba(69,128,247,0.10); }
+html.dark-mode .tickets-page .tk-icon-circle { background-color: #1e293b; color: #94a3b8; }
+html.dark-mode .tickets-page .issue-type-btn.active .tk-icon-circle { background-color: #134de2; color: #ffffff; }
+html.dark-mode .tickets-page .priority-btn { border-color: #334155; color: #cbd5e1; }
+html.dark-mode .tickets-page .priority-btn:hover { border-color: #4580f7; color: #7aa2fa; }
+html.dark-mode .tickets-page .priority-btn.active { border-color: #134de2; background-color: #134de2; color: #ffffff; }
+html.dark-mode .tickets-page .tk-badge-pending  { background-color: #1e293b; border-color: #334155; color: #cbd5e1; }
+html.dark-mode .tickets-page .tk-badge-answered { background-color: rgba(69,128,247,0.15); border-color: rgba(69,128,247,0.4); color: #9db8fb; }
+html.dark-mode .tickets-page .tk-badge-closed   { background-color: transparent; border-color: #334155; color: #64748b; }
 
 /* Cursor pointer for all clickable elements */
 .issue-type-btn,
@@ -511,24 +488,24 @@ a[href],
 }
 
 .nice-select:hover {
-    border-color: #3b82f6;
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    border-color: #4580f7;
+    box-shadow: 0 0 0 3px rgba(69, 128, 247, 0.15);
 }
 
 .nice-select.open {
-    border-color: #3b82f6;
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    border-color: #4580f7;
+    box-shadow: 0 0 0 3px rgba(69, 128, 247, 0.15);
 }
 
 .nice-select .current {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0.75rem 1rem;
-    font-size: 0.95rem;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.875rem;
     font-weight: 500;
     color: #374151;
-    min-height: 48px;
+    min-height: 40px;
 }
 
 .nice-select .current.placeholder {
@@ -560,8 +537,8 @@ a[href],
 }
 
 .nice-select .option {
-    padding: 0.75rem 1rem;
-    font-size: 0.95rem;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.875rem;
     font-weight: 400;
     color: #374151;
     cursor: pointer;
@@ -624,8 +601,8 @@ a[href],
 /* Focus styles */
 .nice-select:focus-within {
     outline: none;
-    border-color: #3b82f6;
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    border-color: #4580f7;
+    box-shadow: 0 0 0 3px rgba(69, 128, 247, 0.15);
 }
 
 /* Animation for options */
@@ -651,7 +628,7 @@ a[href],
 
 
 
-/* Input focus styles - ensure consistent blue focus */
+/* Input focus styles - monochrome focus */
 input[type="text"],
 input[type="email"],
 input[type="url"],
@@ -669,8 +646,8 @@ input[type="tel"]:focus,
 input[type="password"]:focus,
 input[type="number"]:focus,
 textarea:focus {
-    border-color: #3b82f6 !important;
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1) !important;
+    border-color: #4580f7 !important;
+    box-shadow: 0 0 0 3px rgba(69, 128, 247, 0.15) !important;
     outline: none !important;
 }
 
@@ -855,37 +832,11 @@ document.addEventListener('DOMContentLoaded', function() {
 // Issue type selection
 document.querySelectorAll('.issue-type-btn').forEach(btn => {
     btn.addEventListener('click', function() {
-        // Remove active state from all buttons and reset to default
-        document.querySelectorAll('.issue-type-btn').forEach(b => {
-            b.classList.remove('active', 'issue-type-orders', 'issue-type-payment', 'issue-type-general', 'issue-type-cooperation');
-            // Reset to default state based on button position
-            const buttonText = b.querySelector('.text-sm.font-semibold').textContent.trim();
-            if (buttonText === 'Orders') {
-                b.className = 'issue-type-btn p-4 border-2 border-gray-200 rounded-lg hover:border-green-500 transition-colors text-center group cursor-pointer';
-            } else if (buttonText === 'Payment') {
-                b.className = 'issue-type-btn p-4 border-2 border-gray-200 rounded-lg hover:border-blue-500 transition-colors text-center group cursor-pointer';
-            } else if (buttonText === 'General') {
-                b.className = 'issue-type-btn p-4 border-2 border-gray-200 rounded-lg hover:border-purple-500 transition-colors text-center group cursor-pointer';
-            } else if (buttonText === 'Cooperation') {
-                b.className = 'issue-type-btn p-4 border-2 border-gray-200 rounded-lg hover:border-orange-500 transition-colors text-center group cursor-pointer';
-            }
-        });
-        
-        // Add active state to clicked button
+        // Monochrome: styling handled by .issue-type-btn / .active in CSS
+        document.querySelectorAll('.issue-type-btn').forEach(b => b.classList.remove('active'));
         this.classList.add('active');
-        
-        // Set active styling based on button type
         const issueType = this.querySelector('.text-sm.font-semibold').textContent.trim();
-        if (issueType === 'Orders') {
-            this.className = 'issue-type-btn active issue-type-orders p-4 border-2 border-green-500 bg-green-50 rounded-lg hover:border-green-500 transition-colors text-center group cursor-pointer';
-        } else if (issueType === 'Payment') {
-            this.className = 'issue-type-btn active issue-type-payment p-4 border-2 border-blue-500 bg-blue-50 rounded-lg hover:border-blue-500 transition-colors text-center group cursor-pointer';
-        } else if (issueType === 'General') {
-            this.className = 'issue-type-btn active issue-type-general p-4 border-2 border-purple-500 bg-purple-50 rounded-lg hover:border-purple-500 transition-colors text-center group cursor-pointer';
-        } else if (issueType === 'Cooperation') {
-            this.className = 'issue-type-btn active issue-type-cooperation p-4 border-2 border-orange-500 bg-orange-50 rounded-lg hover:border-orange-500 transition-colors text-center group cursor-pointer';
-        }
-        
+
         updateFormContent(issueType);
     });
 });
@@ -1013,71 +964,13 @@ document.addEventListener('DOMContentLoaded', function() {
 // Priority selection
 document.querySelectorAll('.priority-btn').forEach(btn => {
     btn.addEventListener('click', function() {
-        // Remove active class and reset to default state
-        document.querySelectorAll('.priority-btn').forEach(b => {
-            b.classList.remove('active');
-            // Reset to default state
-            if (b.textContent.trim() === 'Low') {
-                b.className = 'priority-btn px-3 py-1.5 rounded-full border-2 border-emerald-400 text-emerald-600 bg-transparent font-medium hover:bg-emerald-50 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 cursor-pointer text-sm';
-            } else if (b.textContent.trim() === 'Medium') {
-                b.className = 'priority-btn px-3 py-1.5 rounded-full border-2 border-amber-400 text-amber-600 bg-transparent font-medium hover:bg-amber-50 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 cursor-pointer text-sm';
-            } else if (b.textContent.trim() === 'High') {
-                b.className = 'priority-btn px-3 py-1.5 rounded-full border-2 border-rose-400 text-rose-600 bg-transparent font-medium hover:bg-rose-50 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 cursor-pointer text-sm';
-            }
-        });
-        
-        // Add active class and set active state
+        // Monochrome: styling handled by .priority-btn / .active in CSS
+        document.querySelectorAll('.priority-btn').forEach(b => b.classList.remove('active'));
         this.classList.add('active');
-        if (this.textContent.trim() === 'Low') {
-            this.className = 'priority-btn active px-3 py-1.5 rounded-full border-2 border-emerald-500 text-white bg-emerald-500 font-medium hover:bg-emerald-600 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 cursor-pointer text-sm shadow-[0_2px_8px_rgba(16,185,129,0.3)]';
-        } else if (this.textContent.trim() === 'Medium') {
-            this.className = 'priority-btn active px-3 py-1.5 rounded-full border-2 border-amber-500 text-white bg-amber-500 font-medium hover:bg-amber-600 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 cursor-pointer text-sm shadow-[0_2px_8px_rgba(245,158,11,0.3)]';
-        } else if (this.textContent.trim() === 'High') {
-            this.className = 'priority-btn active px-3 py-1.5 rounded-full border-2 border-rose-500 text-white bg-rose-500 font-medium hover:bg-rose-600 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 cursor-pointer text-sm shadow-[0_2px_8px_rgba(244,63,94,0.3)]';
-        }
     });
 });
 
 
-
-    // Tab Switching Functionality
-    document.addEventListener('DOMContentLoaded', function() {
-        const createTab = document.getElementById('create-tab');
-        const listTab = document.getElementById('list-tab');
-        const createContent = document.getElementById('create-tab-content');
-        const listContent = document.getElementById('list-tab-content');
-
-        function switchToCreate() {
-            // Update tab styles
-            createTab.className = 'tab-btn active flex items-center justify-center gap-[10px] py-[12px] px-[14px] rounded-full font-medium whitespace-nowrap text-[15px] leading-[160%] tracking-[-0.3px] !text-white border border-white/15 btn-custom-active shadow-[0px_0px_3px_0px_#0139ff,0px_0px_0px_1.182px_#0139ff] cursor-pointer';
-            listTab.className = 'tab-btn flex items-center justify-center gap-[10px] py-[12px] px-[14px] rounded-full font-medium whitespace-nowrap text-[15px] leading-[160%] tracking-[-0.3px] text-gray-600 hover:bg-gray-200 hover:text-gray-800 cursor-pointer';
-            
-            // Show/hide content
-            createContent.classList.remove('hidden');
-            listContent.classList.add('hidden');
-        }
-
-        function switchToList() {
-            // Update tab styles
-            listTab.className = 'tab-btn active flex items-center justify-center gap-[10px] py-[12px] px-[14px] rounded-full font-medium whitespace-nowrap text-[15px] leading-[160%] tracking-[-0.3px] !text-white border border-white/15 btn-custom-active shadow-[0px_0px_3px_0px_#0139ff,0px_0px_0px_1.182px_#0139ff] cursor-pointer';
-            createTab.className = 'tab-btn flex items-center justify-center gap-[10px] py-[12px] px-[14px] rounded-full font-medium whitespace-nowrap text-[15px] leading-[160%] tracking-[-0.3px] text-gray-600 hover:bg-gray-200 hover:text-gray-800 cursor-pointer';
-            
-            // Show/hide content
-            listContent.classList.remove('hidden');
-            createContent.classList.add('hidden');
-        }
-
-        // Add event listeners
-        createTab.addEventListener('click', function(e) {
-            e.preventDefault();
-            switchToCreate();
-        });
-
-        listTab.addEventListener('click', function(e) {
-            e.preventDefault();
-            switchToList();
-        });
-    });
 
     // Real-time update hidden inputs
     function updateHiddenInputs() {

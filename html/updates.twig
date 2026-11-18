@@ -1,4 +1,4 @@
-<div class="relative pb-16 md:pb-15 bg-white pt-6">
+<div class="updates-page relative pb-16 md:pb-15 bg-white pt-6">
     <div class="mx-auto px-4 sm:px-6 lg:px-8">
 
         <!-- Top bar -->
@@ -101,29 +101,23 @@
                 <div class="flex items-center gap-4 mt-2 sm:mt-0 ml-auto sm:ml-0 pl-16 sm:pl-0">
                     <div class="service-status">
                         {% set status_lower = update['update']|lower %}
-                        {% set badge_class = 'bg-gray-100 text-gray-700' %}
-                        {% set icon_class = 'ri-information-line' %}
-                        
+                                                {% set icon_class = 'ri-information-line' %}
+                        {% set icon_tone = '' %}
                         {% if 'new service' in status_lower or 'new' in status_lower %}
-                            {% set badge_class = 'bg-purple-100 text-purple-800' %}
-                            {% set icon_class = 'ri-star-line' %}
+                            {% set icon_class = 'ri-star-fill' %}{% set icon_tone = 'upd-tone-new' %}
                         {% elseif 'rate decreased' in status_lower or 'decreased' in status_lower %}
-                            {% set badge_class = 'bg-blue-100 text-blue-800' %}
-                            {% set icon_class = 'ri-arrow-left-down-line' %}
+                            {% set icon_class = 'ri-arrow-left-down-line' %}{% set icon_tone = 'upd-tone-down' %}
                         {% elseif 'rate increased' in status_lower or 'increased' in status_lower %}
-                            {% set badge_class = 'bg-yellow-100 text-yellow-800' %}
-                            {% set icon_class = 'ri-arrow-right-up-line' %}
+                            {% set icon_class = 'ri-arrow-right-up-line' %}{% set icon_tone = 'upd-tone-up' %}
                         {% elseif 'service enabled' in status_lower or 'enabled' in status_lower %}
-                            {% set badge_class = 'bg-green-100 text-green-800' %}
                             {% set icon_class = 'ri-check-line' %}
                         {% elseif 'service disabled' in status_lower or 'disabled' in status_lower %}
-                            {% set badge_class = 'bg-red-100 text-red-800' %}
-                            {% set icon_class = 'ri-close-circle-line' %}
+                            {% set icon_class = 'ri-close-circle-line' %}{% set icon_tone = 'upd-tone-off' %}
                         {% endif %}
                         
-                        <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium {{ badge_class }}">
-                            <i class="{{ icon_class }}"></i>
-                            {{ update['update'] }}
+                        <span class="upd-status inline-flex items-center gap-1.5 text-sm font-medium">
+                            <i class="{{ icon_class }} upd-status-icon {{ icon_tone }} text-base"></i>
+                            <span>{{ update['update'] }}</span>
                         </span>
                     </div>
                     {% if 'disabled' not in update['update']|lower %} 
@@ -198,6 +192,26 @@
     </div>
 </div>
 
+
+<style>
+/* Updates page: 25% smaller overall, layout unchanged */
+.updates-page { zoom: 0.75; }
+@media (max-width: 767px) { .updates-page { zoom: 0.9; } }
+/* Plain status: single-color icon + uncolored text, no pill */
+.updates-page .upd-status { color: #4b5563; }
+.updates-page .upd-status-icon { color: #134de2; }
+html.dark-mode .updates-page .upd-status { color: #cbd5e1; }
+html.dark-mode .updates-page .upd-status-icon { color: #7aa2fa; }
+/* Colored icons only for these types (text stays neutral) */
+.updates-page .upd-status-icon.upd-tone-down { color: #16a34a; } /* rate decreased: green */
+.updates-page .upd-status-icon.upd-tone-up   { color: #dc2626; } /* rate increased: red */
+.updates-page .upd-status-icon.upd-tone-new  { color: #eab308; } /* new service: yellow */
+.updates-page .upd-status-icon.upd-tone-off  { color: #9333ea; } /* disabled: purple */
+html.dark-mode .updates-page .upd-status-icon.upd-tone-down { color: #4ade80; }
+html.dark-mode .updates-page .upd-status-icon.upd-tone-up   { color: #f87171; }
+html.dark-mode .updates-page .upd-status-icon.upd-tone-new  { color: #facc15; }
+html.dark-mode .updates-page .upd-status-icon.upd-tone-off  { color: #c084fc; }
+</style>
 
 <script>
 $(document).ready(function() {

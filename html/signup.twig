@@ -77,6 +77,32 @@
             align-items: center;
         }
 
+        /* Mobile: remove top gap so the form fits on screen */
+        @media (max-width: 1023px) {
+            .hero {
+                padding-top: 0.5rem !important;
+                padding-bottom: 1.5rem !important;
+                min-height: auto;
+                align-items: flex-start;
+            }
+            /* Layout header: smaller bottom gap on mobile */
+            .header {
+                padding-bottom: 0.25rem !important;
+            }
+        }
+
+        /* Hide the layout's header on signup so only one (centered) logo shows */
+        body:has(.signup-topbar) header.header {
+            display: none !important;
+        }
+        .signup-logo {
+            height: 34px;
+            max-width: 150px;
+        }
+        @media (min-width: 768px) {
+            .signup-logo { height: 40px; max-width: 170px; }
+        }
+
         /* Old Signup Navbar CSS */
         .header {
             padding: 20px 0;
@@ -193,39 +219,29 @@
 <body class="bg-slate-50 text-slate-700 {% if site['rtl'] %}rtl{% endif %}">
     
     <div class="relative z-10 flex min-h-screen flex-col">
-        <header class="header">
-            <div class="header-inner">
-                <a href="/" class="inline-flex items-center justify-center rounded-full border border-blue-200 bg-[#2563eb0d] text-sm font-medium text-blue-600 shadow-sm transition hover:-translate-y-px hover:bg-[#2563eb1a] hover:shadow-md w-12 h-12 md:w-auto md:h-auto md:gap-x-2 md:px-5 md:py-3">
+        <!-- Signup top bar: back | centered logo | how it works -->
+        <div class="signup-topbar w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 pb-2 lg:pt-6 lg:pb-4 relative z-20">
+            <div class="grid grid-cols-[auto_1fr_auto] items-center gap-3">
+                <a href="/" aria-label="Go Back to Website" class="inline-flex items-center justify-center gap-2 w-10 h-10 md:w-auto md:h-11 md:px-5 rounded-full border border-blue-200 bg-white/80 text-sm font-semibold text-blue-600 shadow-sm transition hover:bg-blue-50 hover:shadow-md">
                     <i class="ri-arrow-left-line text-lg"></i>
                     <span class="hidden md:inline">Go Back to Website</span>
                 </a>
-                <div class="absolute left-1/2 -translate-x-1/2">
-                    <a href="{{ page_url('index') }}" class="logo">
-                        {% if site['logo'] %}
-                            <img src="{{ site['logo'] }}" alt="{{ site['name'] }}" title="{{ site['name'] }}" style="
-            height: 40px !important;
-            width: auto !important;
-            max-width: 150px !important;
-            max-height: 40px !important;
-            object-fit: contain !important;
-            display: block !important;
-            opacity: 1 !important;
-            visibility: visible !important;
-        ">
-                        {% else %}
-                            <div class="logo-icon">{{ site['name']|first|upper }}</div>
-                            <span class="logo-text">{{ site['name'] }}</span>
-                        {% endif %}
-                    </a>
-                </div>
-                <a href="/howitworks" class="inline-flex items-center justify-center rounded-full border border-blue-200 bg-[#2563eb0d] text-sm font-medium text-blue-600 shadow-sm transition hover:-translate-y-px hover:bg-[#2563eb1a] hover:shadow-md w-12 h-12 md:w-auto md:h-auto md:gap-x-2 md:px-5 md:py-3">
-                    <i class="ri-question-line text-blue-600 text-lg"></i>
+                <a href="{{ page_url('index') }}" class="flex items-center justify-center gap-2 min-w-0">
+                    {% if site['logo'] %}
+                        <img src="{{ site['logo'] }}" alt="{{ site['name'] }}" title="{{ site['name'] }}" class="signup-logo block w-auto object-contain">
+                    {% else %}
+                        <div class="logo-icon">{{ site['name']|first|upper }}</div>
+                        <span class="logo-text truncate">{{ site['name'] }}</span>
+                    {% endif %}
+                </a>
+                <a href="/howitworks" aria-label="How it Works" class="inline-flex items-center justify-center gap-2 w-10 h-10 md:w-auto md:h-11 md:px-5 rounded-full border border-blue-200 bg-white/80 text-sm font-semibold text-blue-600 shadow-sm transition hover:bg-blue-50 hover:shadow-md">
+                    <i class="ri-question-line text-lg"></i>
                     <span class="hidden md:inline">How it Works</span>
                 </a>
             </div>
-        </header>
-        
-        <main class="flex-grow flex flex-col items-center justify-center relative w-full h-full">
+        </div>
+
+        <main class="flex-grow flex flex-col items-center justify-start lg:justify-center relative w-full h-full">
             <!-- Abstract Background Wave Lines (SVG) -->
             <svg class="bg-lines hidden lg:block" width="100%" height="100%" viewBox="0 0 1440 800" fill="none" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" style="position:absolute; top:0; left:0; width:100%; height:100%; z-index:0; pointer-events:none;">
                 <!-- Hareketsiz Dalga Çizgileri -->
@@ -269,7 +285,7 @@
                     
                     <!-- Signup Form (Right Side) -->
                     <div class="lg:order-2 flex flex-col justify-center" style="margin: 0; padding: 0;">
-                        <div class="login-container max-w-lg mx-auto lg:ml-auto lg:mr-0 w-full relative z-20 mt-12 md:mt-0">
+                        <div class="login-container max-w-lg mx-auto lg:ml-auto lg:mr-0 w-full relative z-20 mt-0">
                             
                             <div class="bg-white/95 backdrop-blur-2xl p-6 md:p-8 rounded-3xl shadow-[0_20px_50px_rgba(0,0,0,0.05)] border border-slate-100 w-full relative z-30 {% if site['rtl'] %} rtl-content {% endif %}">
                                 

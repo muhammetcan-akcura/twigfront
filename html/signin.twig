@@ -62,6 +62,20 @@
             align-items: center;
         }
 
+        /* Mobile: remove top gap so login box fits on screen */
+        @media (max-width: 1023px) {
+            .hero {
+                padding-top: 0.5rem !important;
+                padding-bottom: 1.5rem !important;
+                min-height: auto;
+                align-items: flex-start;
+            }
+            /* Layout header: smaller bottom gap on mobile */
+            .header {
+                padding-bottom: 0.25rem !important;
+            }
+        }
+
 
 </style>
         <main class="relative z-10">
